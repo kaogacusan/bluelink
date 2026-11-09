@@ -180,7 +180,7 @@ async function build(S) {
 
   const L = { dims: S.layer('dims'), roof: S.layer('roof'), people: S.layer('people') };
 
-  // ground: a brick walk that fades into the night around it
+  // ground: a brick walk that fades into the white around it
   const bricks = brickTexture();
   const gw = 12, gd = 9;
   bricks.repeat.set(gw / 1.6, gd / 1.6);
@@ -191,7 +191,7 @@ async function build(S) {
   S.add(ground);
   const fade = canvasTexture(512, 512, (g, w, h) => {
     const gr = g.createRadialGradient(w / 2, h / 2, w * 0.16, w / 2, h / 2, w * 0.5);
-    gr.addColorStop(0, 'rgba(5,8,23,0)'); gr.addColorStop(1, 'rgba(5,8,23,1)');
+    gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(255,255,255,1)');
     g.fillStyle = gr; g.fillRect(0, 0, w, h);
   });
   const fadeM = new THREE.Mesh(new THREE.PlaneGeometry(gw + 0.02, gd + 0.02), new THREE.MeshBasicMaterial({ map: fade, transparent: true, depthWrite: false }));
