@@ -2,7 +2,9 @@ import { useState, type FormEvent } from 'react'
 import { Logo } from '../components/Logo'
 import { api } from '../lib/api'
 import { load, save } from '../lib/storage'
-import { ROLES } from '../../shared/options.js'
+import { COURSES, ROLES } from '../../shared/options.js'
+import { Combo } from '../components/Combo'
+import { LevelSelect } from '../components/ProfileFields'
 import { LEGAL } from '../../shared/legal.js'
 import type { FullPerson } from '../types'
 
@@ -14,6 +16,7 @@ export function Onboarding({ onDone, onSignOut }: { onDone: (me: FullPerson) => 
   const [name, setName] = useState(() => load<{ name: string } | null>('prefill', null)?.name ?? '')
   const [role, setRole] = useState('student')
   const [course, setCourse] = useState('')
+  const [level, setLevel] = useState('')
   const [year, setYear] = useState('')
   const [adult, setAdult] = useState(false)
   const [agree, setAgree] = useState(false)
@@ -29,7 +32,7 @@ export function Onboarding({ onDone, onSignOut }: { onDone: (me: FullPerson) => 
     setBusy(true)
     setError('')
     try {
-      const r = await api<{ user: FullPerson }>('/api/me', { name, role, course, year: year ? Number(year) : null, openTo: [], skills: [], adult, agree: LEGAL.version })
+      const r = await api<{ user: FullPerson }>('/api/me', { name, role, course, level, year: year ? Number(year) : null, openTo: [], skills: [], adult, agree: LEGAL.version })
       save('prefill', null)
       location.hash = '#/'
       onDone(r.user)
@@ -58,18 +61,24 @@ export function Onboarding({ onDone, onSignOut }: { onDone: (me: FullPerson) => 
           <div className="field-row">
             <label className="field is-grow">
               <span>{faculty ? 'Department or office' : 'Course'}</span>
-              <input
-                className="input"
+              <Combo
                 value={course}
+                options={faculty ? [] : COURSES}
                 maxLength={80}
                 autoFocus={!!name}
-                placeholder={faculty ? 'e.g. Department of Economics' : 'e.g. BS Computer Science'}
-                onChange={(e) => setCourse(e.target.value)}
+                placeholder={faculty ? 'e.g. Department of Economics' : 'Type to search, e.g. Comp Sci'}
+                onChange={setCourse}
               />
             </label>
-            {!faculty && (
+            {role === 'student' && (
               <label className="field">
-                <span>{role === 'alum' ? 'Batch' : 'Graduating'}</span>
+                <span>Year</span>
+                <LevelSelect value={level} onChange={setLevel} />
+              </label>
+            )}
+            {role === 'alum' && (
+              <label className="field">
+                <span>Batch</span>
                 <select className="input select" value={year} onChange={(e) => setYear(e.target.value)}>
                   <option value="">Year</option>
                   {YEARS.map((y) => (

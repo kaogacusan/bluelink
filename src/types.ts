@@ -6,6 +6,7 @@ export interface Person {
   role: string
   school: string
   course: string
+  level: string
   year: number | null
   headline: string
   openTo: string[]
@@ -89,7 +90,7 @@ export interface Membership {
   via: 'gcash' | 'code' | 'admin' | null
   status: 'pending' | 'approved' | 'rejected' | null
   ref: string
-  price: number
+  lifetime: boolean
 }
 
 export interface Message {

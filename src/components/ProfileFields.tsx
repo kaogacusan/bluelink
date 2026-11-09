@@ -1,10 +1,12 @@
-import { ROLES, SCHOOLS } from '../../shared/options.js'
+import { COURSES, LEVELS, ROLES, SCHOOLS } from '../../shared/options.js'
+import { Combo } from './Combo'
 
 export interface ProfileDraft {
   name: string
   role: string
   school: string
   course: string
+  level: string
   year: number | null
   headline: string
   about: string
@@ -50,17 +52,23 @@ export function BasicsFields({ value, set }: { value: ProfileDraft; set: (p: Par
       <div className="field-row">
         <label className="field is-grow">
           <span>{faculty ? 'Department or office' : 'Course'}</span>
-          <input
-            className="input"
+          <Combo
             value={value.course}
+            options={faculty ? [] : COURSES}
             maxLength={80}
-            placeholder={faculty ? 'e.g. Department of Economics' : 'e.g. BS Computer Science'}
-            onChange={(e) => set({ course: e.target.value })}
+            placeholder={faculty ? 'e.g. Department of Economics' : 'Type to search, e.g. Comp Sci'}
+            onChange={(course) => set({ course })}
           />
         </label>
-        {!faculty && (
+        {value.role === 'student' && (
           <label className="field">
-            <span>{value.role === 'alum' ? 'Batch' : 'Graduating'}</span>
+            <span>Year</span>
+            <LevelSelect value={value.level} onChange={(level) => set({ level })} />
+          </label>
+        )}
+        {value.role === 'alum' && (
+          <label className="field">
+            <span>Batch</span>
             <select className="input select" value={value.year ?? ''} onChange={(e) => set({ year: e.target.value ? Number(e.target.value) : null })}>
               <option value="">Year</option>
               {YEARS.map((y) => (
@@ -73,6 +81,23 @@ export function BasicsFields({ value, set }: { value: ProfileDraft; set: (p: Par
         )}
       </div>
     </>
+  )
+}
+
+export function LevelSelect({ value, onChange }: { value: string; onChange: (level: string) => void }) {
+  return (
+    <select className="input select" value={value} onChange={(e) => onChange(e.target.value)}>
+      <option value="">Pick one</option>
+      {['College', 'Grad school'].map((g) => (
+        <optgroup key={g} label={g}>
+          {LEVELS.filter((l) => l.group === g).map((l) => (
+            <option key={l.id} value={l.id}>
+              {l.label}
+            </option>
+          ))}
+        </optgroup>
+      ))}
+    </select>
   )
 }
 

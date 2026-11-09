@@ -1,4 +1,4 @@
-import { ROLES, SCHOOLS } from '../../shared/options.js'
+import { LEVELS, ROLES, SCHOOLS } from '../../shared/options.js'
 import type { Person } from '../types'
 
 export function ago(ts: number) {
@@ -18,13 +18,15 @@ export const schoolShort = (id: string) => SCHOOLS.find((s) => s.id === id)?.sho
 export const schoolName = (id: string) => SCHOOLS.find((s) => s.id === id)?.name ?? ''
 export const roleLabel = (id: string) => ROLES.find((r) => r.id === id)?.label ?? ''
 
-// "BS Computer Science '26", "Alum · BS ITE '21", "Faculty or staff · SOSE"
-export function personLine(p: Pick<Person, 'role' | 'course' | 'year' | 'school'>) {
-  const yy = p.year ? ` '${String(p.year).slice(2)}` : ''
-  const course = p.course ? p.course + yy : yy.trim()
+// "BS Computer Science · 3rd year", "Alum · BS ITE '21", "Faculty or staff · SOSE"
+export function personLine(p: Pick<Person, 'role' | 'course' | 'level' | 'year' | 'school'>) {
   if (p.role === 'faculty') return ['Faculty or staff', schoolShort(p.school)].filter(Boolean).join(' · ')
-  if (p.role === 'alum') return ['Alum', course].filter(Boolean).join(' · ')
-  return course || schoolShort(p.school) || 'Student'
+  if (p.role === 'alum') {
+    const yy = p.year ? ` '${String(p.year).slice(2)}` : ''
+    return ['Alum', p.course ? p.course + yy : yy.trim()].filter(Boolean).join(' · ')
+  }
+  const level = LEVELS.find((l) => l.id === p.level)?.label
+  return [p.course, level].filter(Boolean).join(' · ') || schoolShort(p.school) || 'Student'
 }
 
 export function eventWhen(date: string, time: string) {
