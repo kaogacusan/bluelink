@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>blueLink Deck</title>
+<title>BlueLink Deck</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <style>
   @font-face { font-family: 'Inter BL'; src: url('/src/assets/fonts/InterVariable-latin.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
@@ -90,13 +90,13 @@
 <div id="stage">
 
   <section class="slide dark" style="justify-content: center">
-    <div class="logo" style="margin-bottom: 80px"><svg data-logo></svg><span>blueLink</span></div>
+    <div class="logo" style="margin-bottom: 80px"><svg data-logo></svg><span>BlueLink</span></div>
     <h1>The private network<br />for <span class="b">Ateneans</span>.</h1>
     <p class="sub" style="margin-top: 50px">Students, alumni, and faculty. 18+.</p>
   </section>
 
   <section class="slide">
-    <h2>Asking for help is awkward.</h2>
+    <h2>Networking is hard.</h2>
     <div class="list">
       <div>Big feeds bury your post.</div>
       <div>LinkedIn is for show.</div>
@@ -108,7 +108,7 @@
     <h2>What you can do</h2>
     <div class="split">
       <div class="list">
-        <div>Ask for work.</div>
+        <div>Find work.</div>
         <div>Find a mentor.</div>
         <div>Offer your skills.</div>
       </div>
@@ -132,7 +132,7 @@
   <section class="slide">
     <h2>Features</h2>
     <div class="grid g2">
-      <div><h3>Feed</h3><p>Asks, jobs, and events.</p></div>
+      <div><h3>Feed</h3><p>Jobs, opportunities, and events.</p></div>
       <div><h3>People</h3><p>Search by course or skill.</p></div>
       <div><h3>Orgs</h3><p>Follow and apply.</p></div>
       <div><h3>Inbox</h3><p>Message your connections.</p></div>
@@ -140,7 +140,7 @@
   </section>
 
   <section class="slide dark">
-    <h2>Safe to ask.</h2>
+    <h2>Safe to reach out.</h2>
     <div class="list">
       <div>Members only.</div>
       <div>Report and block on every profile.</div>
@@ -158,7 +158,7 @@
   </section>
 
   <section class="slide dark" style="justify-content: center; align-items: center; text-align: center">
-    <div class="logo" style="margin-bottom: 70px"><svg data-logo></svg><span>blueLink</span></div>
+    <div class="logo" style="margin-bottom: 70px"><svg data-logo></svg><span>BlueLink</span></div>
     <h1>Find your <span class="b">people</span>.</h1>
     <p class="sub" style="margin-top: 50px">₱99 a year. ₱250 for life.</p>
     <div class="foot" style="justify-content: center; font-size: 20px">Made by Ateneans. Not an official Ateneo de Manila University service.</div>
@@ -177,7 +177,7 @@
 
   const slides = [...document.querySelectorAll('.slide')]
   slides.forEach((s, i) => {
-    if (!s.querySelector('.foot')) s.insertAdjacentHTML('beforeend', `<div class="foot"><span>blueLink</span><span>${String(i + 1).padStart(2, '0')}</span></div>`)
+    if (!s.querySelector('.foot')) s.insertAdjacentHTML('beforeend', `<div class="foot"><span>BlueLink</span><span>${String(i + 1).padStart(2, '0')}</span></div>`)
   })
 
   // Star field for the dark slides: many tiny stars, a few bright ones.

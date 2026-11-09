@@ -7,7 +7,8 @@
     "dev": "vite --port 5274 --strictPort",
     "build": "tsc --noEmit && vite build",
     "start": "node server/prod.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "deploy": "sh scripts/deploy.sh"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

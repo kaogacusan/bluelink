@@ -20,7 +20,7 @@ function Suggestion({ person }: { person: Person }) {
         <Avatar person={person} size={40} />
         <div>
           <b>{person.name}</b>
-          <span>{person.headline || personLine(person)}</span>
+          <span>{personLine(person)}</span>
         </div>
       </a>
       {status === 'none' ? (
@@ -50,7 +50,7 @@ export function Rail() {
 
       {!!people.data?.people.length && (
         <section className="card rail-card">
-          <h2>People to meet</h2>
+          <h2>Suggested people</h2>
           <ul className="mini-list">
             {people.data.people.map((p) => (
               <Suggestion key={p.uid} person={p} />
@@ -96,14 +96,14 @@ export function Rail() {
           <ul className="mini-list">
             {recruiting.map((o) => (
               <li key={o.id} className="mini">
-                <a href={href.org(o.id)} className="mini-who">
+                <a href={href.org(o.id, o.type)} className="mini-who">
                   <OrgLogo org={o} size={40} />
                   <div>
                     <b>{o.name}</b>
                     <span>{o.members} members</span>
                   </div>
                 </a>
-                <a className="btn btn-sm btn-outline" href={href.org(o.id)}>
+                <a className="btn btn-sm btn-outline" href={href.org(o.id, o.type)}>
                   Apply
                 </a>
               </li>

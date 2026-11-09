@@ -166,10 +166,9 @@ body::before {
   border-radius: var(--radius);
   border: 1px solid var(--line);
   background:
-    linear-gradient(rgba(170, 185, 255, 0.05) 1px, transparent 1px) 0 0 / 32px 32px,
-    linear-gradient(90deg, rgba(170, 185, 255, 0.05) 1px, transparent 1px) 0 0 / 32px 32px,
-    radial-gradient(90% 70% at 50% 110%, rgba(58, 95, 255, 0.22) 0%, transparent 70%),
-    #050817;
+    linear-gradient(rgba(10, 21, 64, 0.05) 1px, transparent 1px) 0 0 / 32px 32px,
+    linear-gradient(90deg, rgba(10, 21, 64, 0.05) 1px, transparent 1px) 0 0 / 32px 32px,
+    #ffffff;
   overflow: hidden;
   touch-action: pan-y;
   user-select: none;
@@ -206,8 +205,8 @@ body::before {
   background: rgba(3, 5, 13, 0.72);
 }
 .tag--dim { color: var(--core); background: rgba(3, 5, 13, 0.85); font-weight: 700; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0; }
-.tag--zone { color: var(--cyan); background: transparent; font-weight: 700; font-size: 12px; letter-spacing: 0.02em; text-transform: uppercase; opacity: 0.55; }
-.tag--soft { background: transparent; color: var(--ink-3); }
+.tag--zone { color: var(--signal); background: rgba(255, 255, 255, 0.85); font-weight: 700; font-size: 12px; letter-spacing: 0.02em; text-transform: uppercase; }
+.tag--soft { background: rgba(255, 255, 255, 0.85); color: #4a5578; }
 
 .stage__hint {
   position: absolute; left: 14px; bottom: 12px;

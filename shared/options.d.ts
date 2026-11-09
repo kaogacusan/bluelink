@@ -1,8 +1,10 @@
-export const OPEN_TO: { id: string; label: string }[]
+export const OPEN_TO: { id: string; label: string; match: string[] }[]
 export const SCHOOLS: { id: string; short: string; name: string }[]
 export const COURSES: string[]
+export function schoolOf(course: string): string
 export const LEVELS: { id: string; label: string; group: string }[]
 export const ROLES: { id: string; label: string }[]
-export const KINDS: { id: 'post' | 'ask' | 'work' | 'opp' | 'event'; label: string; verb: string }[]
+export const KINDS: { id: 'post' | 'work' | 'opp' | 'event'; label: string; verb: string }[]
 export const REPORT_REASONS: { id: string; label: string }[]
 export const ORG_CATEGORIES: { id: string; label: string }[]
+export const BANNERS: { id: string; label: string }[]

@@ -1,10 +1,9 @@
-import { COURSES, LEVELS, ROLES, SCHOOLS } from '../../shared/options.js'
+import { COURSES, LEVELS, ROLES } from '../../shared/options.js'
 import { Combo } from './Combo'
 
 export interface ProfileDraft {
   name: string
   role: string
-  school: string
   course: string
   level: string
   year: number | null
@@ -31,23 +30,11 @@ export function BasicsFields({ value, set }: { value: ProfileDraft; set: (p: Par
         <div className="seg">
           {ROLES.map((r) => (
             <button type="button" key={r.id} className={value.role === r.id ? 'is-on' : ''} onClick={() => set({ role: r.id })}>
-              {r.id === 'student' ? 'A student' : r.id === 'alum' ? 'An alum' : 'Faculty or staff'}
+              {r.id === 'student' ? 'A student' : r.id === 'alum' ? 'Alumni' : 'Faculty or staff'}
             </button>
           ))}
         </div>
       </div>
-
-      <label className="field">
-        <span>School</span>
-        <select className="input select" value={value.school} onChange={(e) => set({ school: e.target.value })}>
-          <option value="">Pick your school</option>
-          {SCHOOLS.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.name}
-            </option>
-          ))}
-        </select>
-      </label>
 
       <div className="field-row">
         <label className="field is-grow">

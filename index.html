@@ -6,55 +6,33 @@
     <meta name="theme-color" content="#ffffff" />
     <meta name="description" content="Welcome to Atenean Networking. Find work, a mentor, or a teammate. Members only, for Ateneans 18 and older. Not an official Ateneo service." />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <title>blueLink</title>
+    <title>BlueLink</title>
     <script>
       try {
         var t = localStorage.getItem('bl:ui-theme')
         if (t) document.documentElement.dataset.theme = JSON.parse(t)
-        // The splash matches the first screen: the dark landing, or the app in its theme.
-        var signedIn = JSON.parse(localStorage.getItem('bl:token') || 'null')
-        var legal = /^#\/(privacy|terms)/.test(location.hash)
-        document.documentElement.dataset.splash = signedIn || legal ? document.documentElement.dataset.theme : 'void'
       } catch (e) {}
     </script>
     <style>
+      /* The splash is always dark, so the white outline shows. */
       #splash {
         --bg: #03050d;
         --back: #93a8ff;
         --front: #ffffff;
         --edge: #ffffff;
-        --glow: rgba(58, 95, 255, 0.5);
         position: fixed;
         inset: 0;
         z-index: 2147483000;
         display: grid;
         place-items: center;
         background: var(--bg);
-        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.5s;
-      }
-      [data-splash='dark'] #splash {
-        --bg: #04060f;
-      }
-      [data-splash='light'] #splash {
-        --bg: #f4f5f9;
-        --front: #1d45e5;
-        --edge: #0a1540;
-        --glow: rgba(29, 69, 229, 0.18);
+        transition: background-color 0.55s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
       }
       #splash .stage {
         position: relative;
         width: 160px;
         height: 160px;
-        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      }
-      /* A soft blue light comes up when the links connect, then breathes while the app loads. */
-      #splash .stage::before {
-        content: '';
-        position: absolute;
-        inset: -45%;
-        background: radial-gradient(closest-side, var(--glow), transparent 72%);
-        opacity: 0;
-        animation: bl-bloom 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards, bl-breathe 2.4s ease-in-out 2s infinite;
+        transition: transform 0.8s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.4s ease;
       }
       #splash svg {
         position: relative;
@@ -63,13 +41,14 @@
         height: 100%;
         overflow: visible;
       }
+      /* On exit the big logo flies into the small logo on the page (set in the script below). */
       #splash.out {
-        opacity: 0;
-        visibility: hidden;
+        background-color: transparent;
         pointer-events: none;
       }
-      #splash.out .stage {
-        transform: scale(1.06);
+      #splash.out.solo .stage {
+        opacity: 0;
+        transform: scale(0.92);
       }
       /* Every path has pathLength 100. A dash of 0 50 grows from the path start in both directions. */
       #splash path {
@@ -80,10 +59,10 @@
       #splash .edge {
         stroke: var(--edge);
         stroke-width: 0.3;
-        animation: bl-grow 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.1s forwards, bl-fade 0.45s ease 1.6s forwards;
+        animation: bl-grow 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.1s forwards, bl-fade 0.45s ease 1.5s forwards;
       }
       #splash .lb .edge {
-        animation-delay: 0.18s, 1.6s;
+        animation-delay: 0.18s, 1.5s;
       }
       /* 2. The two links move in and lock together. */
       #splash .la {
@@ -100,18 +79,12 @@
       #splash .la .body {
         stroke: var(--back);
       }
+      /* The colors move to the page logo's colors as it flies in. */
+      #splash .body {
+        transition: stroke 0.8s ease;
+      }
       #splash .lb .body {
         stroke: var(--front);
-      }
-      #splash .ring {
-        fill: none;
-        stroke: var(--edge);
-        stroke-width: 1;
-        vector-effect: non-scaling-stroke;
-        transform-box: fill-box;
-        transform-origin: center;
-        opacity: 0;
-        animation: bl-ring 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
       }
       @keyframes bl-grow {
         to {
@@ -133,40 +106,14 @@
           transform: translate(3.5px, 2.3px);
         }
       }
-      @keyframes bl-ring {
-        from {
-          opacity: 0.55;
-          transform: scale(1);
-        }
-        to {
-          opacity: 0;
-          transform: scale(3);
-        }
-      }
-      @keyframes bl-bloom {
-        to {
-          opacity: 1;
-        }
-      }
-      @keyframes bl-breathe {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.55;
-        }
-      }
       @media (prefers-reduced-motion: reduce) {
-        #splash *,
-        #splash .stage::before {
+        #splash * {
           animation: none !important;
         }
         #splash .body {
           stroke-dasharray: none;
         }
-        #splash .edge,
-        #splash .ring {
+        #splash .edge {
           display: none;
         }
       }
@@ -179,7 +126,6 @@
           <defs>
             <clipPath id="bl-splash-clip"><circle cx="20" cy="13" r="4.2" /></clipPath>
           </defs>
-          <circle class="ring" cx="16" cy="16" r="7" />
           <g class="la">
             <path class="body" pathLength="100" d="M20 13A6 6 0 0 1 14 19H9A6 6 0 0 1 3 13A6 6 0 0 1 9 7H14A6 6 0 0 1 20 13Z" />
             <path class="edge" pathLength="100" d="M1 13A8 8 0 0 1 9 5H14A8 8 0 0 1 22 13A8 8 0 0 1 14 21H9A8 8 0 0 1 1 13Z" />
@@ -205,7 +151,8 @@
       ;(function () {
         var splash = document.getElementById('splash')
         var root = document.getElementById('root')
-        var minMs = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1900
+        var calm = matchMedia('(prefers-reduced-motion: reduce)').matches
+        var minMs = calm ? 0 : 1950
         var done = false
         var watch = new MutationObserver(function () {
           // The boot screen waits for the account. Its error text means it is done.
@@ -215,10 +162,35 @@
           if (done) return
           done = true
           watch.disconnect()
+          setTimeout(leave, Math.max(0, minMs - performance.now()))
+        }
+        function leave() {
+          var stage = splash.querySelector('.stage')
+          var target = Array.prototype.find.call(root.querySelectorAll('.logo-mark'), function (el) {
+            var r = el.getBoundingClientRect()
+            return r.width > 0 && r.bottom > 0 && r.top < innerHeight
+          })
+          if (target && !calm) {
+            var to = target.getBoundingClientRect()
+            var from = stage.getBoundingClientRect()
+            var rects = target.querySelectorAll('rect')
+            // The 32 unit mark fills the middle 80% of the stage.
+            var k = to.width / (from.width * 0.8)
+            var dx = to.left + to.width / 2 - (from.left + from.width / 2)
+            var dy = to.top + to.height / 2 - (from.top + from.height / 2)
+            splash.style.setProperty('--back', getComputedStyle(rects[0]).stroke)
+            splash.style.setProperty('--front', getComputedStyle(rects[1]).stroke)
+            target.style.visibility = 'hidden'
+            stage.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) scale(' + k + ')'
+          } else {
+            target = null
+            splash.classList.add('solo')
+          }
+          splash.classList.add('out')
           setTimeout(function () {
-            splash.classList.add('out')
-            setTimeout(function () { splash.remove() }, 450)
-          }, Math.max(0, minMs - performance.now()))
+            if (target) target.style.visibility = ''
+            splash.remove()
+          }, 850)
         }
         watch.observe(root, { childList: true, subtree: true })
         setTimeout(hide, 8000)

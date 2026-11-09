@@ -85,7 +85,7 @@ const standalone = (svg, w, h) => svg.replace('class="fill"', `width="${w}" heig
 const MW = 1920, MH = 1080;
 const motifSvgs = [
   ['star-field', standalone(skySvg({ w: MW, h: MH, seed: 'kit-sky', density: 0.03, band: 0.38 }), MW, MH), 'Real stars, a faint band and haze. Transparent: put it on Void.'],
-  ['constellation', standalone(constellationSvg({ w: MW, h: MH, box: [260, 200, 1400, 620], seed: 'kit-c', count: 7, labels: ['Open for work', 'Find a mentor', 'Ask for an intro'], labelSize: 15, unit: 10.8 }), MW, MH), 'One constellation with catalog labels. A line is two people connected.'],
+  ['constellation', standalone(constellationSvg({ w: MW, h: MH, box: [260, 200, 1400, 620], seed: 'kit-c', count: 7, labels: ['Open for work', 'Find a mentor', 'Get an intro'], labelSize: 15, unit: 10.8 }), MW, MH), 'One constellation with catalog labels. A line is two people connected.'],
   ['horizon', standalone(horizonSvg({ w: MW, h: MH, top: 820, sun: true }), MW, MH), 'The planet’s edge with its atmosphere rim and a rising sun.'],
   ['plate-marks', standalone(plateSvg({ w: MW, h: MH, inset: 48, color: C.star, opacity: 0.55 }), MW, MH), 'Corner crosshairs, like a star-chart plate. Transparent.'],
 ];
@@ -107,16 +107,16 @@ const shareCards = [
   ['ig-post', 1080, 1350, 'Instagram post, 4:5. The promise and the price.', () => `
     ${deepField(1080, 1350, null, { seed: 'ig-post', cons: { box: [560, 150, 420, 260], labels: ['Find a mentor'], labelSize: 17 } })}
     <div class="abs" style="left:88px;top:92px">${lock(64)}</div>
-    <div class="abs" style="left:88px;top:400px"><div class="d" style="font-size:112px;color:${C.star}">${hl('The private<br>network where<br>asking is<br>*normal.*')}</div>
+    <div class="abs" style="left:88px;top:400px"><div class="d" style="font-size:112px;color:${C.star}">${hl('Welcome to<br>Atenean<br>*Networking*')}</div>
       <div class="t" style="font-size:36px;margin-top:40px;max-width:800px;color:${C.sub}">${F.support}</div></div>
     <div class="abs" style="left:88px;bottom:96px;display:flex;align-items:baseline;gap:28px"><span class="d nw" style="font-size:76px;color:${C.star}">${peso(F.price)}<span style="font-size:38px;font-weight:600;color:${C.sub};margin-left:10px;letter-spacing:-0.01em">${F.per}</span></span>${mono('Members only', 22, C.muted)}</div>
     <div class="abs" style="right:88px;bottom:104px">${mono(F.site, 22, C.peri)}</div>
     <div class="abs t" style="left:88px;bottom:52px;font-size:20px;color:${C.muted}">${F.unofficial}</div>`],
   ['ig-story', 1080, 1920, 'Instagram story, 9:16. “Find your people.” and how to join.', () => `
-    ${deepField(1080, 1920, null, { seed: 'ig-story', cons: { box: [520, 260, 460, 300], labels: ['Ask for an intro'], labelSize: 18 } })}
+    ${deepField(1080, 1920, null, { seed: 'ig-story', cons: { box: [520, 260, 460, 300], labels: ['Get an intro'], labelSize: 18 } })}
     <div class="abs" style="left:88px;top:150px">${lock(70)}</div>
     <div class="abs" style="left:88px;top:600px"><div class="d" style="font-size:210px;letter-spacing:-0.05em;line-height:0.9;color:${C.star}">${hl('Find your<br>*people.*')}</div>
-      <div class="t" style="font-size:40px;font-weight:600;margin-top:44px;color:${C.sub}">The private network where asking is normal.</div></div>
+      <div class="t" style="font-size:40px;font-weight:600;margin-top:44px;color:${C.sub}">The private network for Ateneans.</div></div>
     <div class="abs" style="left:88px;right:88px;top:1250px">
       ${F.steps.map(([t, d], i) => `<div style="display:grid;grid-template-columns:90px 1fr;padding:26px 0;border-top:2px solid rgba(170,185,255,0.2)">${mono(`0${i + 1}`, 26, C.peri, 'padding-top:8px')}<div><div style="font-size:44px;font-weight:700;letter-spacing:-0.02em;color:${C.star}">${peso(t)}</div><div class="t" style="font-size:32px;margin-top:4px;color:${C.sub}">${d}</div></div></div>`).join('')}</div>
     <div class="abs" style="left:88px;right:88px;bottom:120px;display:flex;justify-content:space-between">${mono(peso(`${F.price} ${F.per}`), 26, C.star)}${mono(F.site, 26, C.peri)}</div>
@@ -124,7 +124,7 @@ const shareCards = [
   ['link-preview', 1200, 630, 'Link preview (Open Graph), 1200 × 630.', () => `
     ${deepField(1200, 630, null, { seed: 'og', cons: { box: [760, 70, 360, 170], labels: ['Open for work'], labelSize: 13 } })}
     <div class="abs" style="left:72px;top:66px">${lock(44)}</div>
-    <div class="abs" style="left:72px;top:190px"><div class="d" style="font-size:72px;color:${C.star}">${hl('The private network<br>where asking is *normal.*')}</div></div>
+    <div class="abs" style="left:72px;top:190px"><div class="d" style="font-size:72px;color:${C.star}">${hl('Welcome to Atenean<br>*Networking*')}</div></div>
     <div class="abs" style="left:72px;bottom:44px;display:flex;gap:28px;align-items:baseline"><span class="d nw" style="font-size:40px;color:${C.star}">${peso(F.price)}<span style="font-size:22px;font-weight:600;color:${C.sub};margin-left:6px;letter-spacing:-0.01em">${F.per}</span></span>${mono(`${F.forWho} · Members only`, 15, C.muted)}</div>
     <div class="abs t" style="right:72px;bottom:46px;font-size:14px;color:${C.muted}">${F.unofficial}</div>`],
 ];
@@ -149,7 +149,7 @@ const sheets = [
     <div class="abs" style="left:72px;top:170px;width:900px">
       ${mono('Inter 800 · tracking −4% · cv05 cv11 ss03', 16, C.peri)}
       <div class="d" style="font-size:132px;margin-top:22px;color:${C.star}">${hl('Find your<br>*people.*')}</div>
-      <div class="t" style="font-size:30px;margin-top:34px;color:${C.sub};max-width:760px">${F.support} Only members see your posts, so asking is normal here.</div>
+      <div class="t" style="font-size:30px;margin-top:34px;color:${C.sub};max-width:760px">${F.support} Only members see your posts.</div>
       ${mono('Inter 500 · body', 14, C.muted, 'display:block;margin-top:14px')}</div>
     <div class="abs" style="left:1060px;top:170px;right:72px">
       ${mono('JetBrains Mono 500 · uppercase · +8%', 16, C.peri)}
@@ -162,8 +162,8 @@ const sheets = [
 const screen = () => `${deepField(1280, 800, 640, { seed: 'screen', cons: { box: [820, 60, 380, 170], labels: [] }, sun: true })}
   <div class="abs" style="left:64px;top:40px">${lock(30)}</div>
   <div class="abs" style="right:64px;top:42px;padding:9px 16px;border:1px solid rgba(170,185,255,0.3);color:${C.star};font-size:15px;font-weight:600">Sign in</div>
-  <div class="abs" style="left:64px;top:150px"><div class="d" style="font-size:68px;color:${C.star}">${hl('The private<br>network where<br>asking is *normal.*')}</div>
-    <div class="t" style="font-size:21px;margin-top:26px;max-width:560px;color:${C.sub}">${F.support} Only members see your posts, so asking is normal here.</div>
+  <div class="abs" style="left:64px;top:150px"><div class="d" style="font-size:68px;color:${C.star}">${hl('Welcome to<br>Atenean<br>*Networking*')}</div>
+    <div class="t" style="font-size:21px;margin-top:26px;max-width:560px;color:${C.sub}">${F.support} Only members see your posts.</div>
     <div style="display:flex;gap:10px;margin-top:30px"><div style="width:330px;height:52px;border:1px solid rgba(170,185,255,0.22);display:flex;align-items:center;padding:0 16px;font-size:17px;color:rgba(238,241,250,0.4)">you@student.ateneo.edu</div><div style="height:52px;padding:0 22px;background:${C.signal};color:#fff;display:flex;align-items:center;font-size:17px;font-weight:650">Join BlueLink →</div></div></div>
   <div class="abs" style="left:64px;bottom:40px">${mono('₱99 a year · ₱250 lifetime', 14, C.muted)}</div>`;
 

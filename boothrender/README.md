@@ -108,7 +108,7 @@ npm run cards -- ~/Downloads/codes.txt v1 founding   # founding member codes (1 
 ```
 
 This makes `voucher-cards-<look>.pdf` next to the codes file: front, back, front, back, one pair per code.
-A line can name its own pass: `BL-ACDE-FGHJ, founding`.
+A line can name its own pass: `ACD-FGH, founding`.
 
 ## Where the words come from
 

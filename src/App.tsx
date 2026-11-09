@@ -18,15 +18,15 @@ import { api, session } from './lib/api'
 import { AppContext, type AppState, type ComposeKind, type Theme } from './lib/app'
 import { connectLive, useLive } from './lib/live'
 import { useRoute, type Route } from './lib/router'
-import { load, save } from './lib/storage'
+import { save } from './lib/storage'
 import { LogoMark } from './components/Logo'
 import type { FullPerson, Membership, MyOrg } from './types'
 
 export default function App() {
   const route = useRoute()
   const [token, setToken] = useState(session.token)
-  // Only a theme the user picked is saved. Everyone else gets light.
-  const [theme, setThemeState] = useState<Theme>(() => load('ui-theme', 'light'))
+  // There is no theme switch, so everyone gets light.
+  const [theme, setThemeState] = useState<Theme>('light')
 
   useEffect(() => session.subscribe(() => setToken(session.token)), [])
   useEffect(() => {
@@ -180,10 +180,12 @@ function Page({ route }: { route: Route }) {
       return <People />
     case 'orgs':
       return <Orgs />
+    case 'businesses':
+      return <Orgs type="business" />
     case 'org':
-      return <OrgPage id={route.id} />
+      return <OrgPage id={route.id} biz={route.biz} />
     case 'newOrg':
-      return <NewOrg />
+      return <NewOrg biz={route.biz} />
     case 'editOrg':
       return <EditOrg id={route.id} />
     case 'user':

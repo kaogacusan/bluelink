@@ -428,14 +428,21 @@ textarea.input {
   display: none;
 }
 
+/* Even tiles, three to a row, so the six choices sit in two neat lines. */
 .picker {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
+}
+.open-picker {
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-flow: column;
+  column-gap: 16px;
 }
 .pick {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   height: 42px;
   padding: 0 16px;
@@ -1099,11 +1106,10 @@ textarea.input {
   position: relative;
 }
 .menu-list {
-  position: absolute;
-  right: 0;
-  top: calc(100% + 4px);
-  z-index: 30;
+  position: fixed;
+  z-index: 45;
   min-width: 200px;
+  max-width: calc(100vw - 16px);
   padding: 6px;
   border-radius: var(--r-card);
   background: var(--solid);
@@ -1331,7 +1337,7 @@ textarea.input {
 .selects {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin: 12px 0 16px;
 }
 .selects .select {
   min-height: 40px;
@@ -1346,63 +1352,157 @@ textarea.input {
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
   gap: 12px;
 }
+/* A person card is a small profile header: photo, name, then the rest. */
 .person {
   display: flex;
   flex-direction: column;
-  padding: 20px 16px 16px;
-  text-align: center;
+  overflow: hidden;
   animation: fadeUp 0.35s var(--ease) both;
 }
 .person-top {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 2px;
+  color: inherit;
+  text-decoration: none;
 }
-.person-top .avatar {
-  margin-bottom: 10px;
+.person-avatar {
+  position: relative;
+  display: inline-flex;
+  margin: 16px 0 8px 16px;
+  border: 4px solid var(--panel);
+  border-radius: 50%;
+  background: var(--panel);
 }
 .person-top b {
-  font-size: 16px;
-  font-weight: 650;
-  letter-spacing: -0.01em;
+  padding: 0 16px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
 }
 .person-top:hover b {
   color: var(--accent-text);
   text-decoration: underline;
 }
-.person-top > span:not(.avatar) {
+.person-line {
+  margin-top: 2px;
+  padding: 0 16px;
   font-size: 13px;
   color: var(--muted);
 }
+.person-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 16px 16px;
+}
+.person-body > .btn {
+  margin-top: auto;
+}
 .person-headline {
-  margin-top: 8px;
+  margin-top: 2px;
+  padding: 0 16px;
   font-size: 14px;
-  color: var(--text-2);
+  color: var(--text);
   line-height: 1.45;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.person-tags {
-  flex: 1;
-  margin: 12px 0 14px;
+/* Affiliations, small: the main one as a banner strip, the rest as logos beside it. */
+.person-aff {
+  display: flex;
+  gap: 6px;
 }
-.person-tags .tags {
-  justify-content: center;
+.aff.is-mini {
+  flex: 1;
+  gap: 10px;
+  min-height: 48px;
+  padding: 8px 10px;
+}
+.aff.is-mini::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(3, 5, 13, 0.92) 0%, rgba(3, 5, 13, 0.72) 50%, rgba(3, 5, 13, 0.3) 100%);
+  pointer-events: none;
+}
+.aff.is-mini .aff-text {
+  gap: 1px;
+}
+.aff.is-mini .aff-text b {
+  display: block;
+  font-size: 13.5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aff.is-mini .aff-text small {
+  font-size: 12px;
+}
+.person-aff-logo,
+.person-aff-more {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 48px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--surface);
+}
+.person-aff-logo:hover {
+  border-color: var(--line-strong);
+}
+.person-aff-more {
+  width: 36px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.open-chips li.is-more {
+  border-color: var(--line);
+  background: none;
+  color: var(--muted);
 }
 
 /* ============ Profile ============ */
+/* Opening a profile: the header card rises, then each part below follows. */
+.profile > :not(.overlay) {
+  animation: fadeUp 0.4s var(--ease) both;
+}
+.profile > :nth-child(2) {
+  animation-delay: 0.06s;
+}
+.profile > :nth-child(3) {
+  animation-delay: 0.12s;
+}
+.profile > :nth-child(4) {
+  animation-delay: 0.18s;
+}
+.profile > :nth-child(n + 5):not(.overlay) {
+  animation-delay: 0.24s;
+}
+.profile-avatar {
+  animation: pop 0.4s 0.1s var(--ease-out) both;
+}
 .profile-card {
   overflow: hidden;
 }
 .profile-band {
-  height: 96px;
   background: var(--blue);
 }
 .profile-body {
+  position: relative;
   padding: 0 22px 22px;
+}
+.profile-edit {
+  position: absolute;
+  top: 14px;
+  right: 22px;
 }
 .profile-avatar {
   display: inline-flex;
@@ -1427,6 +1527,196 @@ textarea.input {
   margin-top: 6px;
   font-size: 14px;
   color: var(--muted);
+}
+/* Orgs and businesses. The highlight is the big one with its banner. The rest are short rows: two stack next to it, more go below. */
+.profile-aff {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+.profile-aff .aff.is-main {
+  grid-row: span 2;
+}
+.profile-aff.is-1 .aff.is-main {
+  grid-column: 1 / -1;
+}
+.profile-aff.is-2 .aff.is-sub {
+  grid-row: span 2;
+}
+/* A short row left alone below the highlight takes the whole row. */
+.profile-aff .aff.is-sub:last-child:nth-child(even):not(:nth-child(2)) {
+  grid-column: 1 / -1;
+}
+.aff {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  min-height: 104px;
+  padding: 14px 16px;
+  border: 1px solid rgba(170, 185, 255, 0.14);
+  border-radius: var(--r-card);
+  background: var(--void);
+  color: var(--starlight);
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color 0.15s var(--ease);
+}
+.aff:hover {
+  border-color: rgba(170, 185, 255, 0.4);
+}
+.aff .cover-img,
+.aff .cover-sky {
+  z-index: -2;
+  transition: transform 0.4s var(--ease);
+}
+.aff:hover .cover-img,
+.aff:hover .cover-sky {
+  transform: scale(1.04);
+}
+/* Dark on the left so the name always reads, the picture shows on the right. */
+.aff.is-main::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(3, 5, 13, 0.92) 0%, rgba(3, 5, 13, 0.72) 45%, rgba(3, 5, 13, 0.2) 100%);
+  pointer-events: none;
+}
+.aff .org-logo {
+  flex: none;
+  box-shadow: 0 0 0 1px rgba(238, 241, 250, 0.22);
+}
+.aff-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  line-height: 1.25;
+}
+.aff-text b {
+  display: -webkit-box;
+  overflow: hidden;
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.aff-text small {
+  overflow: hidden;
+  font-size: 13px;
+  color: rgba(238, 241, 250, 0.7);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The rest: short rows in the page colors, logo on the left. */
+.aff.is-sub {
+  gap: 12px;
+  min-height: 0;
+  padding: 8px 12px;
+  border-color: var(--line);
+  background: var(--surface);
+  color: var(--text);
+}
+.aff.is-sub:hover {
+  border-color: var(--line-strong);
+}
+.aff.is-sub .org-logo {
+  box-shadow: 0 0 0 1px var(--line);
+}
+.aff.is-sub .aff-text {
+  gap: 1px;
+}
+.aff.is-sub .aff-text b {
+  display: block;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.aff.is-sub .aff-text small {
+  font-size: 12px;
+  color: var(--muted);
+}
+/* Phone: the highlight on top, the rest one per row below it. */
+@media (max-width: 640px) {
+  .profile-aff {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .profile-aff .aff.is-main,
+  .profile-aff.is-2 .aff.is-sub {
+    grid-row: auto;
+  }
+  .aff.is-main {
+    min-height: 92px;
+  }
+}
+/* Edit profile: pick the highlight. */
+.hl-pick {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+}
+.hl-opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  cursor: pointer;
+  transition: border-color 0.15s var(--ease);
+}
+.hl-opt:hover {
+  border-color: var(--line-strong);
+}
+.hl-opt.is-on {
+  border-color: var(--blue);
+  box-shadow: inset 0 0 0 1px var(--blue);
+}
+.hl-opt:has(input:focus-visible) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.hl-opt input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.hl-opt .org-logo {
+  flex: none;
+}
+.hl-opt span {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.3;
+}
+.hl-opt b,
+.hl-opt small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hl-opt b {
+  font-size: 14px;
+  font-weight: 650;
+}
+.hl-opt small {
+  font-size: 12px;
+  color: var(--muted);
+}
+.profile-aff-empty {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.profile-aff-empty a {
+  color: var(--accent-text);
 }
 .profile-actions {
   display: flex;
@@ -1462,6 +1752,61 @@ textarea.input {
 .section .fine {
   margin-bottom: 2px;
 }
+/* Open to and skills: one row each, label on the left */
+.facts .fact {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 16px;
+}
+.facts .fact + .fact {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.facts h2 {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.fact > a {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+.open-chips,
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.open-chips li,
+.skills li {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-control);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.open-chips li {
+  border-color: transparent;
+  background: var(--sky);
+  font-weight: 600;
+  color: var(--text);
+}
+@media (max-width: 640px) {
+  .facts .fact {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
 /* ============ Portfolio ============ */
 .section-head {
   display: flex;
@@ -1470,9 +1815,8 @@ textarea.input {
   gap: 12px;
 }
 .section-count {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
 .gallery {
@@ -1515,6 +1859,23 @@ textarea.input {
 }
 .gallery-tile:hover .gallery-frame img {
   transform: scale(1.025);
+}
+/* Phone screenshots: the whole screen in a dark phone body. Round, because phones are. */
+.gallery-frame.is-phone {
+  container-type: size;
+}
+.gallery-frame.is-phone img {
+  position: static;
+  width: auto;
+  height: 88cqh;
+  object-fit: contain;
+  border: 1.6cqh solid #05070d;
+  border-radius: 7cqh;
+  background: #05070d;
+  box-shadow: 0 0 0 1px rgba(190, 205, 255, 0.22), 0 6px 18px rgba(3, 5, 13, 0.18);
+}
+.gallery-tile:hover .gallery-frame.is-phone img {
+  transform: translateY(-2%);
 }
 .gallery-tile:hover .gallery-frame,
 .gallery-tile:focus-visible .gallery-frame {
@@ -1611,9 +1972,8 @@ textarea.input {
   padding: 14px 16px 6px 24px;
 }
 .viewer-count {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
   color: rgba(238, 241, 250, 0.55);
 }
 .viewer-stage {
@@ -1741,8 +2101,38 @@ textarea.input {
   border-bottom: 0;
   padding-bottom: 0;
 }
-.setting .seg {
-  width: 160px;
+.setting-btn {
+  min-width: 130px;
+}
+.settings-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding-top: 20px;
+}
+.settings-delete {
+  font-size: 13px;
+  font-weight: 600;
+}
+.settings-delete:hover {
+  text-decoration: underline;
+}
+.settings-delete.is-confirm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  font-weight: 400;
+  color: var(--text-2);
+  text-align: center;
+}
+.settings-delete.is-confirm:hover {
+  text-decoration: none;
+}
+.settings-delete-actions {
+  display: flex;
+  gap: 8px;
 }
 
 /* ============ Forms (edit + onboarding) ============ */
@@ -1886,10 +2276,6 @@ textarea.input {
   font-weight: 650;
   color: var(--muted);
 }
-.reqs {
-  display: flex;
-  flex-direction: column;
-}
 .req {
   display: flex;
   gap: 12px;
@@ -1998,10 +2384,6 @@ textarea.input {
   text-align: center;
   color: var(--muted);
 }
-.sent-note {
-  padding: 14px 18px 6px;
-}
-
 .inbox-thread {
   display: none;
 }
@@ -2542,6 +2924,14 @@ textarea.input {
   .field-row {
     flex-direction: column;
   }
+  .picker {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .pick {
+    padding: 0 8px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
 }
 
 /* ============ Orgs ============ */
@@ -2558,12 +2948,24 @@ textarea.input {
 }
 .page-head.is-row {
   display: flex;
+  min-height: 42px;
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
 }
+.page-head.is-row h1 {
+  min-width: 0;
+  white-space: nowrap;
+}
+.page-head.is-row .btn {
+  flex-shrink: 0;
+}
 .empty .btn {
   margin-top: 14px;
+}
+.search + .org-grid,
+.search + .empty {
+  margin-top: 16px;
 }
 .chip-select {
   width: auto;
@@ -2636,13 +3038,6 @@ textarea.input {
   font-weight: 650;
   color: var(--live);
 }
-.recruiting::before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-}
 .recruiting.is-block {
   margin-top: 8px;
 }
@@ -2663,6 +3058,46 @@ textarea.input {
 }
 .profile-avatar.is-org {
   border-radius: var(--r-card);
+}
+.cover-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+/* A light banner still needs to carry the white label in the corner. */
+.profile-band.has-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(3, 5, 13, 0.5) 0%, transparent 45%);
+  pointer-events: none;
+}
+.profile-band.has-img .cover-label {
+  color: rgba(238, 241, 250, 0.9);
+  text-shadow: 0 1px 3px rgba(3, 5, 13, 0.6);
+}
+.cover-pick {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 100%;
+  aspect-ratio: 4 / 1;
+  margin-bottom: 18px;
+  padding: 10px;
+  border: 0;
+  border-radius: var(--r-card);
+  background: var(--void);
+  overflow: hidden;
+  cursor: pointer;
+}
+.cover-pick .btn {
+  position: relative;
+  z-index: 1;
 }
 .org-links {
   display: flex;
@@ -2728,12 +3163,6 @@ textarea.input {
   padding: 3px 9px;
   border-radius: var(--r-control);
   background: var(--sky);
-}
-.org-mini-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 8px;
 }
 .section .fine a {
   color: var(--accent-text);

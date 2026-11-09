@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Check } from '@phosphor-icons/react/dist/csr/Check'
 import { PencilSimple } from '@phosphor-icons/react/dist/csr/PencilSimple'
 import { Plus } from '@phosphor-icons/react/dist/csr/Plus'
@@ -6,11 +6,11 @@ import { Globe } from '@phosphor-icons/react/dist/csr/Globe'
 import { FacebookLogo } from '@phosphor-icons/react/dist/csr/FacebookLogo'
 import { InstagramLogo } from '@phosphor-icons/react/dist/csr/InstagramLogo'
 import { Avatar } from '../components/Avatar'
-import { SpaceCover, catalogNo } from '../components/Network'
-import { OrgLogo } from '../components/OrgLogo'
+import { OrgCover, OrgLogo } from '../components/OrgLogo'
 import { Menu } from '../components/Menu'
 import { Modal } from '../components/Modal'
 import { Linkified } from '../components/Post'
+import { Gallery } from '../components/Gallery'
 import { PostList } from './Feed'
 import { FollowButton, categoryLabel } from './Orgs'
 import { api, useFetch } from '../lib/api'
@@ -40,7 +40,7 @@ function ApplyModal({ org, onClose, onDone }: { org: OrgFull; onClose: () => voi
 
   return (
     <Modal title={`Apply to ${org.short || org.name}`} onClose={onClose}>
-      <p className="fine">The org admins will see your profile and your answer.</p>
+      <p className="fine">The admins will see your profile and your answer.</p>
       <label className="field">
         <span>{org.question || 'Why do you want to join?'}</span>
         <textarea className="input" rows={5} maxLength={1500} autoFocus value={answer} onChange={(e) => setAnswer(e.target.value)} />
@@ -57,11 +57,55 @@ function ApplyModal({ org, onClose, onDone }: { org: OrgFull; onClose: () => voi
   )
 }
 
-export function OrgPage({ id }: { id: string }) {
+type Member = OrgFull['people'][number]
+
+// Sets a member's job title, like "Founder and CEO".
+function TitleModal({ org, person, onClose, onDone }: { org: OrgFull; person: Member; onClose: () => void; onDone: (o: OrgFull) => void }) {
+  const { me, toast } = useApp()
+  const [title, setTitle] = useState(person.title)
+  const [busy, setBusy] = useState(false)
+
+  async function save() {
+    setBusy(true)
+    try {
+      const r = await api<{ org: OrgFull }>(`/api/orgs/${org.id}/members/${person.uid}/title`, { title })
+      onDone(r.org)
+      onClose()
+    } catch (e) {
+      toast((e as Error).message)
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Modal title={person.uid === me.uid ? 'Your title' : `${person.name.split(' ')[0]}'s title`} onClose={onClose}>
+      <label className="field">
+        <span>Title at {org.short || org.name}</span>
+        <input className="input" maxLength={60} autoFocus placeholder="Founder and CEO" value={title} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && save()} />
+      </label>
+      <div className="modal-actions">
+        <button className="btn btn-ghost" onClick={onClose}>
+          Cancel
+        </button>
+        <button className="btn btn-primary" onClick={save} disabled={busy}>
+          Save
+        </button>
+      </div>
+    </Modal>
+  )
+}
+
+export function OrgPage({ id, biz }: { id: string; biz?: boolean }) {
   const app = useApp()
   const { data, setData, error, reload } = useFetch<{ org: OrgFull }>(`/api/orgs/${id}`)
+  // Old links send everyone to #/o/id. A business moves to #/businesses/id, so the menu shows Businesses.
+  const type = data?.org.type
+  useEffect(() => {
+    if (type && (type === 'business') !== !!biz) location.replace(href.org(id, type))
+  }, [type, biz, id])
   const [tab, setTab] = useState<'posts' | 'members' | 'apps'>('posts')
   const [applying, setApplying] = useState(false)
+  const [titling, setTitling] = useState<Member | null>(null)
   useLive((e) => e.type === 'org' && e.id === id && reload())
 
   if (error && !data) return <p className="empty">{error}</p>
@@ -102,9 +146,8 @@ export function OrgPage({ id }: { id: string }) {
   return (
     <>
       <section className="card profile-card">
-        <div className="profile-band is-org">
-          <SpaceCover seed={org.id} />
-          <span className="cover-label">{catalogNo(org.id)} · Org</span>
+        <div className={org.cover ? 'profile-band is-org has-img' : 'profile-band is-org'}>
+          <OrgCover org={org} />
         </div>
         <div className="profile-body">
           <div className="profile-avatar is-org">
@@ -114,7 +157,7 @@ export function OrgPage({ id }: { id: string }) {
           <p className="profile-meta">
             {categoryLabel(org.category)} · {org.members} {org.members === 1 ? 'member' : 'members'} · {org.followers} {org.followers === 1 ? 'follower' : 'followers'}
           </p>
-          {org.recruiting && !org.myRole && <p className="recruiting is-block">Recruiting now</p>}
+          {org.recruiting && !org.myRole && <p className="recruiting is-block">{org.type === 'business' ? 'Hiring now' : 'Recruiting now'}</p>}
 
           <div className="profile-actions">
             {admin ? (
@@ -122,7 +165,7 @@ export function OrgPage({ id }: { id: string }) {
                 <button className="btn btn-primary" onClick={() => app.compose('post', org.id)}>
                   <Plus weight="bold" /> Post as {org.short || 'org'}
                 </button>
-                <a className="btn btn-outline" href={href.editOrg(org.id)}>
+                <a className="btn btn-outline" href={href.editOrg(org.id, org.type)}>
                   <PencilSimple weight="bold" /> Edit
                 </a>
               </>
@@ -171,6 +214,23 @@ export function OrgPage({ id }: { id: string }) {
         </section>
       )}
 
+      <Gallery
+        items={org.gallery || []}
+        look={org.portfolio}
+        seed={org.id}
+        empty={org.type === 'business' ? 'Show what you sell or make. Add pictures of products, projects, or your space.' : 'Show what your org does. Add pictures of events and projects.'}
+        edit={
+          admin
+            ? {
+                add: async (w) => setOrg((await api<{ org: OrgFull }>(`/api/orgs/${org.id}/gallery`, w)).org),
+                update: async (id, w) => setOrg((await api<{ org: OrgFull }>(`/api/orgs/${org.id}/gallery/${id}/edit`, w)).org),
+                remove: async (id) => setOrg((await api<{ org: OrgFull }>(`/api/orgs/${org.id}/gallery/${id}/remove`, {})).org),
+                arrange: async (a) => setOrg((await api<{ org: OrgFull }>(`/api/orgs/${org.id}/portfolio`, a)).org),
+              }
+            : undefined
+        }
+      />
+
       <div className="seg page-tabs" role="tablist">
         <button role="tab" aria-selected={tab === 'posts'} className={tab === 'posts' ? 'is-on' : ''} onClick={() => setTab('posts')}>
           Posts
@@ -195,17 +255,22 @@ export function OrgPage({ id }: { id: string }) {
                 <Avatar person={p} size={44} />
                 <div>
                   <b>{p.name}</b>
-                  <span>{p.headline || personLine(p)}</span>
+                  <span>{p.title || personLine(p)}</span>
                 </div>
               </a>
               {p.orgRole === 'admin' && <span className="role-tag">Admin</span>}
-              {admin && p.uid !== app.me.uid && (
+              {(admin || p.uid === app.me.uid) && (
                 <Menu
                   items={[
-                    p.orgRole === 'admin'
-                      ? { label: 'Make a member', onClick: () => act(`members/${p.uid}/member`) }
-                      : { label: 'Make an admin', onClick: () => act(`members/${p.uid}/admin`, `${p.name.split(' ')[0]} is now an admin.`) },
-                    { label: 'Remove from org', onClick: () => act(`members/${p.uid}/remove`, 'Removed.'), danger: true },
+                    { label: p.title ? 'Change title' : 'Add title', onClick: () => setTitling(p) },
+                    ...(admin && p.uid !== app.me.uid
+                      ? [
+                          p.orgRole === 'admin'
+                            ? { label: 'Make a member', onClick: () => act(`members/${p.uid}/member`) }
+                            : { label: 'Make an admin', onClick: () => act(`members/${p.uid}/admin`, `${p.name.split(' ')[0]} is now an admin.`) },
+                          { label: 'Remove from org', onClick: () => act(`members/${p.uid}/remove`, 'Removed.'), danger: true },
+                        ]
+                      : []),
                   ]}
                 />
               )}
@@ -248,6 +313,7 @@ export function OrgPage({ id }: { id: string }) {
       )}
 
       {applying && <ApplyModal org={org} onClose={() => setApplying(false)} onDone={setOrg} />}
+      {titling && <TitleModal org={org} person={titling} onClose={() => setTitling(null)} onDone={(o) => { setOrg(o); app.reloadMe() }} />}
     </>
   )
 }

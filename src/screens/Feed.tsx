@@ -9,7 +9,6 @@ import type { Post } from '../types'
 
 const FILTERS: { kind?: FeedKind; label: string }[] = [
   { label: 'All' },
-  { kind: 'ask', label: 'Asks' },
   { kind: 'work', label: 'Open for work' },
   { kind: 'opp', label: 'Opportunities' },
   { kind: 'event', label: 'Events' },
@@ -17,7 +16,6 @@ const FILTERS: { kind?: FeedKind; label: string }[] = [
 
 const EMPTY: Record<string, string> = {
   all: 'Nothing here yet. Be the first to post.',
-  ask: 'No asks yet. Need help with something? Ask.',
   work: 'No one has posted yet. Good at something? Say you are open for work.',
   opp: 'No opportunities yet. Know of an internship or an org opening? Share it.',
   event: 'No events yet. Hosting something? Post it.',
@@ -74,7 +72,7 @@ export function Feed({ kind }: { kind?: FeedKind }) {
         <div className="compose-row">
           <Avatar person={me} size={44} />
           <button className="compose-prompt" onClick={() => compose()}>
-            Share something, ask for help, or post an event
+            Share an update, an opportunity, or an event
           </button>
         </div>
       </section>

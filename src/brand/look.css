@@ -1,4 +1,4 @@
-/* blueLink look: "Deep Field". People are stars, connections are lines. See BRAND.md.
+/* BlueLink look: "Deep Field". People are stars, connections are lines. See BRAND.md.
    Loaded after styles.css. It changes how things look, never how they work. */
 
 /* ============ Base ============ */
@@ -6,14 +6,11 @@
   box-shadow: none;
 }
 
-/* Small mono labels, like names in a star catalog */
+/* Small quiet labels */
 .rail-card h2,
 .net-head h2 {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 650;
   color: var(--muted);
 }
 
@@ -268,11 +265,8 @@
   border: 0;
   border-radius: 0;
   background: none;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 550;
   color: var(--muted);
   box-shadow: inset 0 -2px 0 transparent;
 }
@@ -318,36 +312,28 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* What kind of post it is, in catalog type */
+/* What kind of post it is */
 .post-kind {
   --k: var(--accent-text);
   width: fit-content;
-  height: 22px;
-  padding: 0 8px 0 7px;
+  height: 24px;
+  padding: 0 9px 0 8px;
   border: 1px solid color-mix(in srgb, var(--k) 30%, transparent);
   border-radius: var(--r-bar);
   background: color-mix(in srgb, var(--k) 6%, transparent);
   color: var(--k);
-  font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 12.5px;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: -0.005em;
 }
 .post-kind svg {
-  font-size: 12px;
-}
-.post-kind.kind-ask {
-  --k: #b4470f;
+  font-size: 14px;
 }
 .post-kind.kind-opp {
   --k: #0d7a55;
 }
 .post-kind.kind-work {
   --k: #5b34c9;
-}
-[data-theme='dark'] .post-kind.kind-ask {
-  --k: #fb923c;
 }
 [data-theme='dark'] .post-kind.kind-opp {
   --k: #4ade80;
@@ -442,36 +428,21 @@
 }
 .net-legend {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 14px;
+  align-items: baseline;
+  gap: 7px;
   margin-top: 8px;
   padding-top: 10px;
   border-top: 1px solid var(--sky-line);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-2);
 }
-.net-legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.net-legend i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--starlight);
-  opacity: 0.7;
-}
-.net-legend i.is-on {
-  background: var(--glow);
-  opacity: 1;
-  box-shadow: 0 0 6px var(--glow);
-}
-.net-legend i.is-pending {
-  background: transparent;
-  border: 1.5px dashed var(--brand-peri);
-  opacity: 1;
+.net-legend b {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
 }
 
 /* ============ Profile cover: their own patch of sky ============ */
@@ -479,9 +450,10 @@
   position: relative;
   z-index: 1;
 }
+/* One shape on every screen, so the same part of the picture always shows. */
 .profile-band {
   position: relative;
-  height: 156px;
+  aspect-ratio: 4 / 1;
   overflow: hidden;
   background:
     radial-gradient(90% 140% at 100% 0%, rgba(40, 60, 160, 0.16) 0%, transparent 60%),
@@ -495,16 +467,88 @@
   top: 14px;
   right: 16px;
   z-index: 1;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
   color: rgba(238, 241, 250, 0.55);
 }
 .profile-avatar {
   margin-top: -52px;
   border-color: var(--panel);
+}
+/* No banner picked yet: plain gray, like an empty frame. */
+.profile-band.is-empty {
+  background: var(--banner-empty);
+}
+/* People cards: a short banner, the photo on its edge. */
+.person-band {
+  align-self: stretch;
+}
+.person-band + .person-avatar {
+  margin-top: -44px;
+}
+
+/* Edit profile: the banner, then the choices under it. */
+.banner-pick {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.banner-preview {
+  border-radius: var(--r-card);
+}
+.banner-opts {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+.banner-opt {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 550;
+  color: var(--text-2);
+  text-align: left;
+  cursor: pointer;
+}
+.banner-opt:disabled {
+  cursor: progress;
+}
+.banner-opt.is-on {
+  color: var(--text);
+}
+.banner-thumb {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  border-radius: var(--r-card);
+  background: var(--void);
+  transition: box-shadow 0.15s var(--ease);
+}
+.banner-thumb.is-empty {
+  background: var(--banner-empty);
+}
+.banner-thumb.is-upload {
+  border: 1px dashed var(--line-strong);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 18px;
+}
+.banner-opt:hover .banner-thumb {
+  box-shadow: 0 0 0 2px var(--panel), 0 0 0 3px var(--line-strong);
+}
+.banner-opt.is-on .banner-thumb {
+  box-shadow: 0 0 0 2px var(--panel), 0 0 0 4px var(--blue);
+}
+@media (max-width: 560px) {
+  .banner-opts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* ============ Landing: deep space over a planet ============ */
@@ -830,10 +874,9 @@ body:has(.landing) {
   padding: 0;
   border: 0;
   width: auto;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
   color: var(--accent-text);
 }
 .l-steps ol {
@@ -872,34 +915,40 @@ body:has(.landing) {
   padding-top: 40px;
 }
 
-/* The prices: two big numbers, then the reason */
+/* The prices: one table. The two plans on top, what both get below. */
 .l-band {
   background: transparent;
 }
 .l-band-inner {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
-  gap: 72px;
   max-width: 1200px;
-  padding: 88px 24px;
+  padding: 96px 24px;
   text-align: left;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+}
+.l-plan-table {
+  margin-top: 40px;
+  border: 1px solid var(--line-strong);
+}
+.l-plans {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .l-band .l-price {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 36px;
   max-width: none;
   margin: 0;
+  padding: 28px 32px 36px;
   font-size: inherit;
   color: #fff;
 }
-.l-plans {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
+.l-price + .l-price {
+  border-left: 1px solid var(--line-strong);
+}
+.l-price span {
+  font-size: 15px;
+  font-weight: 550;
+  color: var(--text-2);
 }
 .l-price b {
   font-size: clamp(72px, 9vw, 120px);
@@ -907,52 +956,25 @@ body:has(.landing) {
   letter-spacing: -0.06em;
   line-height: 0.85;
 }
-.l-price span {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-2);
-}
-.l-band p {
-  margin: 16px 0 28px;
-  max-width: 520px;
-}
-/* What people come for: an even grid of cells split by hairlines, like a star chart's table */
-.l-band .tags.is-lg {
+.l-perks {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
-  max-width: 760px;
-  margin-top: 28px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px 32px;
+  padding: 28px 32px 32px;
   border-top: 1px solid var(--line-strong);
-  border-left: 1px solid var(--line-strong);
 }
-.l-band .tags.is-lg .tag {
-  gap: 10px;
-  height: 56px;
-  padding: 0 18px;
-  border: 0;
-  border-right: 1px solid var(--line-strong);
-  border-bottom: 1px solid var(--line-strong);
-  border-radius: 0;
-  background: transparent;
-  font-size: 15px;
+.l-perks li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
   font-weight: 550;
   color: var(--text);
-  transition: background-color 0.2s var(--ease);
 }
-.l-band .tags.is-lg .tag:hover {
-  background: var(--surface);
-}
-.l-band .tags.is-lg .tag::before {
+.l-perks svg {
   flex-shrink: 0;
-  width: 6px;
-  height: 6px;
-  margin: 0;
-  background: var(--brand-peri);
-  opacity: 1;
+  font-size: 15px;
+  color: var(--brand-peri);
 }
 
 .l-rules ul {
@@ -967,9 +989,10 @@ body:has(.landing) {
 .l-rules li::before {
   content: counter(rule, decimal-leading-zero);
   flex-shrink: 0;
-  padding-top: 3px;
-  font-family: var(--font-mono);
-  font-size: 12px;
+  padding-top: 2px;
+  font-size: 13px;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
 .l-foot {
@@ -991,12 +1014,27 @@ body:has(.landing) {
     border-top: 1px solid var(--line);
   }
   .l-band-inner {
-    grid-template-columns: 1fr;
-    gap: 28px;
     padding: 64px 20px;
   }
-  .l-band .tags.is-lg {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .l-plan-table {
+    margin-top: 28px;
+  }
+  .l-band .l-price {
+    gap: 24px;
+    padding: 20px 20px 24px;
+  }
+  .l-price b {
+    font-size: 56px;
+  }
+  .l-perks {
+    grid-template-columns: repeat(2, auto);
+    justify-content: start;
+    gap: 16px 28px;
+    padding: 20px 20px 24px;
+  }
+  .l-perks li {
+    gap: 10px;
+    font-size: 15px;
   }
 }
 
@@ -1026,14 +1064,14 @@ body:has(.landing) {
   accent-color: var(--blue);
 }
 .check a,
-.setting a,
+.setting a:not(.btn),
 .rail-foot a,
 .pay-fine a {
   color: var(--accent-text);
   font-weight: 600;
 }
 .check a:hover,
-.setting a:hover,
+.setting a:not(.btn):hover,
 .rail-foot a:hover,
 .pay-fine a:hover {
   text-decoration: underline;
@@ -1071,10 +1109,8 @@ body:has(.landing) {
   padding: 0 12px;
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
   color: #9aa3c2;
   border-radius: var(--r-control);
 }
@@ -1091,10 +1127,8 @@ body:has(.landing) {
   padding: 48px 24px 96px;
 }
 .legal-kicker {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--muted);
 }
 .legal-body h1 {
@@ -1118,9 +1152,9 @@ body:has(.landing) {
   letter-spacing: -0.02em;
 }
 .legal-body h2 span {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
 .legal-body p,

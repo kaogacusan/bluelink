@@ -87,7 +87,7 @@ export function Admin() {
     }
   }
 
-  // One code per line with its card: "BL-ACDE-FGHJ, lifetime". The booth kit (npm run cards) prints the matching front.
+  // One code per line with its card: "ACD-FGH, lifetime". The booth kit (npm run cards) prints the matching front.
   function saveCards() {
     const card = cards.plan === 'life' ? 'lifetime' : 'founding'
     const text = cards.codes.map((c) => `${c}, ${card}`).join('\n') + '\n'

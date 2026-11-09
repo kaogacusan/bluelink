@@ -118,9 +118,9 @@ const layers = [
 // ---------- page text ----------
 // the sale, in five steps (the voucher flow in the app: a code on the join screen)
 const steps = [
-  ['1', 'Show', 'Let them see the landing page on the laptop: private, members only, asking is normal.'],
+  ['1', 'Show', 'Let them see the landing page on the laptop: private, members only, made for networking.'],
   ['2', 'Check and sign in', 'They are 18+ with an Ateneo email. They scan the QR and sign in.'],
-  ['3', 'Pay ₱50', 'Cash, or they scan the GCash QR. Check the payment came in.'],
+  ['3', 'Pay ₱99 or ₱250', '₱99 for a year or ₱250 for lifetime. Cash, or they scan the GCash QR. Check the payment came in.'],
   ['4', 'Give the card', 'Write or print the code on the back of a voucher card. Give it.'],
   ['5', 'Redeem', 'They tap “Have a code?” on the join screen and type it. Help them right there. Log the sale.'],
 ];
@@ -192,7 +192,7 @@ async function build(S) {
 
   const L = { dims: S.layer('dims'), roof: S.layer('roof'), people: S.layer('people'), header: S.layer('header') };
 
-  // ground: a brick walk that fades into the night around it
+  // ground: a brick walk that fades into the white around it
   const bricks = brickTexture();
   const gw = 12, gd = 9;
   bricks.repeat.set(gw / 1.6, gd / 1.6);
@@ -203,7 +203,7 @@ async function build(S) {
   S.add(ground);
   const fade = canvasTexture(512, 512, (g, w, h) => {
     const gr = g.createRadialGradient(w / 2, h / 2, w * 0.16, w / 2, h / 2, w * 0.5);
-    gr.addColorStop(0, 'rgba(5,8,23,0)'); gr.addColorStop(1, 'rgba(5,8,23,1)');
+    gr.addColorStop(0, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(255,255,255,1)');
     g.fillStyle = gr; g.fillRect(0, 0, w, h);
   });
   const fadeM = new THREE.Mesh(new THREE.PlaneGeometry(gw + 0.02, gd + 0.02), new THREE.MeshBasicMaterial({ map: fade, transparent: true, depthWrite: false }));

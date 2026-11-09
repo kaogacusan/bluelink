@@ -39,7 +39,7 @@ export const F = {
   privacy: 'bluelinkph.com/#/privacy',
   terms: 'bluelinkph.com/#/terms',
   headline: ['Welcome to', 'Atenean', '*Networking*'],   // *word* = the one blue word
-  support: 'Ask for work, find a mentor, or offer what you are good at.',
+  support: 'Find work, find a mentor, or offer what you are good at.',
   signoff: ['Find your', '*people.*'],
   // Prices from ~/BlueLink/shared/membership.js. Both plans get the same app.
   price: '₱99',
@@ -80,8 +80,8 @@ export const F = {
   once: 'Code works once.',
   // The voucher card. The front reads like a paid plan. Real codes never go in assets/ (the site is public):
   // `npm run cards -- <codes.txt>` makes a private PDF next to the codes file.
-  // Real codes look like BL-ACDE-FGHJ (easy-to-read letters and digits). The public sample shows this one, marked SAMPLE.
-  sampleCode: 'BL-ACDE-FGHJ',
+  // Real codes look like ACD-FGH (easy-to-read letters and digits). The public sample shows this one, marked SAMPLE.
+  sampleCode: 'ACD-FGH',
 };
 
 // Passes a voucher can be for. In the app each code works once and adds its days on top of any time already left.
