@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { colorFor, initials } from './Avatar'
 import { useFetch } from '../lib/api'
 import { useApp } from '../lib/app'
@@ -442,6 +443,27 @@ function layout(me: Person, people: Person[]) {
   return { nodes, links: links.filter((l) => l.show) }
 }
 
+// The card clips what is outside it, so the tip lives on the page instead.
+// It sits above the dot, drops below when there is no room, and never leaves the screen.
+function NetTip({ x, top, bottom, children }: { x: number; top: number; bottom: number; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const { width, height } = el.getBoundingClientRect()
+    const pad = 8
+    const above = top - height - 8
+    el.style.left = `${Math.min(window.innerWidth - width - pad, Math.max(pad, x - width / 2))}px`
+    el.style.top = `${above >= pad ? above : bottom + 8}px`
+  })
+  return createPortal(
+    <div ref={ref} className="net-tip">
+      {children}
+    </div>,
+    document.body,
+  )
+}
+
 export function MyNetwork() {
   const { me, theme } = useApp()
   const { data, reload } = useFetch<{ people: Person[] }>('/api/people')
@@ -572,6 +594,15 @@ export function MyNetwork() {
     })
   }, [graph])
 
+  // The tip is pinned to the screen, so close it when the page scrolls under it.
+  const tipOpen = hover !== null
+  useEffect(() => {
+    if (!tipOpen) return
+    const close = () => ((hoverRef.current = null), setHover(null))
+    window.addEventListener('scroll', close, { capture: true, passive: true })
+    return () => window.removeEventListener('scroll', close, { capture: true })
+  }, [tipOpen])
+
   if (!graph || graph.nodes.length < 2) return null
 
   const hit = (e: ReactMouseEvent<HTMLCanvasElement>) => {
@@ -592,6 +623,7 @@ export function MyNetwork() {
   const counts = { connected: 0, pending: 0, other: 0 }
   graph.nodes.forEach((n) => n.kind !== 'me' && counts[n.kind]++)
   const hovered = hover !== null ? graph.nodes[hover] : null
+  const box = hovered ? ref.current?.getBoundingClientRect() : undefined
   const tipText = (n: GNode) => (n.kind === 'me' ? 'You' : n.kind === 'connected' ? 'Connected' : n.kind === 'pending' ? (n.person?.status === 'received' ? 'Wants to connect' : 'Request sent') : n.person?.headline || 'Say hi')
 
   return (
@@ -618,11 +650,11 @@ export function MyNetwork() {
             go(i === 0 ? href.me : href.user(graph.nodes[i].person!.uid))
           }}
         />
-        {hovered && hover !== null && (
-          <div className="net-tip" style={{ left: hovered.x * scale.current, top: hovered.y * scale.current - hovered.r * scale.current - 8 }}>
+        {hovered && box && (
+          <NetTip x={box.left + hovered.x * scale.current} top={box.top + (hovered.y - hovered.r) * scale.current} bottom={box.top + (hovered.y + hovered.r) * scale.current}>
             <b>{hovered.kind === 'me' ? me.name : hovered.person!.name}</b>
             <span>{tipText(hovered)}</span>
-          </div>
+          </NetTip>
         )}
       </div>
       <p className="net-legend">

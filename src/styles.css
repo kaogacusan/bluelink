@@ -816,29 +816,6 @@ textarea.input {
 .compose-prompt:hover {
   background: var(--surface);
 }
-.compose-quick {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 8px;
-}
-.compose-quick button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 14px;
-  border-radius: var(--r-control);
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-2);
-}
-.compose-quick button:hover {
-  background: var(--surface);
-}
-.compose-quick svg {
-  font-size: 19px;
-  color: var(--accent-text);
-}
 
 .nudge {
   display: flex;
@@ -1148,6 +1125,39 @@ textarea.input {
 }
 .menu-list .is-danger {
   color: var(--danger);
+}
+
+/* ============ Combo (type to filter) ============ */
+.combo {
+  position: relative;
+}
+.combo-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 30;
+  max-height: 264px;
+  overflow-y: auto;
+  padding: 6px;
+  border-radius: var(--r-card);
+  background: var(--solid);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow);
+  animation: pop 0.15s var(--ease);
+}
+.combo-list li {
+  padding: 10px 12px;
+  border-radius: var(--r-control);
+  font-size: 15px;
+  cursor: pointer;
+}
+.combo-list li.is-active {
+  background: var(--surface-2, var(--surface));
+}
+.combo-list li[aria-selected='true'] {
+  color: var(--accent-text);
+  font-weight: 600;
 }
 
 /* ============ Modal ============ */
@@ -2272,9 +2282,6 @@ textarea.input {
   .field-row {
     flex-direction: column;
   }
-  .compose-quick button {
-    padding: 0 8px;
-  }
 }
 
 /* ============ Orgs ============ */
@@ -2599,15 +2606,6 @@ textarea.input {
   display: block;
   font-weight: 650;
 }
-.l-lock {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-}
 .l-card .post-kind {
   margin-top: 16px;
 }
@@ -2695,6 +2693,22 @@ textarea.input {
   font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: 16px;
+}
+.plan-picker {
+  margin-bottom: 20px;
+}
+.plan-picker .pick {
+  flex: 1;
+  justify-content: space-between;
+  height: 52px;
+}
+.plan-picker .pick b {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.plan-picker .pick.is-on b {
+  color: var(--accent-text);
 }
 .pay-steps {
   display: flex;
@@ -2902,13 +2916,6 @@ textarea.input {
   }
   .admin-row {
     flex-wrap: wrap;
-  }
-  .compose-quick {
-    justify-content: space-between;
-  }
-  .compose-quick button {
-    gap: 6px;
-    font-size: 13px;
   }
   .l-price {
     font-size: 52px;

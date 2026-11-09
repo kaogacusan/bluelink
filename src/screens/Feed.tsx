@@ -1,8 +1,4 @@
 import { useState } from 'react'
-import { Question } from '@phosphor-icons/react/dist/csr/Question'
-import { Briefcase } from '@phosphor-icons/react/dist/csr/Briefcase'
-import { Handshake } from '@phosphor-icons/react/dist/csr/Handshake'
-import { CalendarBlank } from '@phosphor-icons/react/dist/csr/CalendarBlank'
 import { Avatar } from '../components/Avatar'
 import { PostCard } from '../components/Post'
 import { api, useFetch } from '../lib/api'
@@ -79,20 +75,6 @@ export function Feed({ kind }: { kind?: FeedKind }) {
           <Avatar person={me} size={44} />
           <button className="compose-prompt" onClick={() => compose()}>
             Share something, ask for help, or post an event
-          </button>
-        </div>
-        <div className="compose-quick">
-          <button onClick={() => compose('ask')}>
-            <Question weight="bold" /> Ask
-          </button>
-          <button onClick={() => compose('work')}>
-            <Handshake weight="bold" /> Open for work
-          </button>
-          <button onClick={() => compose('opp')}>
-            <Briefcase weight="bold" /> Opportunity
-          </button>
-          <button onClick={() => compose('event')}>
-            <CalendarBlank weight="bold" /> Event
           </button>
         </div>
       </section>
