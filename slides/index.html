@@ -69,11 +69,11 @@
   .plans { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
   .plan { border: 2px solid var(--line); border-radius: 4px; padding: 60px; }
   .plan.main { border-color: var(--signal); }
-  .plan .price { font-size: 200px; font-weight: 780; letter-spacing: -0.05em; line-height: 0.9; }
+  .plan .price { font-size: 200px; font-weight: 780; letter-spacing: -0.03em; line-height: 0.9; }
   .plan .what { font-size: 52px; font-weight: 700; letter-spacing: -0.03em; margin-top: 30px; }
   .note { margin-top: 56px; font-size: 36px; color: var(--gray); }
 
-  .nav { position: fixed; right: 24px; bottom: 18px; font-size: 13px; font-weight: 600; color: #a3aac0; z-index: 5; user-select: none; }
+  .nav { display: none; position: fixed; right: 24px; bottom: 18px; font-size: 13px; font-weight: 600; color: #a3aac0; z-index: 5; user-select: none; }
 
   @media print {
     @page { size: 1920px 1080px; margin: 0; }
