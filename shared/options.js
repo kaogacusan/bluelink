@@ -1,6 +1,6 @@
 // Lists shared by the app and the server. The server only accepts these ids.
 
-// "Open to" is the heart of BlueLink: it tells people it is OK to reach out.
+// "Open to" is the heart of blueLink: it tells people it is OK to reach out.
 export const OPEN_TO = [
   { id: 'coffee', label: 'Coffee chats' },
   { id: 'study', label: 'Study buddies' },
@@ -22,6 +22,7 @@ export const SCHOOLS = [
 ]
 
 // Ateneo undergraduate degree programs, from the Ateneo College Viewbook 2026-2027.
+// One entry per course: honors and double-degree tracks go under their main course.
 // The course box suggests these, but people can still type their own (grad school, older programs).
 export const COURSES = [
   'AB Chinese Studies',
@@ -29,7 +30,6 @@ export const COURSES = [
   'AB Development Studies',
   'AB Diplomacy and International Relations',
   'AB Economics',
-  'AB Economics (Honors)',
   'AB European Studies',
   'AB History',
   'AB Humanities',
@@ -38,8 +38,6 @@ export const COURSES = [
   'AB Management Economics',
   'AB Philosophy',
   'AB Political Science',
-  'AB Political Science – Global Politics',
-  'AB Political Science – Master in Public Management',
   'AB Psychology',
   'AB Social Sciences',
   'AB Sociology',
@@ -47,17 +45,13 @@ export const COURSES = [
   'BFA Creative Writing',
   'BFA Information Design',
   'BFA Theater Arts',
-  'BS Applied Mathematics – Data Science',
-  'BS Applied Mathematics – Mathematical Finance',
-  'BS Applied Physics – Materials Science and Engineering',
+  'BS Applied Mathematics',
+  'BS Applied Physics',
   'BS Biology',
   'BS Chemistry',
-  'BS Chemistry – Materials Science and Engineering',
   'BS Communications Technology Management',
   'BS Computer Engineering',
   'BS Computer Science',
-  'BS Computer Science – Digital Game Design and Development',
-  'BS/MS Computer Science',
   'BS Electronics Engineering',
   'BS Environmental Science',
   'BS Health Sciences',
@@ -67,10 +61,8 @@ export const COURSES = [
   'BS Legal Management',
   'BS Life Sciences',
   'BS Management',
-  'BS Management (Honors)',
   'BS Management Engineering',
   'BS Management Information Systems',
-  'BS Management Information Systems – MS Computer Science',
   'BS Management of Applied Chemistry',
   'BS Mathematics',
   'BS Physics',
