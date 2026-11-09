@@ -11,7 +11,7 @@ import type { Person } from '../types'
 type AdminData = {
   stats: { people: number; members: number; pending: number; earned: number }
   payments: { id: string; ref: string; amount: number; at: number; status: 'pending' | 'approved' | 'rejected'; user: Person | null }[]
-  codes: { code: string; max: number; used: number; days: number; createdAt: number }[]
+  codes: { code: string; max: number; used: number; days: number | null; lifetime?: boolean; createdAt: number }[]
   gcash: { name: string; number: string }
   reports: { at: number; reason: string; note: string; from: Person | null; against: Person | null; post: string | null }[]
 }
@@ -47,7 +47,8 @@ export function Admin() {
   const [code, setCode] = useState('')
   const [max, setMax] = useState('50')
   const [count, setCount] = useState('50')
-  const [cards, setCards] = useState<string[]>([])
+  const [plan, setPlan] = useState<'life' | 'year'>('life')
+  const [cards, setCards] = useState<{ codes: string[]; plan: 'life' | 'year' }>({ codes: [], plan: 'life' })
   useLive((e) => e.type === 'admin' && reload())
 
   if (!isAdmin) return <p className="empty">Admins only.</p>
@@ -74,21 +75,24 @@ export function Admin() {
     }
   }
 
-  // Voucher cards for the booth: one code per card, each worth one year.
+  // Voucher cards for the booth: one code per card, Lifetime (₱250) or 1 year (₱99).
   async function makeCards(e: FormEvent) {
     e.preventDefault()
     try {
-      const r = await api<{ codes: string[] }>('/api/admin/codes/batch', { count: Number(count) })
-      setCards(r.codes)
+      const r = await api<{ codes: string[]; plan: 'life' | 'year' }>('/api/admin/codes/batch', { count: Number(count), plan })
+      setCards({ codes: r.codes, plan: r.plan })
       reload()
     } catch (err) {
       toast((err as Error).message)
     }
   }
 
+  // One code per line with its card: "BL-ACDE-FGHJ, lifetime". The booth kit (npm run cards) prints the matching front.
   function saveCards() {
-    const url = URL.createObjectURL(new Blob([cards.join('\n') + '\n'], { type: 'text/plain' }))
-    const a = Object.assign(document.createElement('a'), { href: url, download: `bluelink-voucher-codes-${cards.length}.txt` })
+    const card = cards.plan === 'life' ? 'lifetime' : 'founding'
+    const text = cards.codes.map((c) => `${c}, ${card}`).join('\n') + '\n'
+    const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }))
+    const a = Object.assign(document.createElement('a'), { href: url, download: `bluelink-voucher-codes-${card}-${cards.codes.length}.txt` })
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -160,13 +164,17 @@ export function Admin() {
 
       <section className="card section">
         <h2>Voucher cards</h2>
-        <p className="fine">Makes one-use codes worth one year each, for the printed cards sold at the booth. Save the file and print it with the booth kit. Keep it private: each code is money.</p>
+        <p className="fine">Makes one-use codes for the printed cards sold at the booth: Lifetime (₱250) or 1 year (₱99). Save the file and print it with the booth kit. Keep it private: each code is money.</p>
         <form className="admin-form" onSubmit={makeCards}>
+          <select className="input" value={plan} onChange={(e) => setPlan(e.target.value as 'life' | 'year')} aria-label="Which card">
+            <option value="life">Lifetime</option>
+            <option value="year">1 year</option>
+          </select>
           <input className="input is-num" type="number" min={1} max={500} value={count} onChange={(e) => setCount(e.target.value)} aria-label="How many cards" />
           <button className="btn btn-primary">Make codes</button>
-          {cards.length > 0 && (
+          {cards.codes.length > 0 && (
             <button type="button" className="btn btn-outline" onClick={saveCards}>
-              Save {cards.length} codes
+              Save {cards.codes.length} {cards.plan === 'life' ? 'lifetime' : '1-year'} codes
             </button>
           )}
         </form>
@@ -189,7 +197,7 @@ export function Admin() {
                 <div>
                   <b className="mono">{c.code}</b>
                   <span>
-                    {c.used} of {c.max} used · {c.days === 365 ? '1 year' : `${c.days} days`}
+                    {c.used} of {c.max} used · {c.lifetime ? 'Lifetime' : c.days === 365 ? '1 year' : `${c.days} days`}
                   </span>
                 </div>
               </div>

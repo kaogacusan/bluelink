@@ -471,8 +471,10 @@ export function createApi({ dataDir, dev = false }) {
     if (c.used.length >= c.max) throw new Fail(400, 'This code is all used up.')
     c.used.push(uid)
     const u = db.users[uid]
-    // Time from a code adds on top of any time you already have, so a paid voucher is never wasted.
-    if (!isLifetime(u.until)) u.until = Math.max(u.until || 0, Date.now()) + (c.days ?? MEMBERSHIP.codeDays) * DAY
+    // A lifetime code makes the membership lifetime. Time from any other code adds on top of any time you already
+    // have, so a paid voucher is never wasted.
+    if (c.lifetime) u.until = LIFETIME_UNTIL
+    else if (!isLifetime(u.until)) u.until = Math.max(u.until || 0, Date.now()) + (c.days ?? MEMBERSHIP.codeDays) * DAY
     u.via = 'code'
     u.payment = null
     save()
@@ -493,7 +495,7 @@ export function createApi({ dataDir, dev = false }) {
         earned: db.payments.filter((p) => p.status === 'approved').reduce((s, p) => s + p.amount, 0),
       },
       payments: [...pending, ...done].slice(0, 100).map((p) => ({ id: p.id, ref: p.ref, amount: p.amount, at: p.at, status: p.status, user: who(p.uid) })),
-      codes: Object.entries(db.codes).map(([code, c]) => ({ code, max: c.max, used: c.used.length, days: c.days ?? MEMBERSHIP.codeDays, createdAt: c.createdAt })),
+      codes: Object.entries(db.codes).map(([code, c]) => ({ code, max: c.max, used: c.used.length, days: c.lifetime ? null : c.days ?? MEMBERSHIP.codeDays, lifetime: !!c.lifetime, createdAt: c.createdAt })),
       gcash: { name: db.settings.gcashName || '', number: db.settings.gcashNumber || '' },
       reports: db.reports
         .slice(-30)
@@ -539,20 +541,22 @@ export function createApi({ dataDir, dev = false }) {
   })
 
   // One-use codes for printed voucher cards. Each card gets its own code, so a code cannot be passed around.
+  // plan 'life' makes lifetime codes (the ₱250 card); anything else makes 1-year codes (the ₱99 card).
   route('POST', '/api/admin/codes/batch', 'admin', ({ body }) => {
     const count = Math.min(Math.max(Number(body.count) || 0, 1), 500)
-    const days = MEMBERSHIP.codeDays
+    const lifetime = body.plan === 'life'
+    const days = lifetime ? null : MEMBERSHIP.codeDays
     const ABC = 'ACDEFGHJKMNPQRTUVWXY34679' // no 0/O, 1/I/L, 2/Z, 5/S, 8/B: easy to read off a card
     const made = []
     while (made.length < count) {
       const raw = Array.from(crypto.randomBytes(8), (b) => ABC[b % ABC.length]).join('')
       const code = `BL-${raw.slice(0, 4)}-${raw.slice(4)}`
       if (db.codes[code]) continue
-      db.codes[code] = { max: 1, used: [], days, createdAt: Date.now() }
+      db.codes[code] = { max: 1, used: [], days, lifetime, createdAt: Date.now() }
       made.push(code)
     }
     save()
-    return { codes: made }
+    return { codes: made, plan: lifetime ? 'life' : 'year' }
   })
 
   route('POST', '/api/admin/codes/:code/delete', 'admin', ({ params }) => {

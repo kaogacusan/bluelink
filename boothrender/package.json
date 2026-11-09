@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
+    "pdf-lib": "1.17.1",
     "playwright-core": "1.62.0",
     "qrcode": "^1.5.4"
   },

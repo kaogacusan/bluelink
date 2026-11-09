@@ -478,3 +478,35 @@ table.shifts { min-width: 760px; table-layout: fixed; }
 code { font-family: var(--mono); font-size: 0.86em; padding: 1px 5px; border-radius: 2px; background: var(--well); color: var(--ink); }
 a { text-decoration-color: rgba(147, 168, 255, 0.5); text-underline-offset: 2px; }
 .sec__sub a, .card a { color: var(--core); }
+
+/* ---------- Instagram info reel (made by scripts/social/reel/, files in assets/social/reel/) ---------- */
+.reel {
+  display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); margin: 0 0 16px;
+  border-radius: var(--radius); background: var(--white); border: 1px solid var(--line); box-shadow: var(--lift); overflow: hidden;
+}
+.reel__media {
+  display: grid; place-items: center; padding: 24px;
+  background:
+    linear-gradient(rgba(170, 185, 255, 0.05) 1px, transparent 1px) 0 0 / 24px 24px,
+    linear-gradient(90deg, rgba(170, 185, 255, 0.05) 1px, transparent 1px) 0 0 / 24px 24px,
+    #050817;
+}
+.reel__media video {
+  display: block; width: 100%; max-width: 292px; height: auto; aspect-ratio: 9 / 16;
+  border-radius: 2px; background: #03050d;
+  box-shadow: 0 0 0 1px rgba(170, 185, 255, 0.14), 0 18px 34px -16px rgba(0, 0, 0, 0.9);
+}
+.reel__body { display: flex; flex-direction: column; gap: 12px; min-width: 0; padding: 20px 22px 22px; }
+.reel h3 { margin: -4px 0 0; font-family: var(--display); font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+.reel__scenes { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; font-size: 0.9rem; color: var(--ink-2); }
+.reel__scenes li { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 10px; text-wrap: pretty; }
+.reel__scenes b { padding-top: 2px; font-family: var(--mono); font-size: 0.74rem; font-weight: 500; color: var(--ink-3); }
+.reel__cap {
+  margin: 0; padding: 12px 14px; border-radius: var(--radius-sm); background: var(--well);
+  font-size: 0.86rem; line-height: 1.55; color: var(--ink-2); white-space: pre-line; overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .reel { grid-template-columns: 1fr; }
+  .reel__media { padding: 16px; }
+  .reel__media video { max-width: 260px; }
+}

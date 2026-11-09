@@ -13,7 +13,8 @@ const DEPTH = 3;           // tent depth (assumed)
 const EAVE = 2.0;          // eave height to ask for
 const PEAK = 3.05;         // assumed
 const T = { x0: 0, x1: 0.9, z0: -0.85, z1: -0.25, h: 0.75 };          // selling table (size assumed)
-const TP = { x: 0.75, z: -2.97, w: 1.2192, h: 0.9144, top: 1.95 };   // tarpaulin, 4 × 3 ft, on the back bar
+const SD = { x: 1.18, z: -2.72, w: 0.6096, h: 1.524, y0: 0.12 };    // standee, 2 × 5 ft, on an X-stand at the back of the walkway
+const HD = { x: 0.75, z: 0.022, w: 1.0668, h: 0.381, top: EAVE };    // header, 3.5 × 1.25 ft, hung from the front bar (optional)
 const QR = { x: 0.2, z: -0.74, w: 0.21, h: 0.297 };                   // A4 QR sign in its stand, back row
 const LAP = { x0: 0.56, x1: 0.88, z0: -0.64, z1: -0.42 };             // laptop base
 const CH_X = [0.24, 0.66];                                           // the two chairs
@@ -30,31 +31,39 @@ const groups = [
 ];
 
 const zoomTable = { az: 0.42, el: 0.6, tx: 0.45, ty: 0.86, tz: -0.55, size: 1.05, width: 1.5 };
-const zoomTarp = { az: 0.18, el: 0.12, tx: 0.75, ty: 1.45, tz: -2.9, size: 1.6, width: 2.2 };
+const zoomStandee = { az: 0.1, el: 0, tx: 1.18, ty: 0.88, tz: -2.7, size: 1.95, width: 1.9 };
+const zoomHeader = { az: 0, el: 0, tx: 0.75, ty: 1.4, tz: -0.5, size: 1.3, width: 2.1 };
 
 const pieces = [
-  { id: 'tarp', num: 1, cat: 'print', name: 'Tarpaulin', size: '4 × 3 ft (1219 × 914 mm), landscape, grommets', where: 'Back of our half, top edge at the eave',
-    basis: 'print', flag: 'Size and printer to confirm',
-    note: 'The logo, the headline, the QR, and the price. The top two thirds stay clear of people at the table. Measure the space between the back bar and the table before printing. Ask two shops for a quote.',
-    view: zoomTarp },
-  { id: 'qr', num: 2, cat: 'print', name: 'QR sign', size: 'A4 (210 × 297 mm), QR 12 cm', where: 'Table, back left, in the A4 stand',
+  { id: 'standee', num: 1, cat: 'print', name: 'Standee', size: '2 × 5 ft (610 × 1524 mm), portrait, on an X-stand', where: 'Back of the walkway, facing the aisle',
+    basis: 'print', flag: 'Printer to confirm',
+    note: 'The logo, the headline, a constellation of what people are open to, and the planet’s edge with a blue glow. The QR sits on the planet’s night side beside “Scan to join.”, with both plans under it. The QR is at waist height, where a phone points. At the back of the walkway nobody stands in front of it, so it shows from the aisle. Ask two shops for a quote with the stand.',
+    view: zoomStandee },
+  { id: 'header', num: 2, cat: 'print', name: 'Header (optional)', size: '3.5 × 1.25 ft (1067 × 381 mm), landscape, grommets', where: 'Front bar of the tent, across our half',
+    basis: 'print', flag: 'Optional. Measure the eave',
+    note: 'The booth’s name sign: the logo big and “Find your people.” (a different line from the standee). 1.25 ft tall: with a 2.0 m eave its bottom edge is at 1.62 m, so people sitting at the table are in full view and standing faces show under it. Measure the eave before printing. Turn it on or off with the Header switch.',
+    view: zoomHeader },
+  { id: 'qr', num: 3, cat: 'print', name: 'QR sign', size: 'A4 (210 × 297 mm), QR 12 cm', where: 'Table, back left, in the A4 stand',
     basis: 'print',
     note: 'One QR for the whole booth, with the price under it. A 12 cm QR scans from about 1.2 m. The QR points to a placeholder link until the domain is live. Test it on 2 phones.', view: zoomTable },
-  { id: 'flyers', num: 3, cat: 'print', name: 'Flyers', size: 'A6 (105 × 148 mm), two sides', where: 'Table, front center. Someone in the aisle carries a stack',
+  { id: 'flyers', num: 4, cat: 'print', name: 'Flyers', size: 'A6 (105 × 148 mm), two sides', where: 'Table, front center. Someone in the aisle carries a stack',
     basis: 'print',
     note: 'Print 4 per A4 sheet, both sides. Front: the headline, the QR, and the price. Back: 3 reasons and the legal lines.', view: zoomTable },
-  { id: 'card', num: 4, cat: 'print', name: 'Voucher cards', size: 'A7 landscape, 105 × 74 mm, two sides', where: 'Table, next to the flyers',
+  { id: 'card', num: 5, cat: 'print', name: 'Voucher cards', size: 'Business card, 90 × 54 mm, two sides', where: 'Table, next to the flyers',
     basis: 'print',
-    note: 'The voucher. Front: “1 semester of BlueLink” (or “1 year”, founding member). Back: the code, the price paid, valid until, how to redeem, the 7-day refund line, 18+, the privacy line, and “not an official receipt”. Give one after each cash or GCash sale. Print the real codes with npm run cards (a private PDF, never on this site).', view: zoomTable },
+    note: 'The voucher. Front: “Lifetime access to BlueLink” (or “1 year of BlueLink”, founding member). Back: the code, the price paid, valid until, how to redeem, the 7-day refund line, 18+, the privacy line, and “not an official receipt”. Give one after each cash or GCash sale. Print the real codes with npm run cards (a private PDF, never on this site).', view: zoomTable },
 
-  { id: 'qrstand', num: 5, cat: 'stand', name: 'A4 acrylic stand', size: '1 stand, A4 portrait', where: 'Table, back left',
+  { id: 'qrstand', num: 6, cat: 'stand', name: 'A4 acrylic stand', size: '1 stand, A4 portrait', where: 'Table, back left',
     basis: 'buy',
     note: 'Holds the QR sign upright.', view: zoomTable },
-  { id: 'ties', num: null, cat: 'stand', name: 'Zip ties and string', size: '8 zip ties, 2 m string', where: 'Tarp grommets to the back bar',
+  { id: 'xstand', num: null, cat: 'stand', name: 'X-stand', size: '1 stand for a 2 × 5 ft standee', where: 'Back of the walkway',
     basis: 'buy',
-    note: 'Top grommets to the back bar. Tie the bottom corners down so the tarp does not flap.' },
+    note: 'Most print shops sell it with the standee. Hook the 4 corner eyelets on the X. If it is windy, put the supply box on its feet.' },
+  { id: 'ties', num: null, cat: 'stand', name: 'Zip ties and string', size: '6 zip ties, 2 m string', where: 'Header grommets to the front bar',
+    basis: 'buy',
+    note: 'Only for the header. Top grommets to the front bar. Tie the bottom corners to the bar with string so it does not flap.' },
 
-  { id: 'laptop', num: 6, cat: 'demo', name: 'Demo laptop', size: '1 laptop with charger', where: 'Table, front right, screen to the aisle',
+  { id: 'laptop', num: 7, cat: 'demo', name: 'Demo laptop', size: '1 laptop with charger', where: 'Table, front right, screen to the aisle',
     basis: 'borrow',
     note: 'Open the landing page. Keep a demo account signed in to show the feed, people, and messages. Turn it to the seller between demos.', view: zoomTable },
   { id: 'phone', num: null, cat: 'demo', name: 'Phone with the GCash QR', size: 'Phone and power bank', where: 'With the seller',
@@ -70,21 +79,21 @@ const pieces = [
     basis: 'borrow',
     note: 'Ask the organizers for the nearest outlet. Test the hotspot before opening.' },
 
-  { id: 'table', num: 7, cat: 'furniture', name: 'Selling table', size: 'About 0.9 × 0.6 m, 0.75 m high (assumed)', where: 'Front left, 0.25 m from the edge',
+  { id: 'table', num: 8, cat: 'furniture', name: 'Selling table', size: 'About 0.9 × 0.6 m, 0.75 m high (assumed)', where: 'Front left, 0.25 m from the edge',
     basis: 'borrow', flag: 'Size to confirm',
     note: 'Measure it. A table longer than 1.2 m blocks the walkway on the right.' },
-  { id: 'cloth', num: 8, cat: 'furniture', name: 'Tablecloth, black', size: 'Covers the top and the front to the floor', where: 'On the selling table',
+  { id: 'cloth', num: 9, cat: 'furniture', name: 'Tablecloth, black', size: 'Covers the top and the front to the floor', where: 'On the selling table',
     basis: 'buy',
-    note: 'Black or very dark navy, so the table reads like the night sky under the tarp.', view: zoomTable },
-  { id: 'chairs', num: 9, cat: 'furniture', name: 'Chairs', size: '2, any type', where: 'Behind the table',
+    note: 'Black or very dark navy, so the table reads like the night sky, like the standee.', view: zoomTable },
+  { id: 'chairs', num: 10, cat: 'furniture', name: 'Chairs', size: '2, any type', where: 'Behind the table',
     basis: 'borrow',
     note: 'Keep the walkway on the right clear.' },
 
-  { id: 'box', num: 10, cat: 'home', name: 'Supply box', size: 'About 45 × 30 × 30 cm', where: 'Back left, on the floor',
+  { id: 'box', num: 11, cat: 'home', name: 'Supply box', size: 'About 45 × 30 × 30 cm', where: 'Back left, on the floor',
     basis: 'home',
     note: 'Extra flyers and cards, pens for codes, tape, scissors, zip ties, chargers.' },
 
-  { id: 'tent', num: 11, cat: 'space', name: 'Tent (our half)', size: '3 × 3 m tent; our half is 1.5 × 3 m (assumed). Eave at least 2.0 m', where: 'Venue and stall to confirm',
+  { id: 'tent', num: 12, cat: 'space', name: 'Tent (our half)', size: '3 × 3 m tent; our half is 1.5 × 3 m (assumed). Eave at least 2.0 m', where: 'Venue and stall to confirm',
     basis: 'unquoted', flag: 'To confirm',
     note: 'This page assumes the same half-tent as the profstopick booth (Blueprint bazaar rules). Confirm the venue, the stall, the size, and the fee with the organizers.' },
 ];
@@ -95,13 +104,15 @@ const views = [
   { id: 'side', label: 'Side', az: Math.PI / 2, el: 0.05, tx: 1.4, ty: 1.45, tz: -1.2, size: 3.6, width: 5.6 },
   { id: 'top', label: 'Top', az: 0, el: Math.PI / 2, tx: 1.45, ty: 0, tz: -1.15, size: 4.7, width: 4.4 },
   { id: 'table', label: 'Table', ...zoomTable },
-  { id: 'tarp', label: 'Tarp', ...zoomTarp },
+  { id: 'standee', label: 'Standee', ...zoomStandee },
+  { id: 'header', label: 'Header', ...zoomHeader },
 ];
 
 const layers = [
   { name: 'dims', label: 'Dimensions', mobileOff: true },
   { name: 'roof', label: 'Roof' },
   { name: 'people', label: 'People' },
+  { name: 'header', label: 'Header' },
 ];
 
 // ---------- page text ----------
@@ -131,7 +142,8 @@ const art = await loadArt('booth');
 
 function makeTextures() {
   return {
-    tarp: art.tex('tarp', { w: 1024 }),
+    standee: art.tex('standee', { w: 512 }),
+    header: art.tex('header', { w: 1024 }),
     qr: art.tex('qr', { w: 512 }),
     flyer: art.tex('flyer', { w: 384 }),        // front of the flyer
     card: art.tex('card', { w: 256 }),          // front of the voucher card
@@ -178,7 +190,7 @@ async function build(S) {
   const screen = await screenTexture();
   await art.ready();
 
-  const L = { dims: S.layer('dims'), roof: S.layer('roof'), people: S.layer('people') };
+  const L = { dims: S.layer('dims'), roof: S.layer('roof'), people: S.layer('people'), header: S.layer('header') };
 
   // ground: a brick walk that fades into the night around it
   const bricks = brickTexture();
@@ -207,7 +219,7 @@ async function build(S) {
   S.tag([1.2, 0.02, -1.6], 'walkway', { cls: 'tag--soft' });
   S.tag([1.5, 0.02, 1.95], 'aisle', { cls: 'tag--zone' });
 
-  // 11 tent frame
+  // 12 tent frame
   const steel = S.mat(0xe9edf3);
   const frame = new THREE.Group();
   const leg = 0.035;
@@ -245,18 +257,37 @@ async function build(S) {
     S.tag([(a + b) / 2, 0.02, -1.5], 'next tent', { cls: 'tag--soft' });
   });
 
-  // 1 tarpaulin, hung from the back bar, top edge at the eave
-  const tarp = S.panel({ w: TP.w, h: TP.h, t: 0.003, map: tx.tarp, back: 0x111111 });
-  tarp.position.set(TP.x, TP.top - TP.h / 2, TP.z);
-  S.put('tarp', tarp);
-  // zip ties at the 2 top grommets and string from the 2 bottom ones
+  // 1 standee on its X-stand, at the back of the walkway, facing the aisle
+  const standee = S.panel({ w: SD.w, h: SD.h, t: 0.002, map: tx.standee, back: 0x2a2f3c });
+  standee.position.set(SD.x, SD.y0 + SD.h / 2, SD.z);
+  S.put('standee', standee);
+  // the X-stand: two rods corner to corner behind the print, a pole down to the floor, and two feet
+  const rodM = S.mat(0x9aa3b5);
+  const xstand = new THREE.Group();
+  const dx = SD.w - 0.03, dy = SD.h - 0.03, len = Math.hypot(dx, dy), ang = Math.atan2(dx, dy);
+  [-ang, ang].forEach((a) => {
+    const rod = new THREE.Mesh(new THREE.BoxGeometry(0.008, len, 0.008), rodM);
+    rod.position.set(SD.x, SD.y0 + SD.h / 2, SD.z - 0.012);
+    rod.rotation.z = a;
+    rod.castShadow = true;
+    xstand.add(rod);
+  });
+  xstand.add(S.cyl(SD.x, 0, SD.z - 0.02, 0.008, SD.y0 + SD.h / 2, rodM));
+  xstand.add(S.box(SD.x - 0.01, 0, SD.z - 0.32, SD.x + 0.01, 0.02, SD.z + 0.04, rodM));
+  xstand.add(S.box(SD.x - 0.26, 0, SD.z - 0.03, SD.x + 0.26, 0.02, SD.z - 0.01, rodM));
+  S.put('xstand', xstand);
+
+  // 2 header (optional), hung from the front bar, top edge at the eave. Its own switch: Header.
+  const header = S.panel({ w: HD.w, h: HD.h, t: 0.003, map: tx.header, back: 0x111111 });
+  header.position.set(HD.x, HD.top - HD.h / 2, HD.z);
+  S.put('header', header, L.header);
+  // zip ties at the 2 top grommets
   const tieM = S.mat(0x1a1d26);
   const ties = new THREE.Group();
-  [TP.x - TP.w / 2 + 0.03, TP.x + TP.w / 2 - 0.03].forEach((x) => {
-    ties.add(S.box(x - 0.006, TP.top - 0.01, TP.z - 0.03, x + 0.006, EAVE - bar / 2, TP.z + 0.004, tieM, { edges: false }));
+  [HD.x - HD.w / 2 + 0.03, HD.x + HD.w / 2 - 0.03].forEach((x) => {
+    ties.add(S.box(x - 0.006, EAVE - bar - 0.012, -bar / 2 - 0.004, x + 0.006, EAVE + 0.004, HD.z + 0.004, tieM, { edges: false }));
   });
-  ties.add(S.lines([[TP.x - TP.w / 2 + 0.03, TP.top - TP.h + 0.03, TP.z], [0, 0.95, -DEPTH]], S.faintMat));
-  S.put('ties', ties);
+  S.put('ties', ties, L.header);
 
   // 7 selling table
   const tableTop = S.mat(0xf4f1ea);
@@ -267,7 +298,7 @@ async function build(S) {
     .forEach(([x, z]) => table.add(S.cyl(x, 0, z, 0.012, T.h - 0.03, legM)));
   S.put('table', table);
 
-  // 8 tablecloth, black: over the top, down the front and both sides. The back stays open for the seller.
+  // 9 tablecloth, black: over the top, down the front and both sides. The back stays open for the seller.
   const clothM = S.mat(0x0b0e1a);
   const cloth = new THREE.Group();
   const co = 0.012;
@@ -277,7 +308,7 @@ async function build(S) {
   cloth.add(S.box(T.x1, 0.02, T.z0 - co, T.x1 + co, T.h - 0.034, T.z1, clothM));
   S.put('cloth', cloth);
 
-  // 2 the A4 QR sign in 5 its acrylic stand, back row
+  // 3 the A4 QR sign in 6 its acrylic stand, back row
   const acrylic = S.mat(0xdfe8f5, { opacity: 0.38 });
   const sign = S.panel({ w: QR.w, h: QR.h, t: 0.003, map: tx.qr });
   const sg = new THREE.Group();
@@ -302,7 +333,7 @@ async function build(S) {
     p.position.set(x, y + t / 2, z);
     return p;
   };
-  // 3 flyers
+  // 4 flyers
   const flyers = new THREE.Group();
   for (let i = 0; i < 6; i++) {
     const f = flat(0.105, 0.148, 0.2, -0.36, tx.flyer, T.h + i * 0.0025, 0.0025);
@@ -310,20 +341,20 @@ async function build(S) {
     flyers.add(f);
   }
   S.put('flyers', flyers);
-  // 4 voucher cards
+  // 5 voucher cards
   const cards = new THREE.Group();
   for (let i = 0; i < 5; i++) {
-    const cd = flat(0.105, 0.074, 0.38, -0.32, tx.card, T.h + i * 0.0022, 0.0022);
+    const cd = flat(0.09, 0.054, 0.38, -0.32, tx.card, T.h + i * 0.0022, 0.0022);
     cd.rotation.y = 0.06 - i * 0.03;
     cards.add(cd);
   }
   // one card turned over beside the stack, to show the back (the voucher code)
-  const cb = flat(0.105, 0.074, 0.41, -0.43, tx.cardBack, T.h, 0.0022);
+  const cb = flat(0.09, 0.054, 0.41, -0.42, tx.cardBack, T.h, 0.0022);
   cb.rotation.y = -0.1;
   cards.add(cb);
   S.put('card', cards);
 
-  // 6 demo laptop, screen to the aisle
+  // 7 demo laptop, screen to the aisle
   const laptop = new THREE.Group();
   const shell = S.mat(0x3a3f4b);
   laptop.add(S.box(LAP.x0, T.h, LAP.z0, LAP.x1, T.h + 0.016, LAP.z1, shell));
@@ -339,7 +370,7 @@ async function build(S) {
   laptop.add(lid);
   S.put('laptop', laptop);
 
-  // 9 chairs, behind the table. Back rest away from the table.
+  // 10 chairs, behind the table. Back rest away from the table.
   const chairM = S.mat(0x5a6170);
   const chairs = new THREE.Group();
   CH_X.forEach((x) => {
@@ -350,12 +381,12 @@ async function build(S) {
   });
   S.put('chairs', chairs);
 
-  // 10 supply box
+  // 11 supply box
   S.put('box', S.box(0.06, 0, -2.6, 0.51, 0.3, -2.3, S.mat(0xc79b6a)));
 
   // people: the seller between the table and the chairs, and someone in the aisle with flyers
   L.people.add(S.person(0.45, -1.03, { h: 1.7526 }));
-  S.tag([0.45, 1.86, -1.03], 'seller, 5′9″', { cls: 'tag--soft', layer: 'people' });
+  S.tag([0.8, 1.6, -1.03], 'seller, 5′9″', { cls: 'tag--soft', layer: 'people' });
   L.people.add(S.person(2.6, 1.3, { h: 1.7 }));
   S.tag([2.6, 1.82, 1.3], 'flyers in the aisle', { cls: 'tag--soft', layer: 'people' });
 
@@ -364,14 +395,17 @@ async function build(S) {
   S.dim([0, 0, 0], [0, 0, -DEPTH], '3 m', { off: [-0.32, 0, 0], tick: [1, 0, 0] });
   S.dim([0, 0, 0], [0, EAVE, 0], 'eave 2.0 m', { off: [-0.3, 0, 0.3], tick: [1, 0, 0] });
   S.dim([3, 0, -1.5], [3, PEAK, -1.5], 'peak 3.05 m (estimate)', { off: [0.75, 0, 0], tick: [1, 0, 0] });
-  S.dim([TP.x - TP.w / 2, TP.top, TP.z + 0.02], [TP.x + TP.w / 2, TP.top, TP.z + 0.02], '4 ft (1.22 m)', { off: [0, 0.14, 0], tick: [0, 1, 0] });
-  S.dim([TP.x + TP.w / 2, TP.top - TP.h, TP.z + 0.02], [TP.x + TP.w / 2, TP.top, TP.z + 0.02], '3 ft (0.91 m)', { off: [0.16, 0, 0], tick: [1, 0, 0] });
+  S.dim([SD.x - SD.w / 2, SD.y0, SD.z + 0.02], [SD.x + SD.w / 2, SD.y0, SD.z + 0.02], '2 ft (0.61 m)', { off: [0, -0.07, 0], tick: [0, 1, 0] });
+  S.dim([SD.x - SD.w / 2, SD.y0, SD.z + 0.02], [SD.x - SD.w / 2, SD.y0 + SD.h, SD.z + 0.02], '5 ft (1.52 m)', { off: [-0.14, 0, 0], tick: [1, 0, 0] });
+  S.dim([HD.x - HD.w / 2, HD.top, HD.z + 0.02], [HD.x + HD.w / 2, HD.top, HD.z + 0.02], '3.5 ft (1.07 m)', { off: [0, 0.14, 0], tick: [0, 1, 0], layer: 'header' });
+  S.dim([HD.x + HD.w / 2, HD.top - HD.h, HD.z + 0.02], [HD.x + HD.w / 2, HD.top, HD.z + 0.02], '1.25 ft', { off: [0.16, 0, 0], tick: [1, 0, 0], layer: 'header' });
+  S.dim([HD.x - HD.w / 2 + 0.03, 0, HD.z + 0.02], [HD.x - HD.w / 2 + 0.03, HD.top - HD.h, HD.z + 0.02], `clear ${(HD.top - HD.h).toFixed(2)} m`, { tick: [1, 0, 0], layer: 'header' });
   S.dim([T.x1, 0.02, -2.05], [HALF, 0.02, -2.05], '0.6 m', { tick: [0, 0, 1] });
   S.dim([0, 0.01, 0], [0, 0.01, T.z1], '0.25 m', { off: [0.06, 0, 0], tick: [1, 0, 0] });
 
   // ---------- pins (numbers match the list) ----------
   const pins = {
-    tarp: [TP.x, TP.top - TP.h / 2, TP.z + 0.03], qr: [QR.x, T.h + 0.36, QR.z],
+    standee: [SD.x, SD.y0 + SD.h * 0.62, SD.z + 0.03], header: [HD.x - HD.w / 2 + 0.1, HD.top - HD.h / 2, HD.z + 0.03], qr: [QR.x, T.h + 0.36, QR.z],
     flyers: [0.2, T.h + 0.06, -0.36], card: [0.38, T.h + 0.05, -0.32],
     qrstand: [QR.x + 0.13, T.h + 0.02, QR.z + 0.02],
     laptop: [(LAP.x0 + LAP.x1) / 2, T.h + 0.26, LAP.z0 - 0.04], table: [T.x1, 0.42, T.z0],
@@ -380,13 +414,13 @@ async function build(S) {
   };
   pieces.forEach((p) => {
     if (!p.num || !pins[p.id]) return;
-    S.pin(p.id, p.num, pins[p.id], 'pins');
+    S.pin(p.id, p.num, pins[p.id], p.id === 'header' ? 'header' : 'pins');
   });
 }
 
 // ---------- page text that is not in the model ----------
 document.getElementById('caption').textContent =
-  'Measurements in metres. The booth size (1.5 × 3 m, half of a shared tent) is assumed until the organizers confirm it. The tarpaulin is 4 × 3 ft. The table size is an estimate until measured.';
+  'Measurements in metres. The booth size (1.5 × 3 m, half of a shared tent) is assumed until the organizers confirm it. The standee is 2 × 5 ft; the optional header is 3.5 × 1.25 ft. The table size is an estimate until measured.';
 document.getElementById('steps').innerHTML = steps.map(([n, title, text]) => `<li><span class="step__n">${n}</span><b>${title}</b><span>${text}</span></li>`).join('');
 document.getElementById('trouble').innerHTML = trouble.map(([k, v]) => `<li><b>${k}</b><span>${v}</span></li>`).join('');
 

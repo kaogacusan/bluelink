@@ -97,6 +97,9 @@ const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<
 export function mountAssets(art, { pieces = [], stage = null } = {}) {
   const host = document.getElementById('assetList');
   if (!host) return;
+  // Instagram posts get their own section (#socialList) when the page has one
+  const social = document.getElementById('socialList');
+  const hostOf = (a) => (a.section === 'social' && social) || host;
   const { manifest } = art;
   const page = manifest.page;
   if (!manifest.assets.length) {
@@ -141,7 +144,7 @@ export function mountAssets(art, { pieces = [], stage = null } = {}) {
         </div>
         ${stage && p?.view ? '<button type="button" class="btn btn--ghost asset__show" data-show>View on model ↑</button>' : ''}
       </div>`;
-    host.appendChild(el);
+    hostOf(a).appendChild(el);
 
     el.querySelector('.asset__vs')?.addEventListener('click', (e) => { const b = e.target.closest('[data-v]'); if (b) art.pick(a.id, b.dataset.v); });
     el.querySelector('.asset__pages')?.addEventListener('click', (e) => {
@@ -162,7 +165,7 @@ export function mountAssets(art, { pieces = [], stage = null } = {}) {
   function draw(id) {
     const a = art.get(id);
     const v = art.version(id);
-    const el = host.querySelector(`[data-asset="${id}"]`);
+    const el = hostOf(a).querySelector(`[data-asset="${id}"]`);
     const i = Math.min(shown[id], v.t.length - 1);
     const name = `bluelink-${page}-${a.id}-${v.id}`;
     const img = el.querySelector('.asset__img img');
