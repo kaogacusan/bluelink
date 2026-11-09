@@ -34,7 +34,7 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
     <div className={`layout ${rail ? 'has-rail' : ''} ${route.page === 'inbox' ? 'is-inbox' : ''} ${inThread ? 'in-thread' : ''}`}>
       <aside className="side">
         <Sky seed="bluelink-side" />
-        <a href={href.feed} className="side-logo" aria-label="BlueLink home">
+        <a href={href.feed} className="side-logo" aria-label="blueLink home">
           <Logo size={30} />
         </a>
         <nav className="side-nav">
@@ -65,7 +65,7 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
       </aside>
 
       <header className="mtop">
-        <a href={href.feed} aria-label="BlueLink home">
+        <a href={href.feed} aria-label="blueLink home">
           <Logo size={26} />
         </a>
         <div className="mtop-right">

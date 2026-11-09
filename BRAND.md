@@ -1,6 +1,6 @@
-# BlueLink brand direction — "Deep Field"
+# blueLink brand direction — "Deep Field"
 
-One idea: **Ateneans are stars. BlueLink draws the lines between them.**
+One idea: **Ateneans are stars. blueLink draws the lines between them.**
 Everything looks like a real night sky seen from an observatory: dark, calm, exact. Not a cartoon galaxy.
 
 ## Promise (UVP)
@@ -8,7 +8,7 @@ Everything looks like a real night sky seen from an observatory: dark, calm, exa
 - Headline: **Welcome to Atenean Networking**
 - Support line: Find opportunities, network with each other. Exclusive for the Ateneo Community.
 - Proof points (use 1–3, never more):
-  1. Exclusive access for Ateneans. Your posts stay inside BlueLink.
+  1. Exclusive access for Ateneans. Your posts stay inside blueLink.
   2. For people who want to network. Everyone here joined to meet people and find opportunities.
   3. A safe space for networking. Report and block are on every profile.
 - Price line: **₱99 for 1 year. ₱250 for lifetime.** Both plans get the same app. No premium tier.
@@ -37,7 +37,7 @@ One idea per sentence. Numbers as digits.
 | Void | `#03050D` | Main dark background. The sky. |
 | Deep | `#070C1F` | Panels on dark. The night side of the planet. |
 | Ink | `#0A1540` | Text on light. Brand navy. |
-| Signal | `#1D45E5` | The BlueLink blue. Buttons, links, one key word. |
+| Signal | `#1D45E5` | The blueLink blue. Buttons, links, one key word. |
 | Glow | `#3A5FFF` | Blue on dark. Atmosphere rim light. |
 | Peri | `#93A8FF` | Lines on dark, the back link of the logo, small labels. |
 | Starlight | `#EEF1FA` | Text on dark. |
@@ -70,7 +70,7 @@ Ratio on any piece: about 70% Void/Deep, 20% Starlight, 10% Signal/Glow/Peri, a 
 ## Logo
 
 Two chain links hooked into each other: two people connected. Back link Peri `#93A8FF`, front link Signal `#1D45E5` (on light) or white (on dark).
-Wordmark: "BlueLink" in Inter 700, tracking −0.02em. Keep clear space = the mark's height on every side.
+Wordmark: "blueLink" in Inter 700, tracking −0.02em. Keep clear space = the mark's height on every side.
 
 ## Do / don't
 

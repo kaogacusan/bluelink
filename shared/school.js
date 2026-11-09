@@ -1,4 +1,4 @@
-// One place to change which school BlueLink is for.
+// One place to change which school blueLink is for.
 export const SCHOOL = {
   name: 'Ateneo de Manila',
   short: 'Ateneo',

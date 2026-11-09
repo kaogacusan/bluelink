@@ -1,4 +1,4 @@
-/* BlueLink look: "Deep Field". People are stars, connections are lines. See BRAND.md.
+/* blueLink look: "Deep Field". People are stars, connections are lines. See BRAND.md.
    Loaded after styles.css. It changes how things look, never how they work. */
 
 /* ============ Base ============ */
@@ -975,12 +975,6 @@ body:has(.landing) {
 .l-foot {
   flex-wrap: wrap;
   border-top-color: var(--line);
-}
-.l-coords {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  color: var(--muted);
 }
 
 @media (max-width: 900px) {

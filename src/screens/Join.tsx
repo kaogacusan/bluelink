@@ -82,7 +82,7 @@ export function Join({ firstName, onJoined, onSignOut }: { firstName: string; on
         <h1>{expired ? 'Renew your membership' : `Last step${firstName ? `, ${firstName}` : ''}.`}</h1>
         <p className="lead">
           {expired ? `Your membership ended on ${day(m!.until)}. ` : ''}
-          BlueLink is members only. Pick 1 year or lifetime. Both get the same app.
+          blueLink is members only. Pick 1 year or lifetime. Both get the same app.
         </p>
 
         <ul className="perks">

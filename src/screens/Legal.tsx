@@ -19,7 +19,7 @@ const PRIVACY: Section[] = [
     body: (
       <>
         <p>
-          BlueLink is run by {LEGAL.operator}. It is not an official Ateneo de Manila University service, and the university does not run or endorse it.
+          blueLink is run by {LEGAL.operator}. It is not an official Ateneo de Manila University service, and the university does not run or endorse it.
         </p>
         <p>
           Questions about your data go to our privacy contact (Data Protection Officer): {LEGAL.dpo}, at {LEGAL.contact}.
@@ -126,7 +126,7 @@ const PRIVACY: Section[] = [
   },
   {
     title: `Only for people ${LEGAL.minAge} and older`,
-    body: <p>BlueLink is not for anyone under {LEGAL.minAge}. If we learn that a member is younger, we delete the account.</p>,
+    body: <p>blueLink is not for anyone under {LEGAL.minAge}. If we learn that a member is younger, we delete the account.</p>,
   },
   {
     title: 'Changes',
@@ -136,10 +136,10 @@ const PRIVACY: Section[] = [
 
 const TERMS: Section[] = [
   {
-    title: 'What BlueLink is',
+    title: 'What blueLink is',
     body: (
       <p>
-        BlueLink is a members-only network for Ateneans, run by {LEGAL.operator}. It is not an official Ateneo de Manila University service, and the university does not run or
+        blueLink is a members-only network for Ateneans, run by {LEGAL.operator}. It is not an official Ateneo de Manila University service, and the university does not run or
         endorse it. By joining, you agree to these terms and to our <a href="#/privacy">Privacy Notice</a>.
       </p>
     ),
@@ -161,7 +161,7 @@ const TERMS: Section[] = [
         <li>
           ₱{PLANS[0].price} gives you {PLANS[0].days} days. It does not renew by itself.
         </li>
-        <li>₱{PLANS[1].price} gives you a lifetime membership. Lifetime means for as long as BlueLink runs. You pay one time.</li>
+        <li>₱{PLANS[1].price} gives you a lifetime membership. Lifetime means for as long as blueLink runs. You pay one time.</li>
         <li>A voucher code gives the time printed on the card. A founding member code gives {MEMBERSHIP.codeDays} days.</li>
         <li>Everyone gets the same features. There is no premium tier.</li>
       </ul>
@@ -183,7 +183,7 @@ const TERMS: Section[] = [
         <li>
           Changed your mind? Ask within {LEGAL.refundDays} days of paying and we refund the full amount you paid. Write to {LEGAL.contact}.
         </li>
-        <li>If BlueLink closes before your time runs out, we refund the unused part.</li>
+        <li>If blueLink closes before your time runs out, we refund the unused part.</li>
         <li>If we remove you for breaking the rules, we do not refund you.</li>
       </ul>
     ),
@@ -202,7 +202,7 @@ const TERMS: Section[] = [
     title: 'What you post',
     body: (
       <p>
-        You own what you post. You let us show it to members so BlueLink works. Only post what you have the right to share. You are responsible for what you post and for any deal
+        You own what you post. You let us show it to members so blueLink works. Only post what you have the right to share. You are responsible for what you post and for any deal
         you make with another member.
       </p>
     ),
@@ -218,7 +218,7 @@ const TERMS: Section[] = [
   },
   {
     title: 'What we cannot promise',
-    body: <p>BlueLink helps you meet people. We cannot promise replies, jobs, internships, or any result. We try to keep the app running, but it can go down.</p>,
+    body: <p>blueLink helps you meet people. We cannot promise replies, jobs, internships, or any result. We try to keep the app running, but it can go down.</p>,
   },
   {
     title: 'Law and questions',
@@ -240,7 +240,7 @@ export function Legal({ doc }: { doc: Doc }) {
   return (
     <div className="legal">
       <header className="legal-top">
-        <a href="#/" aria-label="BlueLink home">
+        <a href="#/" aria-label="blueLink home">
           <Logo size={26} />
         </a>
         <nav className="legal-tabs" aria-label="Legal pages">
@@ -265,7 +265,7 @@ export function Legal({ doc }: { doc: Doc }) {
           </section>
         ))}
         <a className="btn btn-outline legal-back" href="#/">
-          Back to BlueLink
+          Back to blueLink
         </a>
       </article>
     </div>

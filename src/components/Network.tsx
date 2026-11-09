@@ -7,7 +7,7 @@ import { useLive } from '../lib/live'
 import { go, href } from '../lib/router'
 import type { Person, Status } from '../types'
 
-// BlueLink draws people as dots and connections as lines, like a map of a brain.
+// blueLink draws people as dots and connections as lines, like a map of a brain.
 // The pictures live here: the landing sky, the side menu sky, your network in the rail, and profile covers.
 
 // The same seed always gives the same numbers, so a person's cover never changes.

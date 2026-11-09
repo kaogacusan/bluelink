@@ -14,7 +14,7 @@ import { PLANS } from '../../shared/membership.js'
 import { LEGAL, RULES } from '../../shared/legal.js'
 
 const WHY = [
-  { title: 'Exclusive access for Ateneans', text: 'Only Ateneans can join. Your posts stay inside BlueLink.' },
+  { title: 'Exclusive access for Ateneans', text: 'Only Ateneans can join. Your posts stay inside blueLink.' },
   { title: 'For people who want to network', text: 'Everyone here joined to meet people and find opportunities, not to scroll.' },
   { title: 'A safe space for networking', text: 'Ask for work, a mentor, or an intro. Report and block are on every profile.' },
 ]
@@ -156,7 +156,7 @@ function SignInForm() {
             aria-label="Ateneo email"
           />
           <button className="btn btn-primary btn-lg" disabled={busy}>
-            Join BlueLink <ArrowRight weight="bold" />
+            Join blueLink <ArrowRight weight="bold" />
           </button>
         </div>
         {error && <p className="form-error">{error}</p>}
@@ -323,7 +323,6 @@ export function Landing() {
           <a href="#/privacy">Privacy</a>
           <a href="#/terms">Terms</a>
         </nav>
-        <p className="l-coords">14.6395° N · 121.0781° E</p>
       </footer>
     </div>
   )

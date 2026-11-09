@@ -31,7 +31,7 @@ export function Logo({ size = 30 }: { size?: number }) {
   return (
     <span className="logo">
       <LogoMark size={size} />
-      <span className="logo-word">BlueLink</span>
+      <span className="logo-word">blueLink</span>
     </span>
   )
 }

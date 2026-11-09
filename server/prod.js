@@ -37,5 +37,5 @@ const server = http.createServer((req, res) => {
   fs.createReadStream(file).pipe(res)
 })
 
-server.listen(port, () => console.log(`BlueLink is running on http://localhost:${port}`))
+server.listen(port, () => console.log(`blueLink is running on http://localhost:${port}`))
 for (const sig of ['SIGINT', 'SIGTERM']) process.on(sig, () => (api.close(), process.exit(0)))

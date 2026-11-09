@@ -109,7 +109,7 @@ export function Orgs() {
         <div className="empty">
           <p>No orgs here yet.</p>
           <a className="btn btn-outline" href={href.newOrg}>
-            Put your org on BlueLink
+            Put your org on blueLink
           </a>
         </div>
       )}

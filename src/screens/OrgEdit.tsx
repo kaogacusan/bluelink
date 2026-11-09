@@ -31,7 +31,7 @@ function Form({ org }: { org?: OrgFull }) {
       let r = await api<{ org: OrgFull }>(org ? `/api/orgs/${org.id}` : '/api/orgs', draft)
       if (logo) r = await api<{ org: OrgFull }>(`/api/orgs/${r.org.id}/logo`, { data: logo })
       app.reloadMe()
-      app.toast(org ? 'Saved.' : `${r.org.short || r.org.name} is on BlueLink.`)
+      app.toast(org ? 'Saved.' : `${r.org.short || r.org.name} is on blueLink.`)
       go(href.org(r.org.id))
     } catch (e) {
       setError((e as Error).message)
@@ -55,7 +55,7 @@ function Form({ org }: { org?: OrgFull }) {
   return (
     <>
       <header className="page-head">
-        <h1>{org ? 'Edit org' : 'Put your org on BlueLink'}</h1>
+        <h1>{org ? 'Edit org' : 'Put your org on blueLink'}</h1>
         {!org && <p>Your org gets a page, a members list, and a place to post events and calls for members.</p>}
       </header>
       <section className="card form-card">

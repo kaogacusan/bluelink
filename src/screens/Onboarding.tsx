@@ -28,7 +28,7 @@ export function Onboarding({ onDone, onSignOut }: { onDone: (me: FullPerson) => 
   async function submit(e: FormEvent) {
     e.preventDefault()
     if (name.trim().length < 2) return setError('Add your full name.')
-    if (!adult || !agree) return setError(`Check both boxes to join. BlueLink is only for people ${LEGAL.minAge} and older.`)
+    if (!adult || !agree) return setError(`Check both boxes to join. blueLink is only for people ${LEGAL.minAge} and older.`)
     setBusy(true)
     setError('')
     try {
@@ -51,7 +51,7 @@ export function Onboarding({ onDone, onSignOut }: { onDone: (me: FullPerson) => 
         </button>
       </header>
       <form className="onboard-body" onSubmit={submit}>
-        <h1>{first ? `Hi, ${first}.` : 'Welcome to BlueLink.'}</h1>
+        <h1>{first ? `Hi, ${first}.` : 'Welcome to blueLink.'}</h1>
         <p className="lead">Just the basics. You can add more later.</p>
         <div className="form-card is-flat">
           <label className="field">
@@ -117,7 +117,7 @@ export function Onboarding({ onDone, onSignOut }: { onDone: (me: FullPerson) => 
                 <a href="#/privacy" target="_blank" rel="noreferrer">
                   Privacy Notice
                 </a>
-                . I let BlueLink use my name, role, course, and year to run my account and show my profile to members.
+                . I let blueLink use my name, role, course, and year to run my account and show my profile to members.
               </span>
             </label>
           </div>
