@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { PencilSimple } from '@phosphor-icons/react/dist/csr/PencilSimple'
-import { SpaceCover, catalogNo } from '../components/Network'
 import { Avatar } from '../components/Avatar'
-import { OrgLogo } from '../components/OrgLogo'
-import { categoryLabel } from './Orgs'
+import { BannerBand } from '../components/Banner'
+import { OrgCover, OrgLogo } from '../components/OrgLogo'
 import { ConnectButton } from '../components/Connect'
 import { Menu } from '../components/Menu'
-import { OpenTo } from '../components/OpenTo'
+import { OpenToChips } from '../components/OpenTo'
 import { ReportModal } from '../components/Report'
 import { Gallery } from '../components/Gallery'
 import { Linkified } from '../components/Post'
@@ -14,8 +13,16 @@ import { PostList } from './Feed'
 import { api, useFetch } from '../lib/api'
 import { useApp } from '../lib/app'
 import { href, go } from '../lib/router'
-import { personLine, roleLabel, schoolName } from '../lib/format'
+import { personLine } from '../lib/format'
 import type { FullPerson, MyOrg, Status } from '../types'
+
+// The highlight comes first. Then businesses before orgs, and admin roles before member roles.
+export function sortAffiliations(orgs: MyOrg[], highlight: string) {
+  const rank = (o: MyOrg) => (o.id === highlight ? 0 : 4) + (o.type === 'business' ? 0 : 2) + (o.myRole === 'admin' ? 0 : 1)
+  return [...orgs].sort((a, b) => rank(a) - rank(b))
+}
+
+export const affiliationRole = (o: MyOrg) => o.title || `${o.type === 'business' ? 'Business' : 'Org'} · ${o.myRole === 'admin' ? 'Admin' : 'Member'}`
 
 type ProfileData = { user: FullPerson; status: Status; note: string; connections: number; mutual: number; orgs: MyOrg[] }
 
@@ -64,31 +71,21 @@ function Settings() {
       {isAdmin && (
         <div className="setting">
           <span>Check payments and reports</span>
-          <a className="btn btn-sm btn-outline" href={href.admin}>
+          <a className="btn btn-sm btn-outline setting-btn" href={href.admin}>
             Admin
           </a>
         </div>
       )}
       <div className="setting">
         <span>Theme</span>
-        <div className="seg is-sm">
-          {(['light', 'dark'] as const).map((t) => (
-            <button key={t} className={theme === t ? 'is-on' : ''} onClick={() => setTheme(t)}>
-              {t === 'light' ? 'Light' : 'Dark'}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="setting">
-        <span>Sign out of blueLink on this device</span>
-        <button className="btn btn-sm btn-ghost" onClick={signOut}>
-          Sign out
+        <button className="btn btn-sm btn-outline setting-btn" onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+          {theme === 'light' ? 'Light' : 'Dark'}
         </button>
       </div>
       <div className="setting">
-        <span>Get a copy of everything we keep about you</span>
-        <button className="btn btn-sm btn-ghost" onClick={download}>
-          Download my data
+        <span>Export my data</span>
+        <button className="btn btn-sm btn-outline setting-btn" onClick={download}>
+          Download
         </button>
       </div>
       <div className="setting">
@@ -96,15 +93,25 @@ function Settings() {
           Read the <a href={href.privacy}>Privacy Notice</a> and the <a href={href.terms}>Terms</a>
         </span>
       </div>
-      <div className="setting">
-        <span>{confirm ? 'This deletes your profile, posts, and messages. You cannot undo it.' : 'Delete your account'}</span>
+      <div className="settings-foot">
+        <button className="btn btn-outline btn-block" onClick={signOut}>
+          Sign out
+        </button>
         {confirm ? (
-          <button className="btn btn-sm btn-danger" onClick={deleteAccount}>
-            Yes, delete
-          </button>
+          <div className="settings-delete is-confirm">
+            <span>This deletes your profile, posts, and messages. You cannot undo it.</span>
+            <div className="settings-delete-actions">
+              <button className="btn btn-sm btn-ghost" onClick={() => setConfirm(false)}>
+                Cancel
+              </button>
+              <button className="btn btn-sm btn-danger" onClick={deleteAccount}>
+                Yes, delete
+              </button>
+            </div>
+          </div>
         ) : (
-          <button className="btn btn-sm btn-ghost is-danger-text" onClick={() => setConfirm(true)}>
-            Delete
+          <button className="settings-delete is-danger-text" onClick={() => setConfirm(true)}>
+            Delete your account
           </button>
         )}
       </div>
@@ -139,22 +146,47 @@ export function Profile({ id }: { id?: string }) {
     go(href.feed)
   }
 
-  const meta = [personLine(user), user.school && user.role !== 'faculty' ? schoolName(user.school) : '', `${data.connections} ${data.connections === 1 ? 'connection' : 'connections'}`, data.mutual ? `${data.mutual} mutual` : '']
+  const affiliations = sortAffiliations(data.orgs, user.highlight)
+
+  const meta = [personLine(user), `${data.connections} ${data.connections === 1 ? 'connection' : 'connections'}`, data.mutual ? `${data.mutual} mutual` : '']
 
   return (
-    <>
+    <div className="profile">
       <section className="card profile-card">
-        <div className="profile-band">
-          <SpaceCover seed={user.uid} />
-          <span className="cover-label">{catalogNo(user.uid)}{user.role ? ` · ${roleLabel(user.role)}` : ''}</span>
-        </div>
+        <BannerBand person={user} className="profile-band" />
         <div className="profile-body">
+          {isMe && (
+            <a className="icon-btn is-outline profile-edit" href={href.edit} aria-label="Edit profile" title="Edit profile">
+              <PencilSimple weight="bold" />
+            </a>
+          )}
           <div className="profile-avatar">
             <Avatar person={user} size={112} />
           </div>
           <h1>{user.name}</h1>
           {user.headline && <p className="profile-headline">{user.headline}</p>}
           <p className="profile-meta">{meta.filter(Boolean).join(' · ')}</p>
+
+          {affiliations.length > 0 ? (
+            <div className={`profile-aff is-${Math.min(affiliations.length, 3)}`}>
+              {affiliations.map((o, i) => (
+                <a key={o.id} href={href.org(o.id, o.type)} className={`aff ${i === 0 ? 'is-main' : 'is-sub'}`}>
+                  {i === 0 && <OrgCover org={o} />}
+                  <OrgLogo org={o} size={i === 0 ? 56 : 32} />
+                  <span className="aff-text">
+                    <b>{o.name}</b>
+                    <small>{affiliationRole(o)}</small>
+                  </span>
+                </a>
+              ))}
+            </div>
+          ) : (
+            isMe && (
+              <p className="profile-aff-empty">
+                Not in an org or business yet. <a href={href.orgs}>Find one</a> or <a href={href.newOrg}>add yours</a>.
+              </p>
+            )
+          )}
 
           {status === 'received' && (
             <div className="request-box">
@@ -165,43 +197,25 @@ export function Profile({ id }: { id?: string }) {
             </div>
           )}
 
-          <div className="profile-actions">
-            {isMe ? (
-              <a className="btn btn-outline" href={href.edit}>
-                <PencilSimple weight="bold" /> Edit profile
-              </a>
-            ) : (
-              <>
-                <ConnectButton person={user} status={status} onChange={setStatus} size="md" />
-                {status === 'received' && (
-                  <button className="btn btn-ghost" onClick={() => remove('Request ignored.')}>
-                    Ignore
-                  </button>
-                )}
-                <Menu
-                  items={[
-                    ...(status === 'sent' ? [{ label: 'Take back request', onClick: () => remove('Request taken back.') }] : []),
-                    ...(status === 'connected' ? [{ label: 'Remove connection', onClick: () => remove('Connection removed.') }] : []),
-                    { label: `Report ${first}`, onClick: () => setReporting(true) },
-                    { label: `Block ${first}`, onClick: block, danger: true },
-                  ]}
-                />
-              </>
-            )}
-          </div>
+          {!isMe && (
+            <div className="profile-actions">
+              <ConnectButton person={user} status={status} onChange={setStatus} size="md" />
+              {status === 'received' && (
+                <button className="btn btn-ghost" onClick={() => remove('Request ignored.')}>
+                  Ignore
+                </button>
+              )}
+              <Menu
+                items={[
+                  ...(status === 'sent' ? [{ label: 'Take back request', onClick: () => remove('Request taken back.') }] : []),
+                  ...(status === 'connected' ? [{ label: 'Remove connection', onClick: () => remove('Connection removed.') }] : []),
+                  { label: `Report ${first}`, onClick: () => setReporting(true) },
+                  { label: `Block ${first}`, onClick: block, danger: true },
+                ]}
+              />
+            </div>
+          )}
         </div>
-      </section>
-
-      <section className="card section">
-        <h2>Open to</h2>
-        {user.openTo.length ? (
-          <>
-            <p className="fine">{isMe ? 'People see this and know it is OK to reach out.' : `${first} is happy to hear from you about these.`}</p>
-            <OpenTo ids={user.openTo} highlight={isMe ? [] : app.me.openTo} />
-          </>
-        ) : (
-          <p className="fine">{isMe ? 'Pick what you are open to so people know they can reach out.' : 'Nothing picked yet.'}</p>
-        )}
       </section>
 
       {user.about && (
@@ -213,45 +227,47 @@ export function Profile({ id }: { id?: string }) {
         </section>
       )}
 
-      <Gallery items={user.gallery || []} isMe={isMe} />
-
-      {user.skills.length > 0 && (
-        <section className="card section">
-          <h2>Can help with</h2>
-          <ul className="tags">
-            {user.skills.map((s) => (
-              <li key={s} className="tag is-plain">
-                {s}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {(data.orgs.length > 0 || isMe) && (
-        <section className="card section">
-          <h2>Orgs</h2>
-          {data.orgs.length ? (
-            <div className="org-mini-list">
-              {data.orgs.map((o) => (
-                <a key={o.id} href={href.org(o.id)} className="row-who">
-                  <OrgLogo org={o} size={40} />
-                  <div>
-                    <b>{o.name}</b>
-                    <span>
-                      {o.myRole === 'admin' ? 'Admin' : 'Member'} · {categoryLabel(o.category)}
-                    </span>
-                  </div>
-                </a>
-              ))}
+      {(isMe || user.openTo.length > 0 || user.skills.length > 0) && (
+        <section className="card section facts">
+          {(isMe || user.openTo.length > 0) && (
+            <div className="fact">
+              <h2>Open to</h2>
+              {user.openTo.length ? <OpenToChips ids={user.openTo} /> : <a href={href.edit}>Add what you are open to</a>}
             </div>
-          ) : (
-            <p className="fine">
-              You are not in any org yet. <a href={href.orgs}>Find one</a> or <a href={href.newOrg}>add yours</a>.
-            </p>
+          )}
+          {(isMe || user.skills.length > 0) && (
+            <div className="fact">
+              <h2>Skills</h2>
+              {user.skills.length ? (
+                <ul className="skills">
+                  {user.skills.map((s) => (
+                    <li key={s}>{s}</li>
+                  ))}
+                </ul>
+              ) : (
+                <a href={href.edit}>Add your skills</a>
+              )}
+            </div>
           )}
         </section>
       )}
+
+      <Gallery
+        items={user.gallery || []}
+        look={user.portfolio}
+        seed={user.uid}
+        empty="Show what you have made. Add pictures of projects, designs, or events."
+        edit={
+          isMe
+            ? {
+                add: async (w) => app.setMe((await api<{ user: FullPerson }>('/api/me/gallery', w)).user),
+                update: async (id, w) => app.setMe((await api<{ user: FullPerson }>(`/api/me/gallery/${id}/edit`, w)).user),
+                remove: async (id) => app.setMe((await api<{ user: FullPerson }>(`/api/me/gallery/${id}/remove`, {})).user),
+                arrange: async (a) => app.setMe((await api<{ user: FullPerson }>('/api/me/portfolio', a)).user),
+              }
+            : undefined
+        }
+      />
 
       {isMe && <Settings />}
 
@@ -259,6 +275,6 @@ export function Profile({ id }: { id?: string }) {
       <PostList path={`/api/feed?author=${encodeURIComponent(user.uid)}`} empty={isMe ? 'You have not posted yet.' : `${first} has not posted yet.`} />
 
       {reporting && <ReportModal uid={user.uid} onClose={() => setReporting(false)} />}
-    </>
+    </div>
   )
 }

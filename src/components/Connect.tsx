@@ -12,8 +12,6 @@ import type { Person, Status } from '../types'
 
 // Ready-made first lines, so no one has to stare at an empty box.
 const STARTERS: Record<string, string> = {
-  coffee: 'Hi! Would you be up for a quick coffee chat this week?',
-  study: 'Hi! Want to study together for our next exam?',
   advice: 'Hi! Could I ask you a few questions about your path so far?',
   mentor: 'Hi! I would be happy to share what I know. What are you working on?',
   intern: 'Hi! Could I ask how you found your internship?',
@@ -24,7 +22,7 @@ const STARTERS: Record<string, string> = {
 
 function startersFor(person: Person) {
   const list = person.openTo.map((id) => STARTERS[id]).filter(Boolean)
-  return (list.length ? list : [STARTERS.coffee, STARTERS.advice]).slice(0, 3)
+  return (list.length ? list : [STARTERS.advice, STARTERS.projects]).slice(0, 3)
 }
 
 export function ConnectModal({ person, onClose, onSent }: { person: Person; onClose: () => void; onSent: (s: Status) => void }) {

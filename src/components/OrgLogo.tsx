@@ -1,4 +1,5 @@
 import type { OrgMini } from '../types'
+import { SpaceCover } from './Network'
 
 const COLORS = ['#0a1540', '#1d45e5', '#2f6f6a', '#6b4fc8', '#b8501c', '#0e6f8f', '#a3305e', '#4f7a1f']
 
@@ -18,4 +19,9 @@ export function OrgLogo({ org, size = 44 }: { org: Pick<OrgMini, 'id' | 'name' |
       {text.toUpperCase()}
     </span>
   )
+}
+
+// An org's banner. Orgs with no picture get their own patch of sky.
+export function OrgCover({ org }: { org: Pick<OrgMini, 'id' | 'cover'> }) {
+  return org.cover ? <img className="cover-img" src={org.cover} alt="" /> : <SpaceCover seed={org.id} />
 }

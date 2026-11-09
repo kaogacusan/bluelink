@@ -12,46 +12,24 @@ import { href } from '../lib/router'
 import { ago, clock, personLine } from '../lib/format'
 import type { Message, Person, Request, Status, Thread } from '../types'
 
-type InboxData = { requests: Request[]; sent: Request[]; threads: Thread[] }
+type InboxData = { requests: Request[]; threads: Thread[] }
 type ThreadData = { user: Person; status: Status; messages: Message[] }
 
-function RequestRow({ req, onDone }: { req: Request; onDone: () => void }) {
-  const { toast, refreshBadges } = useApp()
-  const first = req.user.name.split(' ')[0]
-
-  async function answer(accept: boolean) {
-    try {
-      await api(`/api/links/${req.user.uid}/${accept ? 'accept' : 'remove'}`, {})
-      toast(accept ? `You and ${first} are now connected.` : 'Request ignored.')
-      refreshBadges()
-      onDone()
-    } catch (e) {
-      toast((e as Error).message)
-    }
-  }
-
+// One line in the list. Requests and chats look the same; a reply accepts a request.
+function Row({ person, at, text, unread, on }: { person: Person; at: number; text: string; unread: number; on: boolean }) {
   return (
-    <li className="req">
-      <a href={href.user(req.user.uid)}>
-        <Avatar person={req.user} size={44} />
-      </a>
-      <div className="req-body">
-        <a href={href.user(req.user.uid)} className="req-name">
-          {req.user.name}
-        </a>
-        <span className="req-sub">
-          {personLine(req.user)} · {ago(req.at)}
-        </span>
-        {req.note && <p className="req-note">{req.note}</p>}
-        <div className="req-actions">
-          <button className="btn btn-sm btn-primary" onClick={() => answer(true)}>
-            Accept
-          </button>
-          <button className="btn btn-sm btn-ghost" onClick={() => answer(false)}>
-            Ignore
-          </button>
+    <li>
+      <a href={href.inbox(person.uid)} className={`trow ${on ? 'is-on' : ''} ${unread ? 'is-unread' : ''}`}>
+        <Avatar person={person} size={48} />
+        <div className="trow-body">
+          <div className="trow-top">
+            <b>{person.name}</b>
+            <span>{ago(at)}</span>
+          </div>
+          <p>{text}</p>
         </div>
-      </div>
+        {unread > 0 && <i className="dot" aria-label={`${unread} unread`} />}
+      </a>
     </li>
   )
 }
@@ -100,6 +78,7 @@ function ThreadView({ uid, onSent }: { uid: string; onSent: () => void }) {
     try {
       const r = await api<{ message: Message }>(`/api/threads/${uid}`, { text: body })
       setData((d) => d && { ...d, messages: d.messages.map((m) => (m.id === temp.id ? r.message : m)) })
+      if (data.status === 'received') reload().then(refreshBadges)
       onSent()
     } catch (err) {
       setData((d) => d && { ...d, messages: d.messages.filter((m) => m.id !== temp.id) })
@@ -119,6 +98,8 @@ function ThreadView({ uid, onSent }: { uid: string; onSent: () => void }) {
   if (!data) return <div className="thread" />
 
   const { user, status, messages } = data
+  const first = user.name.split(' ')[0]
+  const open = status === 'connected' || status === 'received'
   let lastDay = ''
 
   return (
@@ -131,22 +112,22 @@ function ThreadView({ uid, onSent }: { uid: string; onSent: () => void }) {
           <Avatar person={user} size={40} />
           <div>
             <b>{user.name}</b>
-            <span>{user.headline || personLine(user)}</span>
+            <span>{personLine(user)}</span>
           </div>
         </a>
       </header>
 
       <div className="thread-list" ref={list}>
-        {status !== 'connected' ? (
+        {!open ? (
           <div className="thread-empty">
             <Avatar person={user} size={72} />
-            <p>{status === 'sent' ? `Waiting for ${user.name.split(' ')[0]} to accept your request.` : `Connect with ${user.name.split(' ')[0]} to start talking.`}</p>
+            <p>{status === 'sent' ? `Waiting for ${first} to accept your request.` : `Connect with ${first} to start talking.`}</p>
             <ConnectButton person={user} status={status} onChange={(s) => (s === 'connected' ? reload() : setData({ ...data, status: s }))} size="md" />
           </div>
         ) : messages.length === 0 ? (
           <div className="thread-empty">
             <Avatar person={user} size={72} />
-            <p>You are connected. Say hi.</p>
+            <p>{status === 'received' ? `${first} wants to connect. Say hi.` : 'You are connected. Say hi.'}</p>
           </div>
         ) : (
           messages.map((m) => {
@@ -165,7 +146,7 @@ function ThreadView({ uid, onSent }: { uid: string; onSent: () => void }) {
         )}
       </div>
 
-      {status === 'connected' && (
+      {open && (
         <form className="thread-input" onSubmit={send}>
           <textarea ref={box} rows={1} value={text} maxLength={2000} placeholder="Write a message" onChange={(e) => setText(e.target.value)} onKeyDown={onKey} aria-label="Message" />
           <button className="icon-btn is-blue" aria-label="Send" disabled={!text.trim()}>
@@ -190,9 +171,9 @@ export function Inbox({ id }: { id?: string }) {
             {data.requests.length > 0 && (
               <>
                 <h2>Requests · {data.requests.length}</h2>
-                <ul className="reqs">
+                <ul className="threads">
                   {data.requests.map((r) => (
-                    <RequestRow key={r.user.uid} req={r} onDone={reload} />
+                    <Row key={r.user.uid} person={r.user} at={r.at} text={r.note || 'Wants to connect.'} unread={1} on={id === r.user.uid} />
                   ))}
                 </ul>
               </>
@@ -202,35 +183,25 @@ export function Inbox({ id }: { id?: string }) {
                 {data.requests.length > 0 && <h2>Conversations</h2>}
                 <ul className="threads">
                   {data.threads.map((t) => (
-                    <li key={t.user.uid}>
-                      <a href={href.inbox(t.user.uid)} className={`trow ${id === t.user.uid ? 'is-on' : ''} ${t.unread ? 'is-unread' : ''}`}>
-                        <Avatar person={t.user} size={48} />
-                        <div className="trow-body">
-                          <div className="trow-top">
-                            <b>{t.user.name}</b>
-                            <span>{ago(t.at)}</span>
-                          </div>
-                          <p>{t.last ? `${t.last.mine ? 'You: ' : ''}${t.last.text}` : 'You are connected. Say hi.'}</p>
-                        </div>
-                        {t.unread > 0 && <i className="dot" aria-label={`${t.unread} unread`} />}
-                      </a>
-                    </li>
+                    <Row
+                      key={t.user.uid}
+                      person={t.user}
+                      at={t.at}
+                      text={t.last ? `${t.last.mine ? 'You: ' : ''}${t.last.text}` : 'You are connected. Say hi.'}
+                      unread={t.unread}
+                      on={id === t.user.uid}
+                    />
                   ))}
                 </ul>
               </>
             )}
             {!data.requests.length && !data.threads.length && (
               <div className="inbox-empty">
-                <p>No messages yet. Find someone open to a coffee chat and say hi.</p>
+                <p>No messages yet. Find someone and say hi.</p>
                 <a className="btn btn-primary" href={href.people}>
                   Find people
                 </a>
               </div>
-            )}
-            {data.sent.length > 0 && (
-              <p className="fine sent-note">
-                {data.sent.length} {data.sent.length === 1 ? 'request is' : 'requests are'} waiting for a reply.
-              </p>
             )}
           </>
         )}

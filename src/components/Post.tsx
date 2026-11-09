@@ -4,7 +4,6 @@ import { ChatCircle } from '@phosphor-icons/react/dist/csr/ChatCircle'
 import { CalendarCheck } from '@phosphor-icons/react/dist/csr/CalendarCheck'
 import { MapPin } from '@phosphor-icons/react/dist/csr/MapPin'
 import { Clock } from '@phosphor-icons/react/dist/csr/Clock'
-import { Question } from '@phosphor-icons/react/dist/csr/Question'
 import { Briefcase } from '@phosphor-icons/react/dist/csr/Briefcase'
 import { Handshake } from '@phosphor-icons/react/dist/csr/Handshake'
 import { CalendarBlank } from '@phosphor-icons/react/dist/csr/CalendarBlank'
@@ -38,7 +37,6 @@ export function Linkified({ text }: { text: string }) {
 }
 
 const KIND_LABEL = {
-  ask: { icon: Question, text: 'Asking for help' },
   work: { icon: Handshake, text: 'Open for work' },
   opp: { icon: Briefcase, text: 'Opportunity' },
   event: { icon: CalendarBlank, text: 'Event' },
@@ -131,11 +129,11 @@ export function PostCard({ post, onChange, onRemove }: Props) {
       <header className="post-head">
         {post.org ? (
           <>
-            <a href={href.org(post.org.id)} className="post-avatar">
+            <a href={href.org(post.org.id, post.org.type)} className="post-avatar">
               <OrgLogo org={post.org} size={44} />
             </a>
             <div className="post-who">
-              <a href={href.org(post.org.id)} className="post-name">
+              <a href={href.org(post.org.id, post.org.type)} className="post-name">
                 {post.org.name}
               </a>
               <span className="post-sub">

@@ -9,7 +9,6 @@ import { KINDS } from '../../shared/options.js'
 
 const PLACEHOLDER: Record<ComposeKind, string> = {
   post: 'What do you want to share?',
-  ask: 'What do you need help with? Be specific, like “Looking for someone who took Math 31.2.”',
   work: 'What can you do, and what kind of work do you want? Like “I edit videos for orgs. Looking for paid projects this break.”',
   opp: 'Share an internship, job, org opening, or scholarship. Say how to apply.',
   event: 'What is it about? Who should come?',

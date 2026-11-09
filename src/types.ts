@@ -12,6 +12,11 @@ export interface Person {
   openTo: string[]
   photo: string | null
   status?: Status
+  // On profiles and in the people list: a picture's URL, a drawn banner's id, or null for plain gray.
+  banner?: string | null
+  // Only in the people list: their orgs and businesses, and which one they show first.
+  highlight?: string
+  orgs?: MyOrg[]
 }
 
 export interface GalleryItem {
@@ -19,13 +24,25 @@ export interface GalleryItem {
   title: string
   caption: string
   link: string
+  featured: boolean
   url: string
+}
+
+export type PortfolioStyle = 'gallery' | 'stage' | 'list'
+
+// How a portfolio looks. The owner picks it. An empty title means "Portfolio".
+export interface PortfolioLook {
+  style: PortfolioStyle
+  title: string
 }
 
 export interface FullPerson extends Person {
   about: string
   skills: string[]
+  // The org or business shown first and biggest on the profile. Empty means none picked.
+  highlight: string
   gallery: GalleryItem[]
+  portfolio: PortfolioLook
   createdAt: number
 }
 
@@ -48,13 +65,16 @@ export interface OrgMini {
   id: string
   name: string
   short: string
+  type: 'org' | 'business'
   logo: string | null
+  cover: string | null
   verified: boolean
 }
 
 export interface MyOrg extends OrgMini {
   category: string
   myRole: 'admin' | 'member'
+  title: string
 }
 
 export interface Org extends OrgMini {
@@ -71,14 +91,16 @@ export interface Org extends OrgMini {
 export interface OrgFull extends Org {
   links: { facebook: string; instagram: string; website: string }
   question: string
+  gallery: GalleryItem[]
+  portfolio: PortfolioLook
   createdAt: number
-  people: (Person & { orgRole: 'admin' | 'member' })[]
+  people: (Person & { orgRole: 'admin' | 'member'; title: string })[]
   applications: { user: Person; answer: string; at: number }[]
 }
 
 export interface Post {
   id: string
-  kind: 'post' | 'ask' | 'work' | 'opp' | 'event'
+  kind: 'post' | 'work' | 'opp' | 'event'
   org: OrgMini | null
   canDelete: boolean
   text: string

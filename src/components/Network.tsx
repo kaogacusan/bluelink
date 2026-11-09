@@ -7,7 +7,7 @@ import { useLive } from '../lib/live'
 import { go, href } from '../lib/router'
 import type { Person, Status } from '../types'
 
-// blueLink draws people as dots and connections as lines, like a map of a brain.
+// BlueLink draws people as dots and connections as lines, like a map of a brain.
 // The pictures live here: the landing sky, the side menu sky, your network in the rail, and profile covers.
 
 // The same seed always gives the same numbers, so a person's cover never changes.
@@ -658,15 +658,7 @@ export function MyNetwork() {
         )}
       </div>
       <p className="net-legend">
-        <span>
-          <i className="is-on" /> {counts.connected} connected
-        </span>
-        <span>
-          <i className="is-pending" /> {counts.pending} pending
-        </span>
-        <span>
-          <i /> {counts.other} to meet
-        </span>
+        <b>{counts.connected}</b> {counts.connected === 1 ? 'connection' : 'connections'}
       </p>
     </section>
   )
@@ -674,31 +666,71 @@ export function MyNetwork() {
 
 /* ---------------- Profile cover ---------------- */
 
-// Every person and org gets their own patch of sky: a real-looking star field and one small constellation.
-// Made from their id, so it never changes. The constellation stays on the right, away from the photo.
-export function SpaceCover({ seed }: { seed: string }) {
-  const ref = useStill(
-    (ctx, w, h) => {
-      const rand = seeded(seed)
-      paintSky(ctx, w, h, rand, { angle: -0.15 - rand() * 0.5, offset: 0.2 + rand() * 0.6, band: 0.75, density: 0.85, bright: 0.4 })
-      const n = 5 + Math.floor(rand() * 3)
-      const pts = Array.from({ length: n }, () => ({ x: w * (0.5 + rand() * 0.44), y: h * (0.14 + rand() * 0.72), r: 0.8 + rand() * 0.7 }))
-      // Join each star to the closest one already in the shape.
-      ctx.strokeStyle = 'rgba(176,194,255,0.3)'
-      ctx.lineWidth = 0.7
-      ctx.beginPath()
-      for (let k = 1; k < n; k++) {
-        let best = 0
-        for (let m = 1; m < k; m++) if (Math.hypot(pts[k].x - pts[m].x, pts[k].y - pts[m].y) < Math.hypot(pts[k].x - pts[best].x, pts[k].y - pts[best].y)) best = m
-        ctx.moveTo(pts[best].x, pts[best].y)
-        ctx.lineTo(pts[k].x, pts[k].y)
-      }
-      ctx.stroke()
-      pts.forEach((p, i) => brightStar(ctx, p.x, p.y, p.r, i === 0 ? '255,214,174' : '226,234,255', 0.95))
-    },
-    [seed],
-  )
+// A star field and one small constellation. The constellation stays on the right, away from the photo.
+function paintSpace(ctx: CanvasRenderingContext2D, w: number, h: number, rand: Rand) {
+  paintSky(ctx, w, h, rand, { angle: -0.15 - rand() * 0.5, offset: 0.2 + rand() * 0.6, band: 0.75, density: 0.85, bright: 0.4 })
+  const n = 5 + Math.floor(rand() * 3)
+  const pts = Array.from({ length: n }, () => ({ x: w * (0.5 + rand() * 0.44), y: h * (0.14 + rand() * 0.72), r: 0.8 + rand() * 0.7 }))
+  // Join each star to the closest one already in the shape.
+  ctx.strokeStyle = 'rgba(176,194,255,0.3)'
+  ctx.lineWidth = 0.7
+  ctx.beginPath()
+  for (let k = 1; k < n; k++) {
+    let best = 0
+    for (let m = 1; m < k; m++) if (Math.hypot(pts[k].x - pts[m].x, pts[k].y - pts[m].y) < Math.hypot(pts[k].x - pts[best].x, pts[k].y - pts[best].y)) best = m
+    ctx.moveTo(pts[best].x, pts[best].y)
+    ctx.lineTo(pts[k].x, pts[k].y)
+  }
+  ctx.stroke()
+  pts.forEach((p, i) => brightStar(ctx, p.x, p.y, p.r, i === 0 ? '255,214,174' : '226,234,255', 0.95))
+}
+
+// The edge of a planet low in the frame, with a thin lit rim of air. Stars above it.
+function paintHorizon(ctx: CanvasRenderingContext2D, w: number, h: number, rand: Rand) {
+  paintSky(ctx, w, h, rand, { band: 0, density: 0.8, bright: 0.5 })
+  const r = w * 1.4
+  const cx = w * (0.35 + rand() * 0.3)
+  const cy = h * 0.72 + r
+  const air = ctx.createRadialGradient(cx, cy, r, cx, cy, r + h * 0.6)
+  air.addColorStop(0, 'rgba(90,125,255,0.5)')
+  air.addColorStop(0.15, 'rgba(58,95,255,0.18)')
+  air.addColorStop(1, 'rgba(58,95,255,0)')
+  ctx.fillStyle = air
+  ctx.fillRect(0, 0, w, h)
+  ctx.fillStyle = '#070c1f'
+  ctx.beginPath()
+  ctx.arc(cx, cy, r, 0, TAU)
+  ctx.fill()
+  ctx.strokeStyle = 'rgba(176,194,255,0.8)'
+  ctx.lineWidth = 1
+  ctx.stroke()
+}
+
+const BANNER_PAINT: Record<string, (ctx: CanvasRenderingContext2D, w: number, h: number, rand: Rand) => void> = {
+  space: paintSpace,
+  // A bright Milky Way across the whole banner.
+  milky: (ctx, w, h, rand) => paintSky(ctx, w, h, rand, { angle: -0.12 - rand() * 0.25, offset: 0.45 + rand() * 0.15, band: 1.4, density: 1.1, bright: 0.7 }),
+  horizon: paintHorizon,
+  // Brand navy into BlueLink blue, with a few faint stars.
+  blue: (ctx, w, h, rand) => {
+    const g = ctx.createLinearGradient(0, h, w, 0)
+    g.addColorStop(0, '#0a1540')
+    g.addColorStop(1, '#1d45e5')
+    ctx.fillStyle = g
+    ctx.fillRect(0, 0, w, h)
+    paintSky(ctx, w, h, rand, { band: 0, density: 0.35, bright: 0.3 })
+  },
+}
+
+// A drawn banner. Made from the person's id, so theirs never changes.
+export function BannerArt({ id, seed }: { id: string; seed: string }) {
+  const ref = useStill((ctx, w, h) => BANNER_PAINT[id]?.(ctx, w, h, seeded(seed)), [id, seed])
   return <canvas ref={ref} className="cover-sky" aria-hidden />
+}
+
+// An org with no banner picture gets its own patch of sky.
+export function SpaceCover({ seed }: { seed: string }) {
+  return <BannerArt id="space" seed={seed} />
 }
 
 // A short catalog number for a person or org, like a star's name in an atlas. Same id, same number.

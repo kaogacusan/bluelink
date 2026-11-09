@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { ArrowRight } from '@phosphor-icons/react/dist/csr/ArrowRight'
 import { ThumbsUp } from '@phosphor-icons/react/dist/csr/ThumbsUp'
 import { ChatCircle } from '@phosphor-icons/react/dist/csr/ChatCircle'
+import { Check } from '@phosphor-icons/react/dist/csr/Check'
 import { Logo } from '../components/Logo'
 import { Avatar } from '../components/Avatar'
 import { HeroGraph } from '../components/Network'
@@ -14,15 +15,15 @@ import { PLANS } from '../../shared/membership.js'
 import { LEGAL, RULES } from '../../shared/legal.js'
 
 const WHY = [
-  { title: 'Exclusive access for Ateneans', text: 'Only Ateneans can join. Your posts stay inside blueLink.' },
+  { title: 'Exclusive access for Ateneans', text: 'Only Ateneans can join. Your posts stay inside BlueLink.' },
   { title: 'For people who want to network', text: 'Everyone here joined to meet people and find opportunities, not to scroll.' },
-  { title: 'A safe space for networking', text: 'Ask for work, a mentor, or an intro. Report and block are on every profile.' },
+  { title: 'A safe space for networking', text: 'Reach out for internships, mentors, or intros. Report and block are on every profile.' },
 ]
 
 const STEPS = [
   { title: 'Sign in with your Ateneo account', text: 'One tap with Google. We never show or keep your email.' },
   { title: 'Pay the membership fee', text: `You get in right away. Full refund within ${LEGAL.refundDays} days.` },
-  { title: 'Post, ask, and connect', text: 'Find people by course, skill, or what they are open to, and say hi.' },
+  { title: 'Post and connect', text: 'Find people by course, skill, or what they are open to, and say hi.' },
 ]
 
 function CodeInput({ value, onChange, disabled }: { value: string; onChange: (v: string) => void; disabled: boolean }) {
@@ -156,7 +157,7 @@ function SignInForm() {
             aria-label="Ateneo email"
           />
           <button className="btn btn-primary btn-lg" disabled={busy}>
-            Join blueLink <ArrowRight weight="bold" />
+            Join BlueLink <ArrowRight weight="bold" />
           </button>
         </div>
         {error && <p className="form-error">{error}</p>}
@@ -273,19 +274,20 @@ export function Landing() {
 
       <section className="l-band">
         <div className="l-band-inner">
-          <div className="l-plans">
-            {PLANS.map((p) => (
-              <p key={p.id} className="l-price">
-                <b>₱{p.price}</b>
-                <span>{p.name}</span>
-              </p>
-            ))}
-          </div>
-          <div>
-            <h2>Both plans get everything.</h2>
-            <ul className="tags is-lg">
+          <h2>Both plans get everything.</h2>
+          <div className="l-plan-table">
+            <div className="l-plans">
+              {PLANS.map((p) => (
+                <p key={p.id} className="l-price">
+                  <span>{p.name}</span>
+                  <b>₱{p.price}</b>
+                </p>
+              ))}
+            </div>
+            <ul className="l-perks">
               {OPEN_TO.map((o) => (
-                <li key={o.id} className="tag">
+                <li key={o.id}>
+                  <Check weight="bold" />
                   {o.label}
                 </li>
               ))}

@@ -4,25 +4,23 @@ import { OPEN_TO } from '../../shared/options.js'
 const label = (id: string) => OPEN_TO.find((o) => o.id === id)?.label ?? id
 
 // The "Open to" tags. They tell people it is OK to reach out.
-export function OpenTo({ ids, max, highlight = [] }: { ids: string[]; max?: number; highlight?: string[] }) {
-  if (!ids.length) return null
+export function OpenToChips({ ids, max }: { ids: string[]; max?: number }) {
   const shown = max ? ids.slice(0, max) : ids
   const extra = ids.length - shown.length
   return (
-    <ul className="tags">
+    <ul className="open-chips">
       {shown.map((id) => (
-        <li key={id} className={`tag ${highlight.includes(id) ? 'is-match' : ''}`}>
-          {label(id)}
-        </li>
+        <li key={id}>{label(id)}</li>
       ))}
-      {extra > 0 && <li className="tag is-more">+{extra}</li>}
+      {extra > 0 && <li className="is-more">+{extra}</li>}
     </ul>
   )
 }
 
 export function OpenToPicker({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+  // Seeking tags fill the left column, the matching give tags fill the right one.
   return (
-    <div className="picker" role="group" aria-label="Open to">
+    <div className="picker open-picker" role="group" aria-label="Open to" style={{ gridTemplateRows: `repeat(${Math.ceil(OPEN_TO.length / 2)}, auto)` }}>
       {OPEN_TO.map((o) => {
         const on = value.includes(o.id)
         return (

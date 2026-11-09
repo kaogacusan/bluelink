@@ -1,4 +1,4 @@
-/* blueLink brand tokens. Every screen reads its colors and type from here. */
+/* BlueLink brand tokens. Every screen reads its colors and type from here. */
 
 /* Full Inter (rsms.me), cut to Latin. The Google Fonts copy drops the alternate letters we use. */
 @font-face {
@@ -8,21 +8,11 @@
   font-style: normal;
   font-display: swap;
 }
-/* JetBrains Mono (SIL Open Font License), cut to Latin. Served from our own site, so no font request goes to Google. */
-@font-face {
-  font-family: 'JetBrains Mono BL';
-  src: url('../assets/fonts/JetBrainsMono-latin.woff2') format('woff2');
-  font-weight: 400 700;
-  font-style: normal;
-  font-display: swap;
-}
 
 :root {
   --font-ui: 'Inter BL', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   /* Inter with the single-storey a, the tailed l and round punctuation. This is what makes it ours. */
   --font-features: 'cv11', 'cv05', 'ss03';
-  /* Small labels, numbers and codes. Reads like a star catalog. */
-  --font-mono: 'JetBrains Mono BL', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
 
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -54,6 +44,7 @@
   --panel: #ffffff;
   --surface: #f1f3f8;
   --surface-2: #e7ebf4;
+  --banner-empty: #e2e4e9;
   --solid: #ffffff;
   --input-bg: #ffffff;
   --line: #e1e5ee;
@@ -85,6 +76,7 @@
   --panel: #080d20;
   --surface: #0e1531;
   --surface-2: #151e42;
+  --banner-empty: #1b1e27;
   --solid: #0a1026;
   --input-bg: #070c1f;
   --line: rgba(190, 205, 255, 0.1);

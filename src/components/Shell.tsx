@@ -6,7 +6,6 @@ import { UserCircle } from '@phosphor-icons/react/dist/csr/UserCircle'
 import { Flag } from '@phosphor-icons/react/dist/csr/Flag'
 import { ShieldCheck } from '@phosphor-icons/react/dist/csr/ShieldCheck'
 import { Plus } from '@phosphor-icons/react/dist/csr/Plus'
-import { MagnifyingGlass } from '@phosphor-icons/react/dist/csr/MagnifyingGlass'
 import { Logo } from './Logo'
 import { Avatar } from './Avatar'
 import { Rail } from './Rail'
@@ -17,24 +16,32 @@ import { href, type Route } from '../lib/router'
 const NAV = [
   { key: 'feed', label: 'Home', to: href.feed, icon: House },
   { key: 'people', label: 'People', to: href.people, icon: UsersThree },
-  { key: 'orgs', label: 'Orgs', to: href.orgs, icon: Flag },
+  { key: 'orgs', label: 'Orgs & businesses', short: 'Orgs', to: href.orgs, icon: Flag },
   { key: 'inbox', label: 'Messages', to: href.inbox(), icon: ChatsCircle },
   { key: 'me', label: 'Profile', to: href.me, icon: UserCircle },
 ] as const
 
-const activeKey = (r: Route) => (r.page === 'edit' ? 'me' : r.page === 'user' ? 'people' : ['org', 'newOrg', 'editOrg'].includes(r.page) ? 'orgs' : r.page)
+// The phone tab bar has room for four links around the Post button.
+const TABS = NAV.filter((n) => n.key !== 'me')
+
+function activeKey(r: Route) {
+  if (r.page === 'edit') return 'me'
+  if (r.page === 'user') return 'people'
+  if (['businesses', 'org', 'editOrg', 'newOrg'].includes(r.page)) return 'orgs'
+  return r.page
+}
 
 export function Shell({ route, children }: { route: Route; children: ReactNode }) {
   const { me, badges, compose, isAdmin } = useApp()
   const active = activeKey(route)
-  const rail = ['feed', 'people', 'user', 'orgs', 'org'].includes(route.page)
+  const rail = ['feed', 'people', 'user', 'me', 'orgs', 'businesses', 'org'].includes(route.page)
   const inThread = route.page === 'inbox' && !!route.id
 
   return (
     <div className={`layout ${rail ? 'has-rail' : ''} ${route.page === 'inbox' ? 'is-inbox' : ''} ${inThread ? 'in-thread' : ''}`}>
       <aside className="side">
         <Sky seed="bluelink-side" />
-        <a href={href.feed} className="side-logo" aria-label="blueLink home">
+        <a href={href.feed} className="side-logo" aria-label="BlueLink home">
           <Logo size={30} />
         </a>
         <nav className="side-nav">
@@ -65,13 +72,10 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
       </aside>
 
       <header className="mtop">
-        <a href={href.feed} aria-label="blueLink home">
+        <a href={href.feed} aria-label="BlueLink home">
           <Logo size={26} />
         </a>
         <div className="mtop-right">
-          <a href={href.people} className="icon-btn" aria-label="Find people">
-            <MagnifyingGlass weight="bold" />
-          </a>
           <a href={href.me} aria-label="Your profile">
             <Avatar person={me} size={32} />
           </a>
@@ -87,10 +91,10 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
       )}
 
       <nav className="tabs">
-        {NAV.slice(0, 2).map((n) => (
+        {TABS.slice(0, 2).map((n) => (
           <a key={n.key} href={n.to} className={`tab ${active === n.key ? 'is-on' : ''}`}>
             <n.icon weight={active === n.key ? 'fill' : 'regular'} />
-            <span>{n.label}</span>
+            <span>{'short' in n ? n.short : n.label}</span>
           </a>
         ))}
         <button className="tab tab-post" onClick={() => compose()} aria-label="Create a post">
@@ -99,10 +103,10 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
           </i>
           <span>Post</span>
         </button>
-        {NAV.slice(2, 4).map((n) => (
+        {TABS.slice(2, 4).map((n) => (
           <a key={n.key} href={n.to} className={`tab ${active === n.key ? 'is-on' : ''}`}>
             <n.icon weight={active === n.key ? 'fill' : 'regular'} />
-            <span>{n.label}</span>
+            <span>{'short' in n ? n.short : n.label}</span>
             {n.key === 'inbox' && badges > 0 && <i className="badge">{badges}</i>}
           </a>
         ))}

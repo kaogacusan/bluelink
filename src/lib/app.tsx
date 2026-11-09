@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react'
 import type { FullPerson, Membership, MyOrg } from '../types'
 
 export type Theme = 'light' | 'dark'
-export type ComposeKind = 'post' | 'ask' | 'work' | 'opp' | 'event'
+export type ComposeKind = 'post' | 'work' | 'opp' | 'event'
 
 export interface AppState {
   me: FullPerson

@@ -19,7 +19,7 @@ const PRIVACY: Section[] = [
     body: (
       <>
         <p>
-          blueLink is run by {LEGAL.operator}. It is not an official Ateneo de Manila University service, and the university does not run or endorse it.
+          BlueLink is run by {LEGAL.operator}. It is not an official Ateneo de Manila University service, and the university does not run or endorse it.
         </p>
         <p>
           Questions about your data go to our privacy contact (Data Protection Officer): {LEGAL.dpo}, at {LEGAL.contact}.
@@ -35,7 +35,7 @@ const PRIVACY: Section[] = [
           <b>When you sign in:</b> your school email, your name, and your Google photo if you use Google. We turn your email into a code and do not keep the email itself.
         </li>
         <li>
-          <b>What you add:</b> your role (student, alum, faculty or staff), course or department, year, headline, about, skills, what you are open to, photo, posts, comments, messages, and org details.
+          <b>What you add:</b> your role (student, alumni, faculty or staff), course or department, year, headline, about, skills, what you are open to, photo, posts, comments, messages, and org details.
         </li>
         <li>
           <b>When you pay:</b> the GCash reference number, the amount, and the date. We never see your GCash PIN or balance.
@@ -126,7 +126,7 @@ const PRIVACY: Section[] = [
   },
   {
     title: `Only for people ${LEGAL.minAge} and older`,
-    body: <p>blueLink is not for anyone under {LEGAL.minAge}. If we learn that a member is younger, we delete the account.</p>,
+    body: <p>BlueLink is not for anyone under {LEGAL.minAge}. If we learn that a member is younger, we delete the account.</p>,
   },
   {
     title: 'Changes',
@@ -136,10 +136,10 @@ const PRIVACY: Section[] = [
 
 const TERMS: Section[] = [
   {
-    title: 'What blueLink is',
+    title: 'What BlueLink is',
     body: (
       <p>
-        blueLink is a members-only network for Ateneans, run by {LEGAL.operator}. It is not an official Ateneo de Manila University service, and the university does not run or
+        BlueLink is a members-only network for Ateneans, run by {LEGAL.operator}. It is not an official Ateneo de Manila University service, and the university does not run or
         endorse it. By joining, you agree to these terms and to our <a href="#/privacy">Privacy Notice</a>.
       </p>
     ),
@@ -149,7 +149,7 @@ const TERMS: Section[] = [
     body: (
       <ul>
         <li>You are {LEGAL.minAge} or older.</li>
-        <li>You are a current student, an alum, or faculty or staff, with an Ateneo email.</li>
+        <li>You are a current student, alumni, or faculty or staff, with an Ateneo email.</li>
         <li>One account per person, under your real name.</li>
       </ul>
     ),
@@ -161,7 +161,7 @@ const TERMS: Section[] = [
         <li>
           ₱{PLANS[0].price} gives you {PLANS[0].days} days. It does not renew by itself.
         </li>
-        <li>₱{PLANS[1].price} gives you a lifetime membership. Lifetime means for as long as blueLink runs. You pay one time.</li>
+        <li>₱{PLANS[1].price} gives you a lifetime membership. Lifetime means for as long as BlueLink runs. You pay one time.</li>
         <li>A voucher code gives the time printed on the card. A founding member code gives {MEMBERSHIP.codeDays} days.</li>
         <li>Everyone gets the same features. There is no premium tier.</li>
       </ul>
@@ -183,7 +183,7 @@ const TERMS: Section[] = [
         <li>
           Changed your mind? Ask within {LEGAL.refundDays} days of paying and we refund the full amount you paid. Write to {LEGAL.contact}.
         </li>
-        <li>If blueLink closes before your time runs out, we refund the unused part.</li>
+        <li>If BlueLink closes before your time runs out, we refund the unused part.</li>
         <li>If we remove you for breaking the rules, we do not refund you.</li>
       </ul>
     ),
@@ -202,7 +202,7 @@ const TERMS: Section[] = [
     title: 'What you post',
     body: (
       <p>
-        You own what you post. You let us show it to members so blueLink works. Only post what you have the right to share. You are responsible for what you post and for any deal
+        You own what you post. You let us show it to members so BlueLink works. Only post what you have the right to share. You are responsible for what you post and for any deal
         you make with another member.
       </p>
     ),
@@ -218,7 +218,7 @@ const TERMS: Section[] = [
   },
   {
     title: 'What we cannot promise',
-    body: <p>blueLink helps you meet people. We cannot promise replies, jobs, internships, or any result. We try to keep the app running, but it can go down.</p>,
+    body: <p>BlueLink helps you meet people. We cannot promise replies, jobs, internships, or any result. We try to keep the app running, but it can go down.</p>,
   },
   {
     title: 'Law and questions',
@@ -240,7 +240,7 @@ export function Legal({ doc }: { doc: Doc }) {
   return (
     <div className="legal">
       <header className="legal-top">
-        <a href="#/" aria-label="blueLink home">
+        <a href="#/" aria-label="BlueLink home">
           <Logo size={26} />
         </a>
         <nav className="legal-tabs" aria-label="Legal pages">
@@ -265,7 +265,7 @@ export function Legal({ doc }: { doc: Doc }) {
           </section>
         ))}
         <a className="btn btn-outline legal-back" href="#/">
-          Back to blueLink
+          Back to BlueLink
         </a>
       </article>
     </div>

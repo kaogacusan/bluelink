@@ -12,7 +12,7 @@ type JoinData = { membership: Membership; gcash: { name: string; number: string 
 const PERKS = [
   'Only members see your posts. Nothing goes on the public internet.',
   'Everyone here wants to network, so people reply.',
-  'Ask for work, a mentor, or an intro. No one thinks it is weird.',
+  'Reach out for internships, mentors, or intros. No one thinks it is weird.',
 ]
 
 const day = (ts: number) => new Date(ts).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })
@@ -82,7 +82,7 @@ export function Join({ firstName, onJoined, onSignOut }: { firstName: string; on
         <h1>{expired ? 'Renew your membership' : `Last step${firstName ? `, ${firstName}` : ''}.`}</h1>
         <p className="lead">
           {expired ? `Your membership ended on ${day(m!.until)}. ` : ''}
-          blueLink is members only. Pick 1 year or lifetime. Both get the same app.
+          BlueLink is members only. Pick 1 year or lifetime. Both get the same app.
         </p>
 
         <ul className="perks">
@@ -161,7 +161,7 @@ export function Join({ firstName, onJoined, onSignOut }: { firstName: string; on
         <div className="code-box-row">
           {showCode ? (
             <form className="code-form" onSubmit={useCode}>
-              <input className="input" value={code} maxLength={40} autoFocus placeholder="e.g. BL-ACDE-FGHJ" onChange={(e) => setCode(e.target.value.toUpperCase())} aria-label="Voucher or founding member code" />
+              <input className="input" value={code} maxLength={40} autoFocus placeholder="e.g. ACD-FGH" onChange={(e) => setCode(e.target.value.toUpperCase())} aria-label="Voucher or founding member code" />
               <button className="btn btn-outline" disabled={busy || code.trim().length < 3}>
                 Use code
               </button>

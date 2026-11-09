@@ -2,7 +2,7 @@ import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { isSchoolEmail } from '../shared/school.js'
-import { KINDS, LEVELS, OPEN_TO, ORG_CATEGORIES, REPORT_REASONS, ROLES, SCHOOLS } from '../shared/options.js'
+import { BANNERS, KINDS, LEVELS, OPEN_TO, ORG_CATEGORIES, REPORT_REASONS, ROLES, schoolOf } from '../shared/options.js'
 import { MEMBERSHIP, LIFETIME_UNTIL, PLANS, planById, isLifetime } from '../shared/membership.js'
 import { LEGAL } from '../shared/legal.js'
 import { openStore } from './store.js'
@@ -14,7 +14,8 @@ const DAY = 24 * HOUR
 const REPORTS_TO_HIDE = 3
 
 const OPEN_IDS = new Set(OPEN_TO.map((o) => o.id))
-const SCHOOL_IDS = new Set(SCHOOLS.map((s) => s.id))
+const OPEN_MATCH = Object.fromEntries(OPEN_TO.map((o) => [o.id, o.match]))
+const BANNER_IDS = new Set(BANNERS.map((b) => b.id))
 const ROLE_IDS = new Set(ROLES.map((r) => r.id))
 const LEVEL_IDS = new Set(LEVELS.map((l) => l.id))
 const KIND_IDS = new Set(KINDS.map((k) => k.id))
@@ -52,10 +53,15 @@ export function createApi({ dataDir, dev = false }) {
   fs.mkdirSync(dataDir, { recursive: true })
   const photoDir = path.join(dataDir, 'photos')
   const logoDir = path.join(dataDir, 'logos')
+  const coverDir = path.join(dataDir, 'covers')
+  const bannerDir = path.join(dataDir, 'banners')
   const galleryDir = path.join(dataDir, 'gallery')
+  const orgGalleryDir = path.join(galleryDir, 'orgs')
   fs.mkdirSync(photoDir, { recursive: true })
-  fs.mkdirSync(galleryDir, { recursive: true })
+  fs.mkdirSync(orgGalleryDir, { recursive: true })
   fs.mkdirSync(logoDir, { recursive: true })
+  fs.mkdirSync(coverDir, { recursive: true })
+  fs.mkdirSync(bannerDir, { recursive: true })
 
   const secretFile = path.join(dataDir, 'secret')
   let secret
@@ -70,6 +76,21 @@ export function createApi({ dataDir, dev = false }) {
   const db = store.data
   const save = store.save
 
+  // Old "open to" tags move to the new ones. "Internships" meant seeking for students and hiring for everyone else.
+  const OLD_OPEN = { mentor: ['seek-mentor'], mentoring: ['advice'], recruit: ['hire-job'], hiring: ['hire-intern', 'hire-job'] }
+  for (const u of Object.values(db.users)) {
+    const ids = (u.openTo || []).flatMap((id) => (id === 'intern' ? [u.role === 'student' ? 'seek-intern' : 'hire-intern'] : OLD_OPEN[id] || [id]))
+    // Drop ids we no longer offer, so old profiles do not show raw ids.
+    u.openTo = [...new Set(ids)].filter((id) => OPEN_IDS.has(id))
+  }
+  // Asks are gone. Old asks become plain posts.
+  for (const p of db.posts) if (p.kind === 'ask') p.kind = 'post'
+  // The school comes from the course, so fill it in for people who never picked one.
+  for (const u of Object.values(db.users)) if (schoolOf(u.course)) u.school = schoolOf(u.course)
+  // ADVO is a company, so it lives under Businesses, not Orgs.
+  if (db.orgs.advo) db.orgs.advo.type = 'business'
+  if (db.orgs.advo?.name === 'ADVO') db.orgs.advo.name = 'ADVO Technologies'
+
   // ---- identity: we keep a keyed hash of the email, never the email itself
   const hmac = (value) => crypto.createHmac('sha256', secret).update(value).digest('base64url')
   const uidFor = (email) => hmac('uid:' + email).slice(0, 20)
@@ -83,6 +104,8 @@ export function createApi({ dataDir, dev = false }) {
       .map(uidFor),
   )
   const isSiteAdmin = (uid) => dev || adminUids.has(uid)
+  // Prince keeps the space banner he had. Everyone else starts plain gray.
+  const spaceBanner = new Set(['prince.alpherson.wagan@student.ateneo.edu'].map(uidFor))
   const googleClientId = process.env.GOOGLE_CLIENT_ID || ''
 
   const uidFromToken = (token) => {
@@ -192,8 +215,18 @@ export function createApi({ dataDir, dev = false }) {
     }
   }
 
-  const galleryItem = (uid) => (g) => ({ id: g.id, title: g.title, caption: g.caption, link: g.link, url: `/api/gallery/${uid}/${g.id}?v=${g.at}` })
-  const full = (u) => ({ ...card(u), about: u.about, skills: u.skills, gallery: (u.gallery || []).map(galleryItem(u.uid)), createdAt: u.createdAt })
+  const galleryItem = (uid) => (g) => ({ id: g.id, title: g.title, caption: g.caption, link: g.link, featured: !!g.featured, url: `/api/gallery/${uid}/${g.id}?v=${g.at}` })
+  // How a portfolio looks. The owner picks the style and the title.
+  const PORTFOLIO_STYLES = ['gallery', 'stage', 'list']
+  const lookOf = (x) => ({ style: PORTFOLIO_STYLES.includes(x.portfolio?.style) ? x.portfolio.style : 'gallery', title: x.portfolio?.title || '' })
+  // The profile banner: a picture's URL, a drawn banner's id, or null for plain gray.
+  // u.banner is a time when they added a picture, a drawn banner's id, or '' for none.
+  function bannerOf(u) {
+    const b = u.banner ?? (spaceBanner.has(u.uid) ? 'space' : '')
+    return typeof b === 'number' ? `/api/banner/${u.uid}?v=${b}` : BANNER_IDS.has(b) ? b : null
+  }
+  // highlight: the org or business shown first and biggest on the profile.
+  const full = (u) => ({ ...card(u), banner: bannerOf(u), about: u.about, skills: u.skills, highlight: u.highlight || '', gallery: (u.gallery || []).map(galleryItem(u.uid)), portfolio: lookOf(u), createdAt: u.createdAt })
 
   // ---- membership: two plans, one tier. Everyone inside gets the same app.
   function membershipOf(uid) {
@@ -214,7 +247,9 @@ export function createApi({ dataDir, dev = false }) {
   const orgRole = (o, uid) => o.members.find((m) => m.uid === uid)?.role ?? null
   const isAdmin = (o, uid) => orgRole(o, uid) === 'admin'
   const orgLogo = (o) => (o.logo ? `/api/logo/${o.id}?v=${o.logo}` : null)
-  const orgMini = (o) => ({ id: o.id, name: o.name, short: o.short, logo: orgLogo(o), verified: !!o.verified })
+  const orgCover = (o) => (o.cover ? `/api/cover/${o.id}?v=${o.cover}` : null)
+  const orgGalleryItem = (oid) => (g) => ({ id: g.id, title: g.title, caption: g.caption, link: g.link, featured: !!g.featured, url: `/api/org-gallery/${oid}/${g.id}?v=${g.at}` })
+  const orgMini = (o) => ({ id: o.id, name: o.name, short: o.short, type: o.type === 'business' ? 'business' : 'org', logo: orgLogo(o), cover: orgCover(o), verified: !!o.verified })
 
   function orgCard(o, viewer) {
     return {
@@ -236,10 +271,12 @@ export function createApi({ dataDir, dev = false }) {
       ...orgCard(o, viewer),
       links: o.links,
       question: o.question,
+      gallery: (o.gallery || []).map(orgGalleryItem(o.id)),
+      portfolio: lookOf(o),
       createdAt: o.createdAt,
       people: o.members
         .filter((m) => visible(viewer, db.users[m.uid]) || m.uid === viewer)
-        .map((m) => ({ ...card(db.users[m.uid]), orgRole: m.role })),
+        .map((m) => ({ ...card(db.users[m.uid]), orgRole: m.role, title: m.title || '' })),
       applications: admin
         ? o.applications.filter((a) => visible(viewer, db.users[a.uid])).map((a) => ({ user: card(db.users[a.uid]), answer: a.answer, at: a.at }))
         : [],
@@ -249,7 +286,7 @@ export function createApi({ dataDir, dev = false }) {
   const orgsOf = (uid) =>
     Object.values(db.orgs)
       .filter((o) => orgRole(o, uid))
-      .map((o) => ({ ...orgMini(o), category: o.category, myRole: orgRole(o, uid) }))
+      .map((o) => ({ ...orgMini(o), category: o.category, myRole: orgRole(o, uid), title: o.members.find((m) => m.uid === uid).title || '' }))
 
   function postView(p, viewer) {
     const org = p.org ? db.orgs[p.org] : null
@@ -273,10 +310,10 @@ export function createApi({ dataDir, dev = false }) {
     }
   }
 
-  // How good a match someone is: shared "open to" counts most, then same course and school.
+  // How good a match someone is: a want that meets their give counts most, then same course and school.
   function score(me, u) {
     let s = 0
-    for (const id of u.openTo) if (me.openTo.includes(id)) s += 2
+    for (const id of u.openTo) if (OPEN_MATCH[id].some((m) => me.openTo.includes(m))) s += 2
     if (me.school && me.school === u.school) s += 1
     if (me.course && u.course && me.course.toLowerCase() === u.course.toLowerCase()) s += 2
     if (Date.now() - (u.seenAt || 0) < 7 * 24 * HOUR) s += 1
@@ -340,7 +377,7 @@ export function createApi({ dataDir, dev = false }) {
     notify(to, 'inbox')
   }
 
-  const demo = dev ? createDemo({ db, save, newId, acceptLink, sendMessage, requestLink, uidFor, photoDir, logoDir, galleryDir }) : null
+  const demo = dev ? createDemo({ db, save, newId, acceptLink, sendMessage, requestLink, uidFor, photoDir, logoDir, coverDir, galleryDir, orgGalleryDir }) : null
   demo?.seed()
 
   // ---- profile input
@@ -349,13 +386,15 @@ export function createApi({ dataDir, dev = false }) {
     if (name.length < 2) throw new Fail(400, 'Add your name.')
     const role = ROLE_IDS.has(body.role) ? body.role : prev.role || 'student'
     const year = Number(body.year)
+    const course = line(body.course, 80)
     const seen = new Set()
     return {
       name,
       role,
-      school: SCHOOL_IDS.has(body.school) ? body.school : '',
-      course: line(body.course, 80),
-      // Students give a year level. Alums give the year they finished.
+      // Faculty type a department, so the school only changes when the course does.
+      school: schoolOf(course) || (course === prev.course ? prev.school || '' : ''),
+      course,
+      // Students give a year level. Alumni give the year they finished.
       level: role === 'student' && LEVEL_IDS.has(body.level) ? body.level : '',
       year: role === 'alum' && Number.isInteger(year) && year >= 1960 && year <= 2035 ? year : null,
       headline: line(body.headline, 140),
@@ -464,7 +503,9 @@ export function createApi({ dataDir, dev = false }) {
 
   route('POST', '/api/membership/code', 'profile', ({ uid, body }) => {
     limit('code:' + uid, 10, HOUR)
-    const code = line(body.code, 40).toUpperCase()
+    let code = line(body.code, 40).toUpperCase().replace(/\s/g, '')
+    // Card codes are XXX-XXX. The dash is optional when you type it.
+    if (/^[A-Z0-9]{6}$/.test(code) && !db.codes[code]) code = `${code.slice(0, 3)}-${code.slice(3)}`
     const c = db.codes[code]
     if (!c) throw new Fail(400, 'That code does not work. Check the spelling.')
     if (c.used.includes(uid)) throw new Fail(400, 'You already used this code.')
@@ -545,8 +586,8 @@ export function createApi({ dataDir, dev = false }) {
     const ABC = 'ACDEFGHJKMNPQRTUVWXY34679' // no 0/O, 1/I/L, 2/Z, 5/S, 8/B: easy to read off a card
     const made = []
     while (made.length < count) {
-      const raw = Array.from(crypto.randomBytes(8), (b) => ABC[b % ABC.length]).join('')
-      const code = `BL-${raw.slice(0, 4)}-${raw.slice(4)}`
+      const raw = Array.from(crypto.randomBytes(6), (b) => ABC[b % ABC.length]).join('')
+      const code = `${raw.slice(0, 3)}-${raw.slice(3)}`
       if (db.codes[code]) continue
       db.codes[code] = { max: 1, used: [], days, createdAt: Date.now() }
       made.push(code)
@@ -597,9 +638,12 @@ export function createApi({ dataDir, dev = false }) {
     const isNew = !prev?.name
     // No profile without a clear yes: 18 or older, and agrees to this version of the Terms and Privacy Notice.
     if (isNew && (body.adult !== true || body.agree !== LEGAL.version))
-      throw new Fail(400, `Check both boxes to join. blueLink is only for people ${LEGAL.minAge} and older.`)
+      throw new Fail(400, `Check both boxes to join. BlueLink is only for people ${LEGAL.minAge} and older.`)
     const consent = isNew ? { consent: { version: LEGAL.version, at: Date.now() } } : {}
-    const u = { ...(prev || { uid, photo: 0, createdAt: Date.now() }), ...readProfile(body, prev), ...consent, updatedAt: Date.now() }
+    // Only an org or business you are in can be your highlight.
+    const pick = body.highlight === undefined ? prev?.highlight || '' : String(body.highlight)
+    const highlight = Object.hasOwn(db.orgs, pick) && orgRole(db.orgs[pick], uid) ? pick : ''
+    const u = { ...(prev || { uid, photo: 0, createdAt: Date.now() }), ...readProfile(body, prev), highlight, ...consent, updatedAt: Date.now() }
     db.users[uid] = u
     save()
     if (isNew && googlePictures.has(uid)) await savePicture(uid, googlePictures.get(uid))
@@ -630,6 +674,41 @@ export function createApi({ dataDir, dev = false }) {
     400_000,
   )
 
+  // A drawn banner by its id, '' for plain gray, or a picture of your own.
+  route(
+    'POST',
+    '/api/me/banner',
+    'member',
+    ({ uid, body }) => {
+      const u = db.users[uid]
+      const file = path.join(bannerDir, `${uid}.jpg`)
+      if (body.data) {
+        const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String(body.data))
+        const bytes = m ? Buffer.from(m[1], 'base64') : null
+        if (!bytes || bytes.length > 700_000 || bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Fail(400, 'That banner did not work. Try another one.')
+        fs.writeFileSync(file, bytes)
+        u.banner = Date.now()
+      } else {
+        const id = String(body.template || '')
+        if (id && !BANNER_IDS.has(id)) throw new Fail(400, 'Pick one of the banners.')
+        fs.rmSync(file, { force: true })
+        u.banner = id
+      }
+      save()
+      return { user: full(u) }
+    },
+    1_000_000,
+  )
+
+  route('GET', '/api/banner/:uid', 'open', ({ params, res }) => {
+    const u = db.users[params.uid]
+    const file = path.join(bannerDir, `${params.uid}.jpg`)
+    if (typeof u?.banner !== 'number' || !/^[\w-]+$/.test(params.uid) || !fs.existsSync(file)) throw new Fail(404, 'No banner.')
+    res.setHeader('Content-Type', 'image/jpeg')
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    fs.createReadStream(file).pipe(res)
+  })
+
   route('GET', '/api/photo/:uid', 'open', ({ params, res }) => {
     const u = db.users[params.uid]
     const file = path.join(photoDir, `${params.uid}.jpg`)
@@ -639,9 +718,53 @@ export function createApi({ dataDir, dev = false }) {
     fs.createReadStream(file).pipe(res)
   })
 
-  // ---- portfolio: up to 12 pictures of your work on your profile
+  // ---- portfolio: up to 12 pictures of work, on a profile or an org page
   const GALLERY_MAX = 12
   const galleryFile = (uid, id) => path.join(galleryDir, `${uid}-${id}.jpg`)
+  const orgGalleryFile = (oid, id) => path.join(orgGalleryDir, `${oid}-${id}.jpg`)
+
+  const HIGHLIGHT_MAX = 2
+
+  // The words on a piece of work: title, what it is, and a link.
+  function workText(body) {
+    const title = line(body.title, 80)
+    if (!title) throw new Fail(400, 'Give it a title.')
+    const link = line(body.link, 200)
+    if (link && !/^https?:\/\/[^\s]+\.[^\s]+$/i.test(link)) throw new Fail(400, 'Use a full link, like https://example.com.')
+    return { title, caption: line(body.caption, 160), link }
+  }
+
+  // Checks a new picture, writes it, and adds it to the list.
+  function addWork(list, body, fileFor) {
+    if (list.length >= GALLERY_MAX) throw new Fail(400, `You can add up to ${GALLERY_MAX}. Remove one first.`)
+    const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String(body.data || ''))
+    const bytes = m ? Buffer.from(m[1], 'base64') : null
+    if (!bytes || bytes.length > 700_000 || bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Fail(400, 'That picture did not work. Try another one.')
+    const item = { id: newId(), ...workText(body), at: Date.now() }
+    fs.writeFileSync(fileFor(item.id), bytes)
+    list.push(item)
+  }
+
+  function editWork(list, id, body) {
+    const item = (list || []).find((g) => g.id === id)
+    if (!item) throw new Fail(404, 'This picture is gone.')
+    Object.assign(item, workText(body))
+  }
+
+  // Saves how a portfolio looks: the style, the title, the order, and up to 2 highlights.
+  function arrange(x, body) {
+    if (!PORTFOLIO_STYLES.includes(body.style)) throw new Fail(400, 'Pick a style.')
+    const order = Array.isArray(body.order) ? body.order.map(String) : []
+    const rank = (g) => (order.includes(g.id) ? order.indexOf(g.id) : order.length)
+    x.gallery = [...(x.gallery || [])].sort((a, b) => rank(a) - rank(b))
+    const picked = Array.isArray(body.featured) ? body.featured.map(String) : []
+    const top = new Set(x.gallery.filter((g) => picked.includes(g.id)).slice(0, HIGHLIGHT_MAX).map((g) => g.id))
+    for (const g of x.gallery) {
+      if (top.has(g.id)) g.featured = true
+      else delete g.featured
+    }
+    x.portfolio = { style: body.style, title: line(body.title, 40) }
+  }
 
   route(
     'POST',
@@ -651,22 +774,26 @@ export function createApi({ dataDir, dev = false }) {
       limit('gallery:' + uid, 40, HOUR)
       const u = db.users[uid]
       u.gallery ||= []
-      if (u.gallery.length >= GALLERY_MAX) throw new Fail(400, `You can add up to ${GALLERY_MAX}. Remove one first.`)
-      const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String(body.data || ''))
-      const bytes = m ? Buffer.from(m[1], 'base64') : null
-      if (!bytes || bytes.length > 700_000 || bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Fail(400, 'That picture did not work. Try another one.')
-      const title = line(body.title, 80)
-      if (!title) throw new Fail(400, 'Give it a title.')
-      const link = line(body.link, 200)
-      if (link && !/^https?:\/\/[^\s]+\.[^\s]+$/i.test(link)) throw new Fail(400, 'Use a full link, like https://example.com.')
-      const item = { id: newId(), title, caption: line(body.caption, 160), link, at: Date.now() }
-      fs.writeFileSync(galleryFile(uid, item.id), bytes)
-      u.gallery.push(item)
+      addWork(u.gallery, body, (id) => galleryFile(uid, id))
       save()
       return { user: full(u) }
     },
     1_000_000,
   )
+
+  route('POST', '/api/me/gallery/:id/edit', 'member', ({ uid, params, body }) => {
+    const u = db.users[uid]
+    editWork(u.gallery, params.id, body)
+    save()
+    return { user: full(u) }
+  })
+
+  route('POST', '/api/me/portfolio', 'member', ({ uid, body }) => {
+    const u = db.users[uid]
+    arrange(u, body)
+    save()
+    return { user: full(u) }
+  })
 
   route('POST', '/api/me/gallery/:id/remove', 'member', ({ uid, params }) => {
     const u = db.users[uid]
@@ -697,7 +824,7 @@ export function createApi({ dataDir, dev = false }) {
     const links = Object.entries(db.links).filter(([, l]) => l.from === uid || l.to === uid)
     return {
       exportedAt: new Date().toISOString(),
-      note: 'Everything blueLink keeps about you. We keep a coded version of your email, not the email.',
+      note: 'Everything BlueLink keeps about you. We keep a coded version of your email, not the email.',
       profile: { ...u, photo: u.photo ? `/api/photo/${uid}` : null },
       posts: db.posts.filter((p) => p.uid === uid).map((p) => ({ id: p.id, kind: p.kind, text: p.text, at: p.at, event: p.event ?? null })),
       comments: db.posts.flatMap((p) => p.comments.filter((c) => c.uid === uid).map((c) => ({ postId: p.id, text: c.text, at: c.at }))),
@@ -735,6 +862,7 @@ export function createApi({ dataDir, dev = false }) {
     delete db.reads[uid]
     delete db.blocks[uid]
     fs.rmSync(path.join(photoDir, `${uid}.jpg`), { force: true })
+    fs.rmSync(path.join(bannerDir, `${uid}.jpg`), { force: true })
     save()
     return { ok: true }
   })
@@ -830,8 +958,9 @@ export function createApi({ dataDir, dev = false }) {
     const open = query.get('open')
     const school = query.get('school')
     const role = query.get('role')
+    // You are in the list too, always first, so you can see how your card looks.
     const people = Object.values(db.users)
-      .filter((u) => u.uid !== uid && visible(uid, u))
+      .filter((u) => visible(uid, u))
       .filter((u) => !open || u.openTo.includes(open))
       .filter((u) => !school || u.school === school)
       .filter((u) => !role || u.role === role)
@@ -848,9 +977,9 @@ export function createApi({ dataDir, dev = false }) {
         return { u, s }
       })
       .filter(Boolean)
-      .sort((a, b) => b.s - a.s || (b.u.seenAt || 0) - (a.u.seenAt || 0))
+      .sort((a, b) => (b.u.uid === uid) - (a.u.uid === uid) || b.s - a.s || (b.u.seenAt || 0) - (a.u.seenAt || 0))
       .slice(0, 60)
-      .map(({ u }) => ({ ...card(u), status: statusOf(uid, u.uid) }))
+      .map(({ u }) => ({ ...card(u), banner: bannerOf(u), status: statusOf(uid, u.uid), highlight: u.highlight || '', orgs: orgsOf(u.uid) }))
     return { people }
   })
 
@@ -928,8 +1057,10 @@ export function createApi({ dataDir, dev = false }) {
     const other = getUser(uid, params.uid)
     const status = statusOf(uid, other.uid)
     const key = pairKey(uid, other.uid)
-    const msgs = status === 'connected' ? (db.messages[key] || []).slice(-300) : []
-    if (msgs.length) {
+    const l = db.links[key]
+    // A request reads like a chat: their note shows as the first message.
+    const msgs = status === 'connected' ? (db.messages[key] || []).slice(-300) : status === 'received' && l.note ? [{ id: 'note', from: other.uid, text: l.note, at: l.at }] : []
+    if (status === 'connected' && msgs.length) {
       ;(db.reads[uid] ||= {})[key] = Date.now()
       save()
     }
@@ -939,9 +1070,12 @@ export function createApi({ dataDir, dev = false }) {
   route('POST', '/api/threads/:uid', 'member', ({ uid, params, body }) => {
     limit('msg:' + uid, 10, 5000)
     const other = getUser(uid, params.uid)
-    if (statusOf(uid, other.uid) !== 'connected') throw new Fail(403, 'Connect first, then you can message.')
+    const status = statusOf(uid, other.uid)
+    if (status !== 'connected' && status !== 'received') throw new Fail(403, 'Connect first, then you can message.')
     const text = block(body.text, 2000)
     if (!text) throw new Fail(400, 'Write something first.')
+    // Replying to a request accepts it.
+    if (status === 'received') acceptLink(linkOf(uid, other.uid))
     const msg = sendMessage(uid, other.uid, text)
     ;(db.reads[uid] ||= {})[pairKey(uid, other.uid)] = msg.at
     demo?.onMessage(uid, other.uid)
@@ -951,7 +1085,7 @@ export function createApi({ dataDir, dev = false }) {
   // ---- orgs
   function readOrg(body) {
     const name = line(body.name, 80)
-    if (name.length < 2) throw new Fail(400, 'Add your org name.')
+    if (name.length < 2) throw new Fail(400, body.type === 'business' ? 'Add your business name.' : 'Add your org name.')
     const url = (v) => {
       const s = line(v, 200)
       if (!s) return ''
@@ -990,7 +1124,9 @@ export function createApi({ dataDir, dev = false }) {
     const q = line(query.get('q'), 60).toLowerCase()
     const cat = query.get('cat')
     const show = query.get('show')
+    const type = query.get('type') === 'business' ? 'business' : 'org'
     const orgs = Object.values(db.orgs)
+      .filter((o) => (o.type === 'business' ? 'business' : 'org') === type)
       .filter((o) => !q || [o.name, o.short, o.about].join(' ').toLowerCase().includes(q))
       .filter((o) => !cat || o.category === cat)
       .filter((o) => show !== 'recruiting' || o.recruiting)
@@ -1002,7 +1138,7 @@ export function createApi({ dataDir, dev = false }) {
 
   route('POST', '/api/orgs', 'member', ({ uid, body }) => {
     limit('org:' + uid, 3, 24 * HOUR)
-    const o = { id: newId(), ...readOrg(body), logo: 0, verified: false, members: [{ uid, role: 'admin', at: Date.now() }], applications: [], followers: [uid], createdBy: uid, createdAt: Date.now() }
+    const o = { id: newId(), type: body.type === 'business' ? 'business' : 'org', ...readOrg(body), logo: 0, verified: false, members: [{ uid, role: 'admin', at: Date.now() }], applications: [], followers: [uid], createdBy: uid, createdAt: Date.now() }
     db.orgs[o.id] = o
     save()
     return { org: orgFull(o, uid) }
@@ -1034,10 +1170,85 @@ export function createApi({ dataDir, dev = false }) {
     400_000,
   )
 
+  route(
+    'POST',
+    '/api/orgs/:id/cover',
+    'member',
+    ({ uid, params, body }) => {
+      const o = adminOf(params.id, uid)
+      const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String(body.data || ''))
+      const bytes = m ? Buffer.from(m[1], 'base64') : null
+      if (!bytes || bytes.length > 700_000 || bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Fail(400, 'That banner did not work. Try another one.')
+      fs.writeFileSync(path.join(coverDir, `${o.id}.jpg`), bytes)
+      o.cover = Date.now()
+      save()
+      return { org: orgFull(o, uid) }
+    },
+    1_000_000,
+  )
+
+  route('GET', '/api/cover/:id', 'open', ({ params, res }) => {
+    const o = db.orgs[params.id]
+    const file = path.join(coverDir, `${params.id}.jpg`)
+    if (!o?.cover || !/^[\w-]+$/.test(params.id) || !fs.existsSync(file)) throw new Fail(404, 'No banner.')
+    res.setHeader('Content-Type', 'image/jpeg')
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    fs.createReadStream(file).pipe(res)
+  })
+
   route('GET', '/api/logo/:id', 'open', ({ params, res }) => {
     const o = db.orgs[params.id]
     const file = path.join(logoDir, `${params.id}.jpg`)
     if (!o?.logo || !/^[\w-]+$/.test(params.id) || !fs.existsSync(file)) throw new Fail(404, 'No logo.')
+    res.setHeader('Content-Type', 'image/jpeg')
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    fs.createReadStream(file).pipe(res)
+  })
+
+  route(
+    'POST',
+    '/api/orgs/:id/gallery',
+    'member',
+    ({ uid, params, body }) => {
+      const o = adminOf(params.id, uid)
+      limit('gallery:' + uid, 40, HOUR)
+      o.gallery ||= []
+      addWork(o.gallery, body, (id) => orgGalleryFile(o.id, id))
+      save()
+      return { org: orgFull(o, uid) }
+    },
+    1_000_000,
+  )
+
+  route('POST', '/api/orgs/:id/gallery/:gid/edit', 'member', ({ uid, params, body }) => {
+    const o = adminOf(params.id, uid)
+    editWork(o.gallery, params.gid, body)
+    save()
+    return { org: orgFull(o, uid) }
+  })
+
+  route('POST', '/api/orgs/:id/portfolio', 'member', ({ uid, params, body }) => {
+    const o = adminOf(params.id, uid)
+    arrange(o, body)
+    save()
+    return { org: orgFull(o, uid) }
+  })
+
+  route('POST', '/api/orgs/:id/gallery/:gid/remove', 'member', ({ uid, params }) => {
+    const o = adminOf(params.id, uid)
+    const item = (o.gallery || []).find((g) => g.id === params.gid)
+    if (!item) throw new Fail(404, 'This picture is gone.')
+    o.gallery = o.gallery.filter((g) => g !== item)
+    fs.rmSync(orgGalleryFile(o.id, item.id), { force: true })
+    save()
+    return { org: orgFull(o, uid) }
+  })
+
+  route('GET', '/api/org-gallery/:id/:gid', 'open', ({ params, res }) => {
+    const o = db.orgs[params.id]
+    const ok = /^[\w-]+$/.test(params.id) && /^[\w-]+$/.test(params.gid) && o?.gallery?.some((g) => g.id === params.gid)
+    const file = orgGalleryFile(params.id, params.gid)
+    if (!ok || !fs.existsSync(file)) throw new Fail(404, 'No picture.')
     res.setHeader('Content-Type', 'image/jpeg')
     res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
     fs.createReadStream(file).pipe(res)
@@ -1081,6 +1292,17 @@ export function createApi({ dataDir, dev = false }) {
   })
 
   // Make someone an admin, make them a member again, or remove them.
+  // A member's job title, like "Founder and CEO". Admins set anyone's. Members set their own.
+  route('POST', '/api/orgs/:id/members/:uid/title', 'member', ({ uid, params, body }) => {
+    const o = getOrg(params.id)
+    if (params.uid !== uid && !isAdmin(o, uid)) throw new Fail(403, 'Only org admins can do this.')
+    const m = o.members.find((x) => x.uid === params.uid)
+    if (!m) throw new Fail(400, 'This person is not a member.')
+    m.title = line(body.title, 60)
+    save()
+    return { org: orgFull(o, uid) }
+  })
+
   route('POST', '/api/orgs/:id/members/:uid/:action', 'member', ({ uid, params }) => {
     const o = adminOf(params.id, uid)
     const m = o.members.find((x) => x.uid === params.uid)
@@ -1113,6 +1335,8 @@ export function createApi({ dataDir, dev = false }) {
     delete db.orgs[o.id]
     db.posts = db.posts.filter((p) => p.org !== o.id)
     fs.rmSync(path.join(logoDir, `${o.id}.jpg`), { force: true })
+    fs.rmSync(path.join(coverDir, `${o.id}.jpg`), { force: true })
+    for (const g of o.gallery || []) fs.rmSync(orgGalleryFile(o.id, g.id), { force: true })
     save()
     return { ok: true }
   })

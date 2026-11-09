@@ -18,12 +18,12 @@ export const schoolShort = (id: string) => SCHOOLS.find((s) => s.id === id)?.sho
 export const schoolName = (id: string) => SCHOOLS.find((s) => s.id === id)?.name ?? ''
 export const roleLabel = (id: string) => ROLES.find((r) => r.id === id)?.label ?? ''
 
-// "BS Computer Science · 3rd year", "Alum · BS ITE '21", "Faculty or staff · SOSE"
+// "BS Computer Science · 3rd year", "Alumni · BS ITE '21", "Faculty or staff · SOSE"
 export function personLine(p: Pick<Person, 'role' | 'course' | 'level' | 'year' | 'school'>) {
   if (p.role === 'faculty') return ['Faculty or staff', schoolShort(p.school)].filter(Boolean).join(' · ')
   if (p.role === 'alum') {
     const yy = p.year ? ` '${String(p.year).slice(2)}` : ''
-    return ['Alum', p.course ? p.course + yy : yy.trim()].filter(Boolean).join(' · ')
+    return ['Alumni', p.course ? p.course + yy : yy.trim()].filter(Boolean).join(' · ')
   }
   const level = LEVELS.find((l) => l.id === p.level)?.label
   return [p.course, level].filter(Boolean).join(' · ') || schoolShort(p.school) || 'Student'

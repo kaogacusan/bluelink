@@ -20,7 +20,7 @@ const PEOPLE = [
     level: '4',
     headline: 'Org president. Building a campus app on the side.',
     about: 'I run our tech org and I like helping freshies find their people. Ask me about orgs, hackathons, or getting your first tech internship.',
-    openTo: ['coffee', 'advice', 'projects', 'recruit'],
+    openTo: ['advice', 'hire-intern'],
     skills: ['React', 'Product', 'Public speaking'],
   },
   {
@@ -32,7 +32,7 @@ const PEOPLE = [
     level: '3',
     headline: 'Interned at a bank last summer. Ask me about applications.',
     about: 'I applied to 20 internships and got 2. I learned a lot about what works. Happy to look at your cover letter.',
-    openTo: ['intern', 'advice', 'coffee'],
+    openTo: ['seek-intern', 'advice'],
     skills: ['Finance', 'Excel', 'Cover letters'],
   },
   {
@@ -44,7 +44,7 @@ const PEOPLE = [
     year: 2021,
     headline: 'Product manager at a fintech. Happy to look at resumes.',
     about: 'I hire for product and design roles. I give back by doing resume reviews for Ateneans every month.',
-    openTo: ['advice', 'intern', 'coffee', 'recruit'],
+    openTo: ['advice', 'hire-job'],
     skills: ['Product management', 'Hiring', 'Resumes'],
   },
   {
@@ -56,7 +56,7 @@ const PEOPLE = [
     level: '1',
     headline: 'Freshman. Looking for a Theo study group.',
     about: 'New here and still finding my way around. I write for the school paper.',
-    openTo: ['study', 'events', 'mentor'],
+    openTo: ['seek-mentor'],
     skills: ['Writing', 'Video editing'],
   },
   {
@@ -66,9 +66,9 @@ const PEOPLE = [
     school: 'sose',
     course: 'BS Management Engineering',
     level: '4',
-    headline: 'Thesis on supply chains. Looking for a groupmate who knows Python.',
+    headline: 'BS ME. Looking at operations and supply chain roles.',
     about: '',
-    openTo: ['projects', 'study'],
+    openTo: ['seek-intern', 'seek-job'],
     skills: ['Python', 'Operations research'],
   },
   {
@@ -80,7 +80,7 @@ const PEOPLE = [
     level: '3',
     headline: 'Debater. Our org is recruiting this month.',
     about: 'Policy nerd. Ask me about law school plans or student government.',
-    openTo: ['events', 'recruit', 'coffee'],
+    openTo: ['seek-intern'],
     skills: ['Debate', 'Research'],
   },
   {
@@ -92,7 +92,7 @@ const PEOPLE = [
     year: null,
     headline: 'I teach data science. My office hours are open to all students.',
     about: 'Come talk to me about data careers, grad school, or research. You do not need to be in my class.',
-    openTo: ['advice', 'mentor', 'projects'],
+    openTo: ['advice'],
     skills: ['Data science', 'Research', 'Grad school'],
   },
   {
@@ -104,7 +104,7 @@ const PEOPLE = [
     year: 2019,
     headline: 'Engineer at a startup in BGC. We take interns every summer.',
     about: '',
-    openTo: ['recruit', 'intern', 'advice'],
+    openTo: ['hire-intern', 'advice'],
     skills: ['Backend', 'Startups'],
   },
   {
@@ -116,7 +116,7 @@ const PEOPLE = [
     level: '3',
     headline: 'Running a mental health week. Looking for volunteers.',
     about: '',
-    openTo: ['events', 'projects', 'coffee'],
+    openTo: ['seek-mentor'],
     skills: ['Event planning', 'Peer support'],
   },
   {
@@ -128,7 +128,7 @@ const PEOPLE = [
     level: '4',
     headline: 'I shoot photos for school events. Let us work on something.',
     about: '',
-    openTo: ['projects', 'events', 'coffee'],
+    openTo: ['seek-job'],
     skills: ['Photography', 'Design'],
   },
 ]
@@ -137,7 +137,7 @@ const day = (offset) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Manil
 
 const POSTS = () => [
   { uid: 'demo-ana', kind: 'post', ago: 5 * D, text: 'Reminder: my office hours are open to any student, not just my classes. Thursdays, 2 to 4 PM. Come talk about data careers or grad school.' },
-  { uid: 'demo-rafa', org: 'demo-debate', kind: 'opp', ago: 4 * D, text: 'We are recruiting. No experience needed, we will train you. Apply here on blueLink before Friday.' },
+  { uid: 'demo-rafa', org: 'demo-debate', kind: 'opp', ago: 4 * D, text: 'We are recruiting. No experience needed, we will train you. Apply here on BlueLink before Friday.' },
   { uid: 'demo-bea', kind: 'post', ago: 3 * D, text: 'Small tip for internship apps: send your resume as a PDF named Lastname_Firstname_Resume. It sounds small, but recruiters notice.' },
   {
     uid: 'demo-nina',
@@ -147,7 +147,6 @@ const POSTS = () => [
     text: 'Drop by our booth for free coffee, a quiet corner, and people who will listen. Bring a friend.',
     event: { title: 'Pause: Mental Health Week booth', date: day(4), time: '10:00', place: 'Leong Hall lobby' },
   },
-  { uid: 'demo-jill', kind: 'ask', ago: 30 * H, text: 'Looking for a thesis groupmate who knows Python (pandas). ME or CS. We meet twice a week at the library.' },
   {
     uid: 'demo-migs',
     org: 'demo-coders',
@@ -156,7 +155,7 @@ const POSTS = () => [
     text: 'Three seniors talk about how they got their first internship. Open to all courses. Free snacks.',
     event: { title: 'Tech talk: How I got my first internship', date: day(8), time: '16:30', place: 'Faber Hall' },
   },
-  { uid: 'demo-bea', org: 'demo-hbs', kind: 'opp', ago: 14 * H, text: 'Our alumni mentor program is open. Get paired with an alum in your dream industry for one semester. Free for all Ateneans.' },
+  { uid: 'demo-bea', org: 'demo-hbs', kind: 'opp', ago: 14 * H, text: 'Our alumni mentor program is open. Get paired with alumni in your dream industry for one semester. Free for all Ateneans.' },
   { uid: 'demo-paolo', kind: 'post', ago: 9 * H, text: 'Free resume reviews this weekend. Comment your course and the roles you want. I will take the first 10.' },
   {
     uid: 'demo-leo',
@@ -170,7 +169,6 @@ const POSTS = () => [
     ago: 6 * H,
     text: 'I edit videos for orgs and small brands. Reels, event recaps, and interviews. Looking for paid projects this break.',
   },
-  { uid: 'demo-sam', kind: 'ask', ago: 3 * H, text: 'Anyone in Theo 11 this sem? Looking for 2 or 3 people to review with before the long test.' },
   { uid: 'demo-kyle', kind: 'opp', ago: 50 * 60_000, text: 'We are hiring 2 software engineering interns for the summer. Paid, hybrid in BGC. Message me and I will refer you.' },
 ]
 
@@ -232,7 +230,7 @@ const COMMENTS = {
     ['demo-sam', 'AB Comm, looking at content and marketing roles. Thank you for doing this.'],
     ['demo-jill', 'BS ME, operations and supply chain roles please.'],
   ],
-  'demo-sam': [['demo-leo', 'I took it last year. Happy to share my notes.']],
+  'demo-sam': [['demo-leo', 'Sent you a message. Our org needs an event recap.']],
   'demo-kyle': [['demo-migs', 'Sharing this with our org. Thanks, Kyle.']],
 }
 
@@ -246,20 +244,22 @@ const OWNER_PROFILE = {
   course: 'BS Management',
   level: '1',
   year: null,
-  headline: 'Founder and CEO of ADVO. Building blueLink.',
+  headline: 'Founder and CEO of ADVO Technologies. Building BlueLink.',
   about:
-    'I run ADVO, a software company in the Philippines. We build web apps, websites, and the hardware they run on, for businesses that still work on paper and group chats.\n\n' +
+    'I run ADVO Technologies, a software company in the Philippines. We build web apps, websites, and the hardware they run on, for businesses that still work on paper and group chats.\n\n' +
     "Our work includes FourlinQ, a patient registry for The Medical City, Felici Artisan Gelato, and Coffee Rush Eastridge.\n\n" +
-    'Now I am building blueLink so Ateneans can find each other faster. Message me about projects, work at ADVO, or blueLink feedback.',
-  openTo: ['coffee', 'projects', 'recruit', 'mentor'],
+    'Now I am building BlueLink so Ateneans can find each other faster. Message me about projects, work at ADVO, or BlueLink feedback.',
+  openTo: ['hire-intern', 'hire-job', 'seek-mentor'],
   skills: ['Startups', 'Product', 'Sales', 'Web apps', 'React', 'TypeScript', 'UI design', 'Project management'],
 }
 
 // Prince's company, as an org page he runs.
+const OWNER_TITLE = 'Founder and CEO'
 const OWNER_ORG = {
   id: 'advo',
-  name: 'ADVO',
+  name: 'ADVO Technologies',
   short: 'ADVO',
+  type: 'business',
   category: 'tech',
   about: 'We build web apps, websites, and the hardware they run on for Philippine businesses. Our work includes FourlinQ, The Medical City, Felici Artisan Gelato, and Coffee Rush Eastridge.',
   recruiting: true,
@@ -281,11 +281,11 @@ const OWNER_WORK = [
 // [who, minutes ago, text]. "me" is the owner.
 const OWNER_CHATS = {
   'demo-migs': [
-    ['demo-migs', 3 * 24 * 60, 'Hi! I saw you just joined. I help run a tech org and we are looking for people for a campus app project. Want to grab coffee this week?'],
+    ['demo-migs', 3 * 24 * 60, 'Hi! I saw you just joined. I help run a tech org and we are looking for people for a campus app project. Want to meet up this week?'],
     ['me', 3 * 24 * 60 - 40, 'Hi Migs! Yes, I would love that. I am building something similar.'],
     ['demo-migs', 2 * 24 * 60, 'Nice. Thursday after 3 at Gonzaga?'],
     ['me', 2 * 24 * 60 - 15, 'Works for me. See you there.'],
-    ['demo-migs', 50, 'Our guild has a demo night next week. You should show blueLink.'],
+    ['demo-migs', 50, 'Our guild has a demo night next week. You should show BlueLink.'],
   ],
   'demo-bea': [
     ['me', 5 * 24 * 60, 'Hi Bea! I saw your tip about resume names. Could you look at my cover letter?'],
@@ -294,7 +294,7 @@ const OWNER_CHATS = {
     ['me', 4 * 24 * 60 - 20, 'Thank you. That helps a lot.'],
   ],
   'demo-paolo': [
-    ['demo-paolo', 26 * 60, 'Got your resume. Strong projects. Put blueLink at the top and add user numbers when you have them.'],
+    ['demo-paolo', 26 * 60, 'Got your resume. Strong projects. Put BlueLink at the top and add user numbers when you have them.'],
     ['demo-paolo', 25 * 60, 'Free for a 20 minute call on Saturday?'],
   ],
   'demo-kyle': [
@@ -304,11 +304,11 @@ const OWNER_CHATS = {
 }
 
 const OWNER_POSTS = [
-  { kind: 'post', ago: 2 * D, text: 'blueLink is live for testing. If you are an Atenean, sign in with your school email and tell me what feels off. Every bit of feedback helps.' },
-  { kind: 'ask', ago: 8 * H, text: 'Looking for 2 people who like design or frontend to help with a campus app this sem. No pay yet, but good for your portfolio.' },
+  { kind: 'post', ago: 2 * D, text: 'BlueLink is live for testing. If you are an Atenean, sign in with your school email and tell me what feels off. Every bit of feedback helps.' },
+  { kind: 'opp', ago: 8 * H, text: 'Looking for 2 people who like design or frontend to help with a campus app this sem. No pay yet, but good for your portfolio.' },
 ]
 
-export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLink, uidFor, photoDir, logoDir, galleryDir }) {
+export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLink, uidFor, photoDir, logoDir, coverDir, galleryDir, orgGalleryDir }) {
   const ownerUids = new Set(OWNERS.map(uidFor))
 
   // Fills an owner's account once: profile gaps, connections, requests, chats, orgs, and a few posts.
@@ -327,7 +327,7 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
       db.links[key(uid, other)] = { from: other, to: uid, status: 'accepted', note: '', at: now - at * D, acceptedAt: now - at * D + H }
     }
     // Waiting for you
-    db.links[key(uid, 'demo-jill')] = { from: 'demo-jill', to: uid, status: 'pending', note: 'Hi! I saw you build apps. Want to help with a thesis dashboard? We use Python.', at: ago(90) }
+    db.links[key(uid, 'demo-jill')] = { from: 'demo-jill', to: uid, status: 'pending', note: 'Hi! I saw you build apps. Could we talk about tech roles in supply chain?', at: ago(90) }
     db.links[key(uid, 'demo-rafa')] = { from: 'demo-rafa', to: uid, status: 'pending', note: 'Our debate club needs a better sign-up page. Can we talk?', at: ago(5 * 60) }
     // Waiting for them
     db.links[key(uid, 'demo-ana')] = { from: uid, to: 'demo-ana', status: 'pending', note: 'Hi Ma\'am! Could I ask about data science electives for next sem?', at: ago(2 * 24 * 60) }
@@ -338,14 +338,6 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
     // Everything read, except the newest few from Migs and Paolo
     db.reads[uid] = { ...db.reads[uid], [key(uid, 'demo-bea')]: now, [key(uid, 'demo-kyle')]: now, [key(uid, 'demo-migs')]: ago(2 * 24 * 60) }
 
-    const join = (id, role) => {
-      const o = db.orgs[id]
-      if (!o) return
-      if (!o.members.some((m) => m.uid === uid)) o.members.push({ uid, role, at: now - 14 * D })
-      if (!o.followers.includes(uid)) o.followers.push(uid)
-    }
-    join('demo-coders', 'member')
-    join('demo-hbs', 'member')
     if (db.orgs['demo-lens'] && !db.orgs['demo-lens'].followers.includes(uid)) db.orgs['demo-lens'].followers.push(uid)
 
     for (const p of db.posts) {
@@ -357,7 +349,7 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
     OWNER_POSTS.forEach((p) => {
       const at = now - p.ago
       const comments =
-        p.kind === 'ask'
+        p.kind === 'opp'
           ? [{ id: newId(), uid: 'demo-leo', text: 'I can help with design. Messaging you.', at: at + H }]
           : [{ id: newId(), uid: 'demo-migs', text: 'Signed up. This is clean.', at: at + 2 * H }, { id: newId(), uid: 'demo-bea', text: 'Sharing with my block.', at: at + 5 * H }]
       db.posts.push({ id: newId(), uid, org: null, kind: p.kind, text: p.text, event: null, at, likes: friends.filter(() => Math.random() < 0.7), going: [], comments })
@@ -385,7 +377,7 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
         ...OWNER_ORG,
         logo: now,
         verified: false,
-        members: [{ uid, role: 'admin', at: now - 20 * D }],
+        members: [{ uid, role: 'admin', title: OWNER_TITLE, at: now - 20 * D }],
         applications: [],
         followers: [uid, ...friends],
         createdBy: uid,
@@ -427,10 +419,86 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
     save()
   }
 
+  // Fills the ADVO page's portfolio once, with the pictures from the owner's own portfolio.
+  function seedOrgGallery(uid) {
+    const me = db.users[uid]
+    const org = db.orgs[OWNER_ORG.id]
+    db.orgGalleries ||= []
+    if (!me?.gallery?.length || !org || db.orgGalleries.includes(org.id) || !org.members.some((m) => m.uid === uid)) return
+    if (!org.gallery?.length) {
+      org.gallery = me.gallery
+        .filter((g) => fs.existsSync(path.join(galleryDir, `${uid}-${g.id}.jpg`)))
+        .map((g) => {
+          const item = { ...g, id: newId() }
+          fs.copyFileSync(path.join(galleryDir, `${uid}-${g.id}.jpg`), path.join(orgGalleryDir, `${org.id}-${item.id}.jpg`))
+          return item
+        })
+    }
+    db.orgGalleries.push(org.id)
+    save()
+  }
+
+  // Sets the ADVO page's portfolio look once: the stage style, with 2 highlights.
+  function seedOrgPortfolio() {
+    const org = db.orgs[OWNER_ORG.id]
+    if (!org?.gallery?.length) return
+    // The first seed called it "Selected work". Now it is "Portfolio", the default.
+    if (org.portfolio?.title === 'Selected work') {
+      org.portfolio.title = ''
+      save()
+    }
+    if (org.portfolio) return
+    const order = ['FourlinQ', 'FloodPASS PH', 'Felici Artisan Gelato', 'Camps PH', 'NO KOHI', 'VBE Eye Center Clinic', 'PCEDM Members']
+    const rank = (g) => (order.includes(g.title) ? order.indexOf(g.title) : order.length)
+    org.gallery.sort((a, b) => rank(a) - rank(b))
+    org.gallery.forEach((g, i) => (i < 2 ? (g.featured = true) : delete g.featured))
+    org.portfolio = { style: 'stage', title: '' }
+    save()
+  }
+
+  // Gives the ADVO page its banner from advo.ph, once.
+  function seedOwnerCover() {
+    const org = db.orgs[OWNER_ORG.id]
+    if (!org || org.cover) return
+    fs.copyFileSync(path.join(assets, 'advo-cover.jpg'), path.join(coverDir, `${org.id}.jpg`))
+    org.cover = Date.now()
+    save()
+  }
+
+  // Takes the owner out of the demo orgs he was put in before, once. He is only in ADVO.
+  function leaveDemoOrgs(uid) {
+    db.leftDemoOrgs ||= []
+    if (db.leftDemoOrgs.includes(uid)) return
+    for (const id of ['demo-coders', 'demo-hbs']) {
+      const o = db.orgs[id]
+      if (o) o.members = o.members.filter((m) => m.uid !== uid)
+    }
+    db.leftDemoOrgs.push(uid)
+    save()
+  }
+
+  // Moves accounts seeded before to the new name and title, once.
+  function renameOwnerOrg(uid) {
+    const me = db.users[uid]
+    const m = db.orgs[OWNER_ORG.id]?.members.find((x) => x.uid === uid)
+    db.renamedOwners ||= []
+    if (!me?.name || !m || db.renamedOwners.includes(uid)) return
+    m.title ||= OWNER_TITLE
+    me.headline = OWNER_PROFILE.headline
+    me.about = OWNER_PROFILE.about
+    db.renamedOwners.push(uid)
+    save()
+  }
+
   function setUpOwner(uid) {
     seedOwner(uid)
+    leaveDemoOrgs(uid)
     seedOwnerProfile(uid)
+    seedOwnerCover()
     seedOwnerGallery(uid)
+    seedOrgGallery(uid)
+    seedOrgPortfolio()
+    renameOwnerOrg(uid)
   }
 
   function seed() {
@@ -463,15 +531,39 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
     }
     // Dev only: a founding member code and a fake GCash number, so the pay screen can be tested.
     db.codes.FOUNDERS = { max: 100, used: [], createdAt: now }
-    db.settings = { gcashName: 'blueLink (dev)', gcashNumber: '0900 000 0000' }
+    db.settings = { gcashName: 'BlueLink (dev)', gcashNumber: '0900 000 0000' }
     db.links['demo-bea:demo-migs'] = { from: 'demo-bea', to: 'demo-migs', status: 'accepted', note: '', at: now - 9 * D, acceptedAt: now - 9 * D }
     db.links['demo-kyle:demo-migs'] = { from: 'demo-kyle', to: 'demo-migs', status: 'accepted', note: '', at: now - 8 * D, acceptedAt: now - 8 * D }
     db.links['demo-ana:demo-jill'] = { from: 'demo-jill', to: 'demo-ana', status: 'accepted', note: '', at: now - 6 * D, acceptedAt: now - 6 * D }
     save()
   }
 
+  // Demo students made before year levels have none, so their cards show no year. Copies it from PEOPLE.
+  function syncDemoLevels() {
+    let changed = false
+    for (const p of PEOPLE) {
+      const u = db.users[p.uid]
+      if (u && p.level && !u.level) {
+        u.level = p.level
+        changed = true
+      }
+    }
+    if (changed) save()
+  }
+
+  // Demo people made before the new "open to" tags get the new ones from PEOPLE, one time.
+  function syncDemoOpenTo() {
+    if (db.demoOpenTo === 3) return
+    for (const p of PEOPLE) if (db.users[p.uid]) db.users[p.uid].openTo = p.openTo
+    delete db.demoOpenTo2
+    db.demoOpenTo = 3
+    save()
+  }
+
   function seedAll() {
     seed()
+    syncDemoLevels()
+    syncDemoOpenTo()
     ownerUids.forEach(setUpOwner)
   }
 
@@ -480,7 +572,7 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
     if (ownerUids.has(uid)) return setUpOwner(uid)
     setTimeout(() => {
       if (!db.users[uid] || db.links[`${uid}:demo-migs`] || db.links[`demo-migs:${uid}`]) return
-      requestLink('demo-migs', uid, 'Hi! I saw you just joined. I help run a tech org and we are looking for people for a campus app project. Want to grab coffee this week?')
+      requestLink('demo-migs', uid, 'Hi! I saw you just joined. I help run a tech org and we are looking for people for a campus app project. Want to meet up this week?')
     }, 2500)
   }
 

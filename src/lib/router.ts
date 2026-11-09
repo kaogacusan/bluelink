@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react'
 
-export type FeedKind = 'ask' | 'work' | 'opp' | 'event'
+export type FeedKind = 'work' | 'opp' | 'event'
 
-const FEED_PATHS: Record<string, FeedKind> = { asks: 'ask', work: 'work', opportunities: 'opp', events: 'event' }
+const FEED_PATHS: Record<string, FeedKind> = { work: 'work', opportunities: 'opp', events: 'event' }
 
 export type Route =
   | { page: 'feed'; kind?: FeedKind }
   | { page: 'people' }
   | { page: 'orgs' }
-  | { page: 'newOrg' }
-  | { page: 'org'; id: string }
-  | { page: 'editOrg'; id: string }
+  | { page: 'businesses' }
+  | { page: 'newOrg'; biz?: boolean }
+  | { page: 'org'; id: string; biz?: boolean }
+  | { page: 'editOrg'; id: string; biz?: boolean }
   | { page: 'user'; id: string }
   | { page: 'inbox'; id?: string }
   | { page: 'me' }
@@ -25,7 +26,14 @@ export function parse(hash: string): Route {
   if (a === 'admin') return { page: 'admin' }
   if (a === 'privacy' || a === 'terms') return { page: 'legal', doc: a }
   if (a === 'orgs') return b === 'new' ? { page: 'newOrg' } : { page: 'orgs' }
-  if (a === 'o' && b) return hash.endsWith('/edit') ? { page: 'editOrg', id: decodeURIComponent(b) } : { page: 'org', id: decodeURIComponent(b) }
+  if (a === 'businesses' && !b) return { page: 'businesses' }
+  if (a === 'businesses' && b === 'new') return { page: 'newOrg', biz: true }
+  // Orgs live at #/o/id, businesses at #/businesses/id.
+  if ((a === 'o' || a === 'businesses') && b) {
+    const id = decodeURIComponent(b)
+    const biz = a === 'businesses'
+    return hash.endsWith('/edit') ? { page: 'editOrg', id, biz } : { page: 'org', id, biz }
+  }
   if (a === 'u' && b) return { page: 'user', id: decodeURIComponent(b) }
   if (a === 'inbox') return { page: 'inbox', id: b ? decodeURIComponent(b) : undefined }
   if (a === 'me') return b === 'edit' ? { page: 'edit' } : { page: 'me' }
@@ -38,9 +46,11 @@ export const href = {
   people: '#/people',
   admin: '#/admin',
   orgs: '#/orgs',
+  businesses: '#/businesses',
   newOrg: '#/orgs/new',
-  org: (id: string) => `#/o/${encodeURIComponent(id)}`,
-  editOrg: (id: string) => `#/o/${encodeURIComponent(id)}/edit`,
+  newBusiness: '#/businesses/new',
+  org: (id: string, type?: 'org' | 'business') => `#/${type === 'business' ? 'businesses' : 'o'}/${encodeURIComponent(id)}`,
+  editOrg: (id: string, type?: 'org' | 'business') => `${href.org(id, type)}/edit`,
   user: (uid: string) => `#/u/${encodeURIComponent(uid)}`,
   inbox: (uid?: string) => (uid ? `#/inbox/${encodeURIComponent(uid)}` : '#/inbox'),
   me: '#/me',
