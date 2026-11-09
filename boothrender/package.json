@@ -1,0 +1,16 @@
+{
+  "name": "bluelink-booth",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "playwright-core": "1.62.0",
+    "qrcode": "^1.5.4"
+  },
+  "scripts": {
+    "print": "node scripts/print/build.mjs",
+    "cards": "node scripts/print/cards.mjs",
+    "kit": "python3 scripts/kit/wordmark.py && node scripts/kit/build.mjs",
+    "dev": "npx --yes serve -l 5191 .",
+    "posts": "node scripts/social/posts.mjs"
+  }
+}

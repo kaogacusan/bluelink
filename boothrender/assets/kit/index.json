@@ -1,0 +1,176 @@
+{
+ "zip": {
+  "file": "/assets/kit/bluelink-brand-kit.zip",
+  "kb": 3896
+ },
+ "files": [
+  {
+   "group": "logo",
+   "name": "lockup-light",
+   "file": "/assets/kit/brand/lockup-light.svg",
+   "about": "Logo on light. Navy word, blue and periwinkle links.",
+   "w": 1154.49,
+   "h": 240
+  },
+  {
+   "group": "logo",
+   "name": "lockup-dark",
+   "file": "/assets/kit/brand/lockup-dark.svg",
+   "about": "Logo on dark. White word, white and periwinkle links.",
+   "w": 1154.49,
+   "h": 240
+  },
+  {
+   "group": "logo",
+   "name": "lockup-ink",
+   "file": "/assets/kit/brand/lockup-ink.svg",
+   "about": "One color, navy. For stamps, receipts, one-color prints.",
+   "w": 1154.49,
+   "h": 240
+  },
+  {
+   "group": "logo",
+   "name": "lockup-white",
+   "file": "/assets/kit/brand/lockup-white.svg",
+   "about": "One color, white. For photos and dark grounds.",
+   "w": 1154.49,
+   "h": 240
+  },
+  {
+   "group": "logo",
+   "name": "mark",
+   "file": "/assets/kit/brand/mark.svg",
+   "about": "The mark on light.",
+   "w": 320,
+   "h": 320
+  },
+  {
+   "group": "logo",
+   "name": "mark-dark",
+   "file": "/assets/kit/brand/mark-dark.svg",
+   "about": "The mark on dark.",
+   "w": 320,
+   "h": 320
+  },
+  {
+   "group": "logo",
+   "name": "mark-ink",
+   "file": "/assets/kit/brand/mark-ink.svg",
+   "about": "The mark, one color navy.",
+   "w": 320,
+   "h": 320
+  },
+  {
+   "group": "logo",
+   "name": "mark-white",
+   "file": "/assets/kit/brand/mark-white.svg",
+   "about": "The mark, one color white.",
+   "w": 320,
+   "h": 320
+  },
+  {
+   "group": "logo",
+   "name": "wordmark-ink",
+   "file": "/assets/kit/brand/wordmark-ink.svg",
+   "about": "The word alone, navy.",
+   "w": 764.86,
+   "h": 165.09
+  },
+  {
+   "group": "logo",
+   "name": "wordmark-white",
+   "file": "/assets/kit/brand/wordmark-white.svg",
+   "about": "The word alone, white.",
+   "w": 764.86,
+   "h": 165.09
+  },
+  {
+   "group": "logo",
+   "name": "app-icon",
+   "file": "/assets/kit/brand/app-icon.svg",
+   "about": "App icon: night sky, the mark, the planet’s rim.",
+   "w": 512,
+   "h": 512
+  },
+  {
+   "group": "motif",
+   "name": "star-field",
+   "file": "/assets/kit/motif/star-field.svg",
+   "about": "Real stars, a faint band and haze. Transparent: put it on Void.",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "group": "motif",
+   "name": "constellation",
+   "file": "/assets/kit/motif/constellation.svg",
+   "about": "One constellation with catalog labels. A line is two people connected.",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "group": "motif",
+   "name": "horizon",
+   "file": "/assets/kit/motif/horizon.svg",
+   "about": "The planet’s edge with its atmosphere rim and a rising sun.",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "group": "motif",
+   "name": "plate-marks",
+   "file": "/assets/kit/motif/plate-marks.svg",
+   "about": "Corner crosshairs, like a star-chart plate. Transparent.",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "group": "motif",
+   "name": "deep-field-background",
+   "file": "/assets/kit/motif/deep-field-background.png",
+   "about": "Everything together: sky, constellation, horizon, plate marks. For slides and video.",
+   "w": 1920,
+   "h": 1080
+  },
+  {
+   "group": "share",
+   "name": "ig-post",
+   "file": "/assets/kit/share/ig-post.png",
+   "about": "Instagram post, 4:5. The promise and the price.",
+   "w": 1080,
+   "h": 1350
+  },
+  {
+   "group": "share",
+   "name": "ig-story",
+   "file": "/assets/kit/share/ig-story.png",
+   "about": "Instagram story, 9:16. “Find your people.” and how to join.",
+   "w": 1080,
+   "h": 1920
+  },
+  {
+   "group": "share",
+   "name": "link-preview",
+   "file": "/assets/kit/share/link-preview.png",
+   "about": "Link preview (Open Graph), 1200 × 630.",
+   "w": 1200,
+   "h": 630
+  },
+  {
+   "group": "sheet",
+   "name": "colors",
+   "file": "/assets/kit/sheet/colors.png",
+   "about": "The nine colors with hex codes and what each is for.",
+   "w": 1600,
+   "h": 1000
+  },
+  {
+   "group": "sheet",
+   "name": "type",
+   "file": "/assets/kit/sheet/type.png",
+   "about": "Inter for words, JetBrains Mono for labels and numbers.",
+   "w": 1600,
+   "h": 1000
+  }
+ ]
+}

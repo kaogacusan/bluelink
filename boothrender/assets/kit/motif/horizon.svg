@@ -1,0 +1,24 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="hz1a" gradientUnits="userSpaceOnUse" cx="960" cy="5428" r="4705.2">
+        <stop offset="0.9770466717674062" stop-color="#3a5fff" stop-opacity="0.55"/>
+        <stop offset="0.9845065034429993" stop-color="#3a5fff" stop-opacity="0.16"/>
+        <stop offset="1" stop-color="#3a5fff" stop-opacity="0"/>
+      </radialGradient>
+      <radialGradient id="hz1c" cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#3a5fff" stop-opacity="0.42"/>
+        <stop offset="1" stop-color="#3a5fff" stop-opacity="0"/>
+      </radialGradient>
+      <linearGradient id="hz1r" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1920" y2="0">
+        <stop offset="0" stop-color="#dfe6ff" stop-opacity="0.05"/>
+        <stop offset="0.5" stop-color="#dfe6ff" stop-opacity="0.95"/>
+        <stop offset="1" stop-color="#dfe6ff" stop-opacity="0.05"/>
+      </linearGradient>
+      <radialGradient id="hz1s" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#ffc48a" stop-opacity="0.9"/><stop offset="0.25" stop-color="#ffc48a" stop-opacity="0.35"/><stop offset="1" stop-color="#ffc48a" stop-opacity="0"/></radialGradient>
+    </defs>
+    <ellipse cx="960" cy="820" rx="1056" ry="311.04" fill="url(#hz1c)"/>
+    <circle cx="960" cy="5428" r="4705.2" fill="url(#hz1a)"/>
+    <circle cx="960" cy="5428" r="4608" fill="#060a19"/>
+    <circle cx="960" cy="5428" r="4608" fill="none" stroke="url(#hz1r)" stroke-width="1.73"/>
+    <ellipse cx="960" cy="820" rx="75.6" ry="17.28" fill="url(#hz1s)"/>
+  </svg>
