@@ -1,0 +1,6 @@
+export const OPEN_TO: { id: string; label: string }[]
+export const SCHOOLS: { id: string; short: string; name: string }[]
+export const ROLES: { id: string; label: string }[]
+export const KINDS: { id: 'post' | 'ask' | 'work' | 'opp' | 'event'; label: string; verb: string }[]
+export const REPORT_REASONS: { id: string; label: string }[]
+export const ORG_CATEGORIES: { id: string; label: string }[]

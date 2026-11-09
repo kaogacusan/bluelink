@@ -1,0 +1,113 @@
+/* BlueLink brand tokens. Every screen reads its colors and type from here. */
+
+/* Full Inter (rsms.me), cut to Latin. The Google Fonts copy drops the alternate letters we use. */
+@font-face {
+  font-family: 'Inter BL';
+  src: url('../assets/fonts/InterVariable-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+/* JetBrains Mono (SIL Open Font License), cut to Latin. Served from our own site, so no font request goes to Google. */
+@font-face {
+  font-family: 'JetBrains Mono BL';
+  src: url('../assets/fonts/JetBrainsMono-latin.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-ui: 'Inter BL', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Inter with the single-storey a, the tailed l and round punctuation. This is what makes it ours. */
+  --font-features: 'cv11', 'cv05', 'ss03';
+  /* Small labels, numbers and codes. Reads like a star catalog. */
+  --font-mono: 'JetBrains Mono BL', ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Sharp. Only people and stars are round. */
+  --r-bar: 2px;
+  --r-control: 3px;
+  --r-card: 4px;
+
+  /* Fixed brand colors. These do not change with the theme. */
+  --brand-blue: #1d45e5;
+  --brand-ink: #0a1540;
+  --brand-sky: #ebf0ff;
+  --brand-peri: #93a8ff;
+
+  /* Deep Field: the night sky. See BRAND.md. */
+  --void: #03050d;
+  --deep: #070c1f;
+  --glow: #3a5fff;
+  --starlight: #eef1fa;
+  --flare: #ffc48a;
+  --sky-line: rgba(170, 185, 255, 0.1);
+}
+
+:root,
+[data-theme='light'] {
+  --bg: #f4f5f9;
+  --panel: #ffffff;
+  --surface: #f1f3f8;
+  --surface-2: #e7ebf4;
+  --solid: #ffffff;
+  --input-bg: #ffffff;
+  --line: #e1e5ee;
+  --line-strong: #c6cddd;
+  --dot: rgba(10, 21, 64, 0.085);
+  --hover: rgba(10, 21, 64, 0.045);
+  --text: #0a1540;
+  --text-2: #3f4a6e;
+  --muted: #697290;
+  --accent-text: #1d45e5;
+  --blue: #1d45e5;
+  --blue-hover: #1638c2;
+  --blue-soft: #6f8cff;
+  --sky: #ebf0ff;
+  --ring: rgba(29, 69, 229, 0.18);
+  --bubble-me: #1d45e5;
+  --bubble-them: #eef2fb;
+  --danger: #d6334c;
+  --live: #11a06b;
+  --shadow: 0 1px 2px rgba(10, 21, 64, 0.06), 0 18px 40px -24px rgba(10, 21, 64, 0.3);
+  --shadow-sm: none;
+  --shadow-lift: 0 12px 30px -22px rgba(10, 21, 64, 0.35);
+  --bar: rgba(245, 246, 250, 0.86);
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg: #04060f;
+  --panel: #080d20;
+  --surface: #0e1531;
+  --surface-2: #151e42;
+  --solid: #0a1026;
+  --input-bg: #070c1f;
+  --line: rgba(190, 205, 255, 0.1);
+  --line-strong: rgba(190, 205, 255, 0.18);
+  --dot: rgba(147, 168, 255, 0.075);
+  --hover: rgba(147, 168, 255, 0.07);
+  --text: #eef1fa;
+  --text-2: #b4bcd6;
+  --muted: #7f89a8;
+  --accent-text: #93a8ff;
+  --blue: #3a5fff;
+  --blue-hover: #5476ff;
+  --blue-soft: #93a8ff;
+  --sky: #18224a;
+  --ring: rgba(58, 95, 255, 0.32);
+  --bubble-me: #3a5fff;
+  --bubble-them: #18224a;
+  --danger: #ff7488;
+  --live: #5fdcae;
+  --shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.7);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-lift: 0 18px 40px -20px rgba(0, 0, 0, 0.8);
+  --bar: rgba(6, 10, 25, 0.86);
+  color-scheme: dark;
+}
+

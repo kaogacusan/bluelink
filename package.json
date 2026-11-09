@@ -1,0 +1,26 @@
+{
+  "name": "bluelink",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5274 --strictPort",
+    "build": "tsc --noEmit && vite build",
+    "start": "node server/prod.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.3.0",
+    "playwright": "^1.62.1",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.6"
+  }
+}

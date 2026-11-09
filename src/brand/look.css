@@ -1,0 +1,1082 @@
+/* BlueLink look: "Deep Field". People are stars, connections are lines. See BRAND.md.
+   Loaded after styles.css. It changes how things look, never how they work. */
+
+/* ============ Base ============ */
+.card {
+  box-shadow: none;
+}
+
+/* Small mono labels, like names in a star catalog */
+.rail-card h2,
+.net-head h2 {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ============ Buttons ============ */
+.btn-primary {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.btn-outline {
+  border-width: 1px;
+  border-color: var(--line-strong);
+  color: var(--text);
+  background: var(--panel);
+}
+.btn-outline:hover {
+  border-color: var(--text);
+  background: var(--panel);
+  color: var(--text);
+}
+.icon-btn.is-outline {
+  border-width: 1px;
+  border-color: var(--line-strong);
+  color: var(--text-2);
+}
+.icon-btn.is-outline:hover {
+  border-color: var(--blue);
+  background: transparent;
+  color: var(--accent-text);
+}
+.icon-btn:hover:not(:disabled),
+.btn-ghost:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+/* ============ Night sky panels ============ */
+/* These are always a dark sky, in light mode too. */
+.side,
+.mtop,
+.net-card,
+.profile-band {
+  --text: var(--starlight);
+  --text-2: #b4bcd6;
+  --muted: #7f89a8;
+  --line: var(--sky-line);
+  --line-strong: rgba(170, 185, 255, 0.2);
+  --panel: var(--deep);
+  --hover: rgba(170, 185, 255, 0.08);
+  --surface: rgba(170, 185, 255, 0.07);
+  --accent-text: var(--brand-peri);
+  --blue: var(--glow);
+  --blue-soft: var(--brand-peri);
+  --ring: rgba(58, 95, 255, 0.3);
+  color-scheme: dark;
+}
+.sky,
+.cover-sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.logo-mark rect:nth-of-type(2) {
+  transition: stroke 0.2s var(--ease);
+}
+.side .logo-mark rect:nth-of-type(2),
+.mtop .logo-mark rect:nth-of-type(2) {
+  stroke: #fff;
+}
+
+/* Phones: the top bar is a strip of sky */
+.mtop {
+  background: var(--void);
+  border-bottom-color: var(--sky-line);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.mtop .icon-btn {
+  color: var(--text-2);
+}
+.tab-post i {
+  border-radius: var(--r-control);
+}
+
+/* ============ Desktop layout: a fixed sky on the left, the page on paper ============ */
+@media (min-width: 1000px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: none;
+    margin: 0;
+    padding: 0 40px 0 calc(var(--side-w) + 40px);
+  }
+  .layout.has-rail {
+    grid-template-columns: minmax(0, 620px) 300px;
+    column-gap: 36px;
+    justify-content: center;
+  }
+  .side {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    width: var(--side-w);
+    height: auto;
+    padding: 24px 14px 18px;
+    background:
+      radial-gradient(120% 50% at 0% 100%, rgba(58, 95, 255, 0.14) 0%, transparent 70%),
+      var(--void);
+    border-right: 1px solid var(--sky-line);
+    color: var(--text);
+  }
+  .side > *:not(.sky) {
+    position: relative;
+    z-index: 1;
+  }
+  .side-logo {
+    padding: 0 10px;
+    margin-bottom: 30px;
+  }
+  .side-logo .logo-word {
+    font-size: 19px;
+  }
+  .side-nav {
+    gap: 1px;
+  }
+  .side-link {
+    position: relative;
+    height: 42px;
+    padding: 0 12px;
+    border-radius: var(--r-control);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-2);
+  }
+  .side-link svg {
+    font-size: 20px;
+    color: var(--muted);
+  }
+  .side-link:hover {
+    background: var(--hover);
+    color: var(--text);
+  }
+  .side-link.is-on {
+    background: rgba(170, 185, 255, 0.07);
+    color: #fff;
+    font-weight: 600;
+  }
+  .side-link.is-on svg {
+    color: var(--brand-peri);
+  }
+  /* The active page gets a thin lit edge, like a star on the horizon */
+  .side-link.is-on::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background: var(--glow);
+    box-shadow: 0 0 12px 1px rgba(58, 95, 255, 0.8);
+  }
+  .side-post {
+    margin-top: 22px;
+    height: 44px;
+    font-size: 15px;
+    background: var(--glow);
+  }
+  .side-post:hover:not(:disabled) {
+    background: #5476ff;
+  }
+  .side-me {
+    padding: 12px 10px;
+    border-radius: var(--r-control);
+    border-top: 1px solid var(--sky-line);
+  }
+  .side-me:hover {
+    background: var(--hover);
+  }
+  .side-me .avatar {
+    box-shadow: 0 0 0 2px var(--void), 0 0 0 3px rgba(170, 185, 255, 0.25);
+  }
+  .main {
+    padding-top: 32px;
+  }
+  .rail {
+    padding-top: 32px;
+    gap: 14px;
+  }
+  .rail > * {
+    flex-shrink: 0;
+  }
+}
+:root {
+  --side-w: 236px;
+}
+/* Not enough room for the rail next to the page. Drop it until the screen is wide. */
+@media (min-width: 1000px) and (max-width: 1199px) {
+  .layout.has-rail {
+    grid-template-columns: minmax(0, 640px);
+  }
+  .rail {
+    display: none !important;
+  }
+}
+
+/* ============ Page heads ============ */
+.page-head h1 {
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+}
+
+/* ============ Tags: each "Open to" is a small square label ============ */
+.tag {
+  height: 26px;
+  padding: 0 9px;
+  border: 1px solid color-mix(in srgb, var(--accent-text) 22%, transparent);
+  background: color-mix(in srgb, var(--accent-text) 6%, transparent);
+  font-size: 13px;
+  font-weight: 550;
+}
+.tag:not(.is-plain):not(.is-more)::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  margin-right: 3px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+.tag.is-match {
+  border-color: var(--blue);
+}
+.tag.is-match::before {
+  opacity: 1;
+}
+.tag.is-plain,
+.tag.is-more {
+  border-color: var(--line);
+}
+
+/* Filters: a quiet row of tabs, not pills */
+.filters {
+  gap: 2px;
+  margin: 20px 0 12px;
+  border-bottom: 1px solid var(--line);
+}
+.filters .chip {
+  height: 38px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  box-shadow: inset 0 -2px 0 transparent;
+}
+.filters .chip:hover {
+  color: var(--text);
+  background: none;
+}
+.filters .chip.is-on {
+  color: var(--text);
+  background: none;
+  box-shadow: inset 0 -2px 0 var(--blue);
+}
+.chip {
+  background: var(--panel);
+  border-color: var(--line-strong);
+}
+.chip.is-on {
+  background: var(--text);
+  border-color: var(--text);
+}
+
+/* ============ Feed ============ */
+.compose-prompt {
+  background: var(--surface);
+  border-color: var(--line);
+}
+.compose-prompt:hover {
+  background: var(--surface-2);
+}
+.compose-quick {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.compose-quick button:hover,
+.act:hover {
+  background: var(--hover);
+}
+.nudge {
+  background: var(--panel);
+  border-color: var(--line);
+  border-left: 2px solid var(--blue);
+}
+
+.post-list {
+  gap: 10px;
+}
+.post-sub {
+  font-variant-numeric: tabular-nums;
+}
+
+/* What kind of post it is, in catalog type */
+.post-kind {
+  --k: var(--accent-text);
+  width: fit-content;
+  height: 22px;
+  padding: 0 8px 0 7px;
+  border: 1px solid color-mix(in srgb, var(--k) 30%, transparent);
+  border-radius: var(--r-bar);
+  background: color-mix(in srgb, var(--k) 6%, transparent);
+  color: var(--k);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.post-kind svg {
+  font-size: 12px;
+}
+.post-kind.kind-ask {
+  --k: #b4470f;
+}
+.post-kind.kind-opp {
+  --k: #0d7a55;
+}
+.post-kind.kind-work {
+  --k: #5b34c9;
+}
+[data-theme='dark'] .post-kind.kind-ask {
+  --k: #fb923c;
+}
+[data-theme='dark'] .post-kind.kind-opp {
+  --k: #4ade80;
+}
+[data-theme='dark'] .post-kind.kind-work {
+  --k: #c4b5fd;
+}
+
+.post-actions {
+  border-top-style: solid;
+}
+
+/* People and org cards: the border darkens when you point at them. No jumping. */
+.person,
+.org-card {
+  transition: border-color 0.15s var(--ease);
+}
+.person:hover,
+.org-card:hover {
+  border-color: var(--line-strong);
+}
+
+.avatar {
+  box-shadow: inset 0 0 0 1px rgba(10, 21, 64, 0.06);
+}
+
+/* ============ Your network (rail): a small patch of night sky ============ */
+.net-card {
+  position: relative;
+  overflow: hidden;
+  padding: 16px 16px 14px;
+  background: var(--void);
+  border-color: var(--void);
+  color: var(--text);
+}
+.net-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.net-head h2 {
+  margin: 0;
+}
+.net-head a {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+.net-head a:hover {
+  text-decoration: underline;
+}
+.net-stage {
+  position: relative;
+  margin: 0 -16px;
+}
+.net-stage canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 268 / 210;
+  touch-action: manipulation;
+}
+.net-tip {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 200px;
+  padding: 6px 10px;
+  border-radius: var(--r-control);
+  border: 1px solid rgba(170, 185, 255, 0.18);
+  background: rgba(7, 12, 31, 0.92);
+  color: #fff;
+  text-align: center;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  animation: fadeIn 0.12s var(--ease);
+}
+.net-tip b {
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.net-tip span {
+  font-size: 12px;
+  opacity: 0.75;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.net-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--sky-line);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+.net-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.net-legend i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--starlight);
+  opacity: 0.7;
+}
+.net-legend i.is-on {
+  background: var(--glow);
+  opacity: 1;
+  box-shadow: 0 0 6px var(--glow);
+}
+.net-legend i.is-pending {
+  background: transparent;
+  border: 1.5px dashed var(--brand-peri);
+  opacity: 1;
+}
+
+/* ============ Profile cover: their own patch of sky ============ */
+.profile-avatar {
+  position: relative;
+  z-index: 1;
+}
+.profile-band {
+  position: relative;
+  height: 156px;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 140% at 100% 0%, rgba(40, 60, 160, 0.16) 0%, transparent 60%),
+    var(--void);
+}
+.profile-band.is-org {
+  background: var(--void);
+}
+.cover-label {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(238, 241, 250, 0.55);
+}
+.profile-avatar {
+  margin-top: -52px;
+  border-color: var(--panel);
+}
+
+/* ============ Landing: deep space over a planet ============ */
+/* The whole page is the night side of the planet, so the hero runs into it with no seam. */
+body:has(.landing) {
+  background: var(--void);
+}
+.landing {
+  background: var(--void);
+  --text: var(--starlight);
+  --text-2: #a9b2cf;
+  --muted: #7a84a6;
+  --line: rgba(170, 185, 255, 0.1);
+  --line-strong: rgba(170, 185, 255, 0.2);
+  --panel: rgba(7, 12, 31, 0.72);
+  --solid: #0a1024;
+  --surface: rgba(170, 185, 255, 0.06);
+  --surface-2: rgba(170, 185, 255, 0.1);
+  --input-bg: rgba(255, 255, 255, 0.03);
+  --accent-text: #b4c2ff;
+  --blue: var(--brand-blue);
+  --sky: rgba(170, 185, 255, 0.08);
+  --ring: rgba(90, 120, 255, 0.3);
+  --danger: #ff8a9c;
+  --hover: rgba(170, 185, 255, 0.08);
+  color: var(--text);
+  color-scheme: dark;
+}
+.l-dark {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* Space gets a little hazy and blue just above the planet's air. */
+  background: linear-gradient(180deg, #02030a 0%, #03050d 55%, #061033 100%);
+}
+.hero-graph {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+/* The planet. A huge dark circle; only its top edge shows. Its color is the page color below. */
+.l-planet {
+  --exposed: max(120px, 10vw);
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: calc(100% - var(--exposed));
+  width: max(4000px, 320vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(closest-side, var(--void) 98.9%, #070d26 99.6%, #0c1846 100%);
+  box-shadow:
+    0 0 0 1px rgba(150, 175, 255, 0.3),
+    0 -1px 6px rgba(130, 160, 255, 0.45),
+    0 -10px 40px -6px rgba(70, 110, 255, 0.32),
+    0 -60px 180px -40px rgba(58, 95, 255, 0.3);
+  pointer-events: none;
+}
+/* The air over the middle of the limb glows brighter. It sits behind the planet, so only the sky side shows. */
+.l-dark::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  bottom: calc(max(120px, 10vw) - 150px);
+  width: 2200px;
+  height: 300px;
+  transform: translateX(-50%);
+  /* The warm spot is the sun, just about to rise. The planet hides its lower half. */
+  background:
+    radial-gradient(400px 30px at 50% 50%, rgba(255, 236, 216, 0.5), rgba(255, 196, 138, 0.16) 45%, rgba(255, 196, 138, 0) 100%),
+    radial-gradient(closest-side, rgba(70, 110, 255, 0.24), rgba(70, 110, 255, 0) 100%);
+  pointer-events: none;
+}
+
+.l-dark .l-top {
+  position: relative;
+}
+.landing .logo-mark rect:nth-of-type(2) {
+  stroke: #fff;
+}
+.l-dark .l-hero {
+  min-height: min(800px, calc(100svh - 80px));
+  padding-top: 32px;
+  padding-bottom: calc(max(120px, 10vw) + 56px);
+}
+.l-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 26px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.l-kicker i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--flare);
+  box-shadow: 0 0 10px 2px rgba(255, 196, 138, 0.55);
+}
+.l-dark .l-copy h1 {
+  font-size: clamp(44px, 5.4vw, 76px);
+  font-weight: 750;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  color: #fff;
+}
+.l-copy h1 em {
+  font-style: normal;
+  color: var(--brand-peri);
+}
+.l-dark .btn-ghost {
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+}
+.l-dark .btn-ghost:hover {
+  border-color: rgba(170, 185, 255, 0.4);
+  background: var(--hover);
+}
+.landing .btn-primary {
+  background: var(--brand-blue);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 10px 30px -14px rgba(58, 95, 255, 0.8);
+}
+.landing .btn-primary:hover:not(:disabled) {
+  background: #2a52f0;
+}
+.l-email .input {
+  border-radius: var(--r-control);
+}
+.landing .input::placeholder {
+  color: rgba(238, 241, 250, 0.38);
+}
+.landing .code-box {
+  background: rgba(255, 255, 255, 0.03);
+}
+.landing .google-btn.is-loading {
+  background: rgba(170, 185, 255, 0.08);
+}
+.landing .google-btn iframe {
+  color-scheme: light;
+}
+
+/* The preview floats in the sky like a star-chart plate: sharp, with corner marks. */
+.l-dark .l-card {
+  position: relative;
+  border-color: rgba(170, 185, 255, 0.12);
+  background: rgba(5, 8, 22, 0.66);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 40px 100px -40px rgba(0, 0, 0, 0.95);
+}
+.plate {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(180, 195, 255, 0.55), rgba(180, 195, 255, 0.55)) center / 1px 100% no-repeat,
+    linear-gradient(rgba(180, 195, 255, 0.55), rgba(180, 195, 255, 0.55)) center / 100% 1px no-repeat;
+}
+.plate.is-tl {
+  top: -6px;
+  left: -6px;
+}
+.plate.is-tr {
+  top: -6px;
+  right: -6px;
+}
+.plate.is-bl {
+  bottom: -6px;
+  left: -6px;
+}
+.plate.is-br {
+  bottom: -6px;
+  right: -6px;
+}
+.l-card-tag {
+  display: flex;
+  justify-content: space-between;
+  margin: -6px 0 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.l-dark .post-kind.kind-work {
+  --k: #c9bdfd;
+}
+.l-reply p {
+  border-radius: var(--r-control);
+}
+.l-dark .l-lock {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---- Below the horizon ---- */
+.l-steps,
+.l-band,
+.l-rules,
+.l-foot {
+  position: relative;
+}
+.l-steps h2,
+.l-band h2,
+.l-rules h2 {
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+/* "Why" and "How": three points on one line, like linked stars */
+.l-steps ol {
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.l-steps ol li {
+  position: relative;
+  padding: 28px 32px 8px 0;
+}
+.l-steps ol li + li {
+  padding-left: 32px;
+  border-left: 1px solid var(--line);
+}
+.l-num {
+  display: block;
+  margin-bottom: 14px;
+  padding: 0;
+  border: 0;
+  width: auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--accent-text);
+}
+.l-steps ol {
+  counter-reset: pt;
+}
+.l-steps li {
+  counter-increment: pt;
+}
+.l-steps .l-num:empty::before {
+  content: '0' counter(pt);
+}
+.l-steps .l-num:not(:empty)::before {
+  content: 'STEP 0';
+}
+/* The dot where each point sits on the line */
+.l-steps ol li::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--starlight);
+  box-shadow: 0 0 10px 1px rgba(170, 190, 255, 0.6);
+}
+.l-steps ol li + li::before {
+  left: -4px;
+}
+.l-steps h3 {
+  font-size: 19px;
+  font-weight: 650;
+  color: #fff;
+}
+.l-steps.is-why {
+  padding-top: 40px;
+}
+
+/* The price: one big number, then the reason */
+.l-band {
+  background: transparent;
+}
+.l-band-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 72px;
+  max-width: 1200px;
+  padding: 88px 24px;
+  text-align: left;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.l-band .l-price {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: none;
+  margin: 0;
+  font-size: inherit;
+  color: #fff;
+}
+.l-price b {
+  font-size: clamp(88px, 11vw, 148px);
+  font-weight: 750;
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+}
+.l-price span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.l-band p {
+  margin: 16px 0 28px;
+  max-width: 520px;
+}
+.l-band .tags.is-lg {
+  justify-content: flex-start;
+  gap: 8px;
+}
+.l-band .tags.is-lg .tag {
+  height: 34px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: var(--text);
+  border-color: var(--line-strong);
+  background: transparent;
+}
+.l-band .tags.is-lg .tag::before {
+  background: var(--brand-peri);
+}
+
+.l-rules ul {
+  counter-reset: rule;
+  border-top: 1px solid var(--line);
+}
+.l-rules li {
+  display: flex;
+  gap: 18px;
+  counter-increment: rule;
+}
+.l-rules li::before {
+  content: counter(rule, decimal-leading-zero);
+  flex-shrink: 0;
+  padding-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.l-foot {
+  flex-wrap: wrap;
+  border-top-color: var(--line);
+}
+.l-coords {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .l-dark .l-hero {
+    min-height: 0;
+    padding-bottom: 168px;
+  }
+  .l-steps ol li,
+  .l-steps ol li + li {
+    padding: 22px 0 6px;
+    border-left: 0;
+  }
+  .l-steps ol li + li {
+    border-top: 1px solid var(--line);
+  }
+  .l-band-inner {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 64px 20px;
+  }
+}
+
+/* ============ Consent at sign-up ============ */
+.consent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 0 2px;
+  border-top: 1px solid var(--line);
+}
+.check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-2);
+  cursor: pointer;
+}
+.check input {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin: 2px 0 0;
+  border-radius: var(--r-bar);
+  accent-color: var(--blue);
+}
+.check a,
+.setting a,
+.rail-foot a,
+.pay-fine a {
+  color: var(--accent-text);
+  font-weight: 600;
+}
+.check a:hover,
+.setting a:hover,
+.rail-foot a:hover,
+.pay-fine a:hover {
+  text-decoration: underline;
+}
+
+/* ============ Terms and Privacy ============ */
+.legal {
+  min-height: 100vh;
+  background: var(--bg);
+}
+.legal-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 24px;
+  background: var(--void);
+  border-bottom: 1px solid var(--sky-line);
+}
+.legal-top .logo-word {
+  color: var(--starlight);
+}
+.legal-top .logo-mark rect:nth-of-type(2) {
+  stroke: #fff;
+}
+.legal-tabs {
+  display: flex;
+  gap: 4px;
+}
+.legal-tabs a {
+  height: 34px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9aa3c2;
+  border-radius: var(--r-control);
+}
+.legal-tabs a:hover {
+  color: #fff;
+}
+.legal-tabs a[aria-current='page'] {
+  color: #fff;
+  background: rgba(170, 185, 255, 0.1);
+}
+.legal-body {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 24px 96px;
+}
+.legal-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.legal-body h1 {
+  margin: 10px 0 8px;
+  font-size: clamp(34px, 5vw, 48px);
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+.legal-body section {
+  padding: 26px 0 4px;
+  border-bottom: 1px solid var(--line);
+}
+.legal-body h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 10px;
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+.legal-body h2 span {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+.legal-body p,
+.legal-body li {
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.legal-body p + p {
+  margin-top: 10px;
+}
+.legal-body ul,
+.legal-body ol {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 4px 0 18px;
+  padding-left: 18px;
+}
+.legal-body ul {
+  list-style: square;
+}
+.legal-body ol {
+  list-style: decimal-leading-zero;
+}
+.legal-body li::marker {
+  color: var(--muted);
+}
+.legal-body p:last-child {
+  margin-bottom: 18px;
+}
+.legal-body b {
+  color: var(--text);
+  font-weight: 650;
+}
+.legal-body a:not(.btn) {
+  color: var(--accent-text);
+  font-weight: 600;
+}
+.legal-back {
+  margin-top: 32px;
+}
+
+/* Footer links on the landing page */
+.l-legal {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+}
+.l-legal a:hover {
+  color: var(--text);
+}
