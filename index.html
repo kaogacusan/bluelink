@@ -22,15 +22,15 @@
         --bg: #03050d;
         --back: #93a8ff;
         --front: #ffffff;
-        --track: rgba(147, 168, 255, 0.16);
-        --glint: #3a5fff;
+        --edge: #ffffff;
+        --glow: rgba(58, 95, 255, 0.5);
         position: fixed;
         inset: 0;
         z-index: 2147483000;
         display: grid;
         place-items: center;
         background: var(--bg);
-        transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.4s;
+        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0s 0.5s;
       }
       [data-splash='dark'] #splash {
         --bg: #04060f;
@@ -38,72 +38,135 @@
       [data-splash='light'] #splash {
         --bg: #f4f5f9;
         --front: #1d45e5;
-        --track: rgba(10, 21, 64, 0.08);
-        --glint: #ffffff;
+        --edge: #0a1540;
+        --glow: rgba(29, 69, 229, 0.18);
+      }
+      #splash .stage {
+        position: relative;
+        width: 160px;
+        height: 160px;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      /* A soft blue light comes up when the links connect, then breathes while the app loads. */
+      #splash .stage::before {
+        content: '';
+        position: absolute;
+        inset: -45%;
+        background: radial-gradient(closest-side, var(--glow), transparent 72%);
+        opacity: 0;
+        animation: bl-bloom 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards, bl-breathe 2.4s ease-in-out 2s infinite;
       }
       #splash svg {
-        width: 60px;
-        height: 60px;
+        position: relative;
+        display: block;
+        width: 100%;
+        height: 100%;
         overflow: visible;
-        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       }
       #splash.out {
         opacity: 0;
         visibility: hidden;
         pointer-events: none;
       }
-      #splash.out svg {
-        transform: scale(1.08);
+      #splash.out .stage {
+        transform: scale(1.06);
       }
-      /* Each link is 17 x 12 with 6 radius: its outline is about 48 units long. */
-      #splash rect {
+      /* Every path has pathLength 100. A dash of 0 50 grows from the path start in both directions. */
+      #splash path {
         fill: none;
+        stroke-dasharray: 0 100 0 0;
+      }
+      /* 1. A white outline traces each link, starting at its far end. */
+      #splash .edge {
+        stroke: var(--edge);
+        stroke-width: 0.3;
+        animation: bl-grow 0.8s cubic-bezier(0.65, 0, 0.35, 1) 0.1s forwards, bl-fade 0.45s ease 1.6s forwards;
+      }
+      #splash .lb .edge {
+        animation-delay: 0.18s, 1.6s;
+      }
+      /* 2. The two links move in and lock together. */
+      #splash .la {
+        animation: bl-in-a 0.5s cubic-bezier(0.65, 0, 0.25, 1) 0.72s backwards;
+      }
+      #splash .lb {
+        animation: bl-in-b 0.5s cubic-bezier(0.65, 0, 0.25, 1) 0.72s backwards;
+      }
+      /* 3. Color flows out from the point where they touch. */
+      #splash .body {
         stroke-width: 4;
-        stroke-dasharray: 48;
-        stroke-dashoffset: 48;
-        animation: bl-draw 0.6s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+        animation: bl-grow 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
       }
-      #splash .track {
-        stroke: var(--track);
-        stroke-dashoffset: 0;
-        animation: none;
-      }
-      #splash .a {
+      #splash .la .body {
         stroke: var(--back);
-        animation-delay: 0.05s;
       }
-      #splash .b {
+      #splash .lb .body {
         stroke: var(--front);
-        animation-delay: 0.2s;
       }
-      /* While the app still loads, a small light runs along the links. */
-      #splash .glint {
-        stroke: var(--glint);
-        stroke-dasharray: 6 42;
+      #splash .ring {
+        fill: none;
+        stroke: var(--edge);
+        stroke-width: 1;
+        vector-effect: non-scaling-stroke;
+        transform-box: fill-box;
+        transform-origin: center;
         opacity: 0;
-        animation: bl-glint 1.4s linear 0.9s infinite;
+        animation: bl-ring 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
       }
-      @keyframes bl-draw {
+      @keyframes bl-grow {
         to {
-          stroke-dashoffset: 0;
+          stroke-dasharray: 50 0 50 0;
         }
       }
-      @keyframes bl-glint {
+      @keyframes bl-fade {
+        to {
+          opacity: 0;
+        }
+      }
+      @keyframes bl-in-a {
         from {
-          stroke-dashoffset: 48;
-          opacity: 1;
+          transform: translate(-3.5px, -2.3px);
+        }
+      }
+      @keyframes bl-in-b {
+        from {
+          transform: translate(3.5px, 2.3px);
+        }
+      }
+      @keyframes bl-ring {
+        from {
+          opacity: 0.55;
+          transform: scale(1);
         }
         to {
-          stroke-dashoffset: 0;
+          opacity: 0;
+          transform: scale(3);
+        }
+      }
+      @keyframes bl-bloom {
+        to {
           opacity: 1;
+        }
+      }
+      @keyframes bl-breathe {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.55;
         }
       }
       @media (prefers-reduced-motion: reduce) {
-        #splash rect {
-          animation: none;
-          stroke-dashoffset: 0;
+        #splash *,
+        #splash .stage::before {
+          animation: none !important;
         }
-        #splash .glint {
+        #splash .body {
+          stroke-dasharray: none;
+        }
+        #splash .edge,
+        #splash .ring {
           display: none;
         }
       }
@@ -111,19 +174,30 @@
   </head>
   <body>
     <div id="splash" aria-hidden="true">
-      <svg viewBox="0 0 32 32">
-        <defs>
-          <clipPath id="bl-splash-clip"><circle cx="20" cy="13" r="4.2" /></clipPath>
-        </defs>
-        <rect class="track" x="3" y="7" width="17" height="12" rx="6" />
-        <rect class="track" x="12" y="13" width="17" height="12" rx="6" />
-        <rect class="a" x="3" y="7" width="17" height="12" rx="6" />
-        <rect class="glint" x="3" y="7" width="17" height="12" rx="6" />
-        <rect class="b" x="12" y="13" width="17" height="12" rx="6" />
-        <rect class="glint" x="12" y="13" width="17" height="12" rx="6" />
-        <!-- The back link passes over the front link at the top right. -->
-        <rect class="a" x="3" y="7" width="17" height="12" rx="6" clip-path="url(#bl-splash-clip)" />
-      </svg>
+      <div class="stage">
+        <svg viewBox="-4 -4 40 40">
+          <defs>
+            <clipPath id="bl-splash-clip"><circle cx="20" cy="13" r="4.2" /></clipPath>
+          </defs>
+          <circle class="ring" cx="16" cy="16" r="7" />
+          <g class="la">
+            <path class="body" pathLength="100" d="M20 13A6 6 0 0 1 14 19H9A6 6 0 0 1 3 13A6 6 0 0 1 9 7H14A6 6 0 0 1 20 13Z" />
+            <path class="edge" pathLength="100" d="M1 13A8 8 0 0 1 9 5H14A8 8 0 0 1 22 13A8 8 0 0 1 14 21H9A8 8 0 0 1 1 13Z" />
+            <path class="edge" pathLength="100" d="M5 13A4 4 0 0 1 9 9H14A4 4 0 0 1 18 13A4 4 0 0 1 14 17H9A4 4 0 0 1 5 13Z" />
+          </g>
+          <g class="lb">
+            <path class="body" pathLength="100" d="M12 19A6 6 0 0 1 18 13H23A6 6 0 0 1 29 19A6 6 0 0 1 23 25H18A6 6 0 0 1 12 19Z" />
+            <path class="edge" pathLength="100" d="M31 19A8 8 0 0 1 23 27H18A8 8 0 0 1 10 19A8 8 0 0 1 18 11H23A8 8 0 0 1 31 19Z" />
+            <path class="edge" pathLength="100" d="M27 19A4 4 0 0 1 23 23H18A4 4 0 0 1 14 19A4 4 0 0 1 18 15H23A4 4 0 0 1 27 19Z" />
+          </g>
+          <!-- The back link passes over the front link at the top right. -->
+          <g class="la" clip-path="url(#bl-splash-clip)">
+            <path class="body" pathLength="100" d="M20 13A6 6 0 0 1 14 19H9A6 6 0 0 1 3 13A6 6 0 0 1 9 7H14A6 6 0 0 1 20 13Z" />
+            <path class="edge" pathLength="100" d="M1 13A8 8 0 0 1 9 5H14A8 8 0 0 1 22 13A8 8 0 0 1 14 21H9A8 8 0 0 1 1 13Z" />
+            <path class="edge" pathLength="100" d="M5 13A4 4 0 0 1 9 9H14A4 4 0 0 1 18 13A4 4 0 0 1 14 17H9A4 4 0 0 1 5 13Z" />
+          </g>
+        </svg>
+      </div>
     </div>
     <div id="root"></div>
     <script>
@@ -131,7 +205,7 @@
       ;(function () {
         var splash = document.getElementById('splash')
         var root = document.getElementById('root')
-        var minMs = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 900
+        var minMs = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1900
         var done = false
         var watch = new MutationObserver(function () {
           // The boot screen waits for the account. Its error text means it is done.
