@@ -1,6 +1,12 @@
 // Dev only: made-up demo people and posts, so the app is not empty while we build it.
 // None of this runs in production (server/prod.js does not turn on dev mode).
 
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const assets = path.join(path.dirname(fileURLToPath(import.meta.url)), 'assets')
+
 const H = 60 * 60_000
 const D = 24 * H
 
@@ -131,7 +137,7 @@ const day = (offset) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Manil
 
 const POSTS = () => [
   { uid: 'demo-ana', kind: 'post', ago: 5 * D, text: 'Reminder: my office hours are open to any student, not just my classes. Thursdays, 2 to 4 PM. Come talk about data careers or grad school.' },
-  { uid: 'demo-rafa', org: 'demo-debate', kind: 'opp', ago: 4 * D, text: 'We are recruiting. No experience needed, we will train you. Apply here on BlueLink before Friday.' },
+  { uid: 'demo-rafa', org: 'demo-debate', kind: 'opp', ago: 4 * D, text: 'We are recruiting. No experience needed, we will train you. Apply here on blueLink before Friday.' },
   { uid: 'demo-bea', kind: 'post', ago: 3 * D, text: 'Small tip for internship apps: send your resume as a PDF named Lastname_Firstname_Resume. It sounds small, but recruiters notice.' },
   {
     uid: 'demo-nina',
@@ -230,7 +236,203 @@ const COMMENTS = {
   'demo-kyle': [['demo-migs', 'Sharing this with our org. Thanks, Kyle.']],
 }
 
-export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLink }) {
+// The team's own accounts. In dev they start with a full network, so the app looks lived-in when they sign in.
+const OWNERS = ['prince.alpherson.wagan@student.ateneo.edu']
+
+// Prince's real details, from ADVO (advo.ph) and his Ateneo classes.
+const OWNER_PROFILE = {
+  role: 'student',
+  school: 'jgsom',
+  course: 'BS Management',
+  level: '1',
+  year: null,
+  headline: 'Founder and CEO of ADVO. Building blueLink.',
+  about:
+    'I run ADVO, a software company in the Philippines. We build web apps, websites, and the hardware they run on, for businesses that still work on paper and group chats.\n\n' +
+    "Our work includes FourlinQ, a patient registry for The Medical City, Felici Artisan Gelato, and Coffee Rush Eastridge.\n\n" +
+    'Now I am building blueLink so Ateneans can find each other faster. Message me about projects, work at ADVO, or blueLink feedback.',
+  openTo: ['coffee', 'projects', 'recruit', 'mentor'],
+  skills: ['Startups', 'Product', 'Sales', 'Web apps', 'React', 'TypeScript', 'UI design', 'Project management'],
+}
+
+// Prince's company, as an org page he runs.
+const OWNER_ORG = {
+  id: 'advo',
+  name: 'ADVO',
+  short: 'ADVO',
+  category: 'tech',
+  about: 'We build web apps, websites, and the hardware they run on for Philippine businesses. Our work includes FourlinQ, The Medical City, Felici Artisan Gelato, and Coffee Rush Eastridge.',
+  recruiting: true,
+  question: 'What do you want to build with us?',
+  links: { facebook: '', instagram: '', website: 'https://advo.ph' },
+}
+
+// Prince's portfolio, as shown on advo.ph. Pictures are in server/assets/advo-work.
+const OWNER_WORK = [
+  { file: 'fourlinq', title: 'FourlinQ', caption: 'An interactive website for custom windows and doors, brought to life with 3D animations.', link: 'https://fourlinq.ph' },
+  { file: 'vbe-eye-center-clinic', title: 'VBE Eye Center Clinic', caption: 'Digital patient records and coordinated workflows for an eye care clinic.', link: '' },
+  { file: 'felici-artisan-gelato', title: 'Felici Artisan Gelato', caption: 'An immersive gelato website with animated storytelling, interactive flavors, and store discovery.', link: 'https://felicigelato.ph' },
+  { file: 'camps-ph', title: 'Camps PH', caption: 'Official booking website for campsites around the Philippines.', link: 'https://camps.ph' },
+  { file: 'pcedm-members', title: 'PCEDM Members', caption: 'Conference registration, annual dues, and telemedicine for members.', link: 'https://www.pcedm.ph' },
+  { file: 'no-kohi', title: 'NO KOHI', caption: 'Online ordering, POS, inventory, and staff attendance for a matcha and doughnut shop.', link: 'https://nokohi.com' },
+  { file: 'floodpass', title: 'FloodPASS PH', caption: 'A flood navigation platform with live road conditions, flood alerts, and safer route planning.', link: 'https://floodpass.com' },
+]
+
+// [who, minutes ago, text]. "me" is the owner.
+const OWNER_CHATS = {
+  'demo-migs': [
+    ['demo-migs', 3 * 24 * 60, 'Hi! I saw you just joined. I help run a tech org and we are looking for people for a campus app project. Want to grab coffee this week?'],
+    ['me', 3 * 24 * 60 - 40, 'Hi Migs! Yes, I would love that. I am building something similar.'],
+    ['demo-migs', 2 * 24 * 60, 'Nice. Thursday after 3 at Gonzaga?'],
+    ['me', 2 * 24 * 60 - 15, 'Works for me. See you there.'],
+    ['demo-migs', 50, 'Our guild has a demo night next week. You should show blueLink.'],
+  ],
+  'demo-bea': [
+    ['me', 5 * 24 * 60, 'Hi Bea! I saw your tip about resume names. Could you look at my cover letter?'],
+    ['demo-bea', 5 * 24 * 60 - 90, 'Sure! Send it here and I will check it tonight.'],
+    ['demo-bea', 4 * 24 * 60, 'Done. Keep the first paragraph short and say the role you want in line one.'],
+    ['me', 4 * 24 * 60 - 20, 'Thank you. That helps a lot.'],
+  ],
+  'demo-paolo': [
+    ['demo-paolo', 26 * 60, 'Got your resume. Strong projects. Put blueLink at the top and add user numbers when you have them.'],
+    ['demo-paolo', 25 * 60, 'Free for a 20 minute call on Saturday?'],
+  ],
+  'demo-kyle': [
+    ['me', 7 * 24 * 60, 'Hi Kyle! Is your summer internship open to Management students?'],
+    ['demo-kyle', 7 * 24 * 60 - 60, 'Yes, for product roles. Send me your resume when applications open.'],
+  ],
+}
+
+const OWNER_POSTS = [
+  { kind: 'post', ago: 2 * D, text: 'blueLink is live for testing. If you are an Atenean, sign in with your school email and tell me what feels off. Every bit of feedback helps.' },
+  { kind: 'ask', ago: 8 * H, text: 'Looking for 2 people who like design or frontend to help with a campus app this sem. No pay yet, but good for your portfolio.' },
+]
+
+export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLink, uidFor, photoDir, logoDir, galleryDir }) {
+  const ownerUids = new Set(OWNERS.map(uidFor))
+
+  // Fills an owner's account once: profile gaps, connections, requests, chats, orgs, and a few posts.
+  function seedOwner(uid) {
+    const me = db.users[uid]
+    db.seededOwners ||= []
+    if (!me?.name || db.seededOwners.includes(uid)) return
+    const now = Date.now()
+    const ago = (min) => now - min * 60_000
+    const key = (a, b) => (a < b ? `${a}:${b}` : `${b}:${a}`)
+
+    if ((me.until || 0) < now) Object.assign(me, { until: now + 365 * D, via: 'code' })
+
+    // Connected
+    for (const [other, at] of [['demo-migs', 3], ['demo-bea', 5], ['demo-paolo', 6], ['demo-kyle', 7], ['demo-nina', 10], ['demo-leo', 12]]) {
+      db.links[key(uid, other)] = { from: other, to: uid, status: 'accepted', note: '', at: now - at * D, acceptedAt: now - at * D + H }
+    }
+    // Waiting for you
+    db.links[key(uid, 'demo-jill')] = { from: 'demo-jill', to: uid, status: 'pending', note: 'Hi! I saw you build apps. Want to help with a thesis dashboard? We use Python.', at: ago(90) }
+    db.links[key(uid, 'demo-rafa')] = { from: 'demo-rafa', to: uid, status: 'pending', note: 'Our debate club needs a better sign-up page. Can we talk?', at: ago(5 * 60) }
+    // Waiting for them
+    db.links[key(uid, 'demo-ana')] = { from: uid, to: 'demo-ana', status: 'pending', note: 'Hi Ma\'am! Could I ask about data science electives for next sem?', at: ago(2 * 24 * 60) }
+
+    for (const [other, lines] of Object.entries(OWNER_CHATS)) {
+      db.messages[key(uid, other)] = lines.map(([who, min, text]) => ({ id: newId(), from: who === 'me' ? uid : who, text, at: ago(min) }))
+    }
+    // Everything read, except the newest few from Migs and Paolo
+    db.reads[uid] = { ...db.reads[uid], [key(uid, 'demo-bea')]: now, [key(uid, 'demo-kyle')]: now, [key(uid, 'demo-migs')]: ago(2 * 24 * 60) }
+
+    const join = (id, role) => {
+      const o = db.orgs[id]
+      if (!o) return
+      if (!o.members.some((m) => m.uid === uid)) o.members.push({ uid, role, at: now - 14 * D })
+      if (!o.followers.includes(uid)) o.followers.push(uid)
+    }
+    join('demo-coders', 'member')
+    join('demo-hbs', 'member')
+    if (db.orgs['demo-lens'] && !db.orgs['demo-lens'].followers.includes(uid)) db.orgs['demo-lens'].followers.push(uid)
+
+    for (const p of db.posts) {
+      if (p.uid === uid || !p.uid.startsWith('demo-')) continue
+      if (Math.random() < 0.5 && !p.likes.includes(uid)) p.likes.push(uid)
+      if (p.kind === 'event' && !p.going.includes(uid)) p.going.push(uid)
+    }
+    const friends = ['demo-migs', 'demo-bea', 'demo-paolo', 'demo-kyle', 'demo-nina', 'demo-leo']
+    OWNER_POSTS.forEach((p) => {
+      const at = now - p.ago
+      const comments =
+        p.kind === 'ask'
+          ? [{ id: newId(), uid: 'demo-leo', text: 'I can help with design. Messaging you.', at: at + H }]
+          : [{ id: newId(), uid: 'demo-migs', text: 'Signed up. This is clean.', at: at + 2 * H }, { id: newId(), uid: 'demo-bea', text: 'Sharing with my block.', at: at + 5 * H }]
+      db.posts.push({ id: newId(), uid, org: null, kind: p.kind, text: p.text, event: null, at, likes: friends.filter(() => Math.random() < 0.7), going: [], comments })
+    })
+    db.posts.sort((a, b) => a.at - b.at)
+
+    db.seededOwners.push(uid)
+    save()
+  }
+
+  // Sets the owner's real profile, photo, and ADVO page once. Kept apart from seedOwner so accounts seeded before it get it too.
+  function seedOwnerProfile(uid) {
+    const me = db.users[uid]
+    db.profiledOwners ||= []
+    if (!me?.name || db.profiledOwners.includes(uid)) return
+    const now = Date.now()
+    Object.assign(me, OWNER_PROFILE, { updatedAt: now })
+    fs.copyFileSync(path.join(assets, 'owner-photo.jpg'), path.join(photoDir, `${uid}.jpg`))
+    me.photo = now
+
+    const friends = ['demo-migs', 'demo-bea', 'demo-leo', 'demo-kyle'].filter((u) => db.users[u])
+    if (!db.orgs[OWNER_ORG.id]) {
+      fs.copyFileSync(path.join(assets, 'advo-logo.jpg'), path.join(logoDir, `${OWNER_ORG.id}.jpg`))
+      db.orgs[OWNER_ORG.id] = {
+        ...OWNER_ORG,
+        logo: now,
+        verified: false,
+        members: [{ uid, role: 'admin', at: now - 20 * D }],
+        applications: [],
+        followers: [uid, ...friends],
+        createdBy: uid,
+        createdAt: now - 20 * D,
+      }
+      const at = now - 5 * H
+      db.posts.push({
+        id: newId(),
+        uid,
+        org: OWNER_ORG.id,
+        kind: 'opp',
+        text: 'ADVO is taking in Ateneans who want to build software for real clients. Frontend, design, and sales. Apply on our page or message me.',
+        event: null,
+        at,
+        likes: friends.slice(0, 3),
+        going: [],
+        comments: db.users['demo-leo'] ? [{ id: newId(), uid: 'demo-leo', text: 'Applied for design.', at: at + H }] : [],
+      })
+      db.posts.sort((a, b) => a.at - b.at)
+    }
+    db.profiledOwners.push(uid)
+    save()
+  }
+
+  // Fills the owner's portfolio once, if it is empty.
+  function seedOwnerGallery(uid) {
+    const me = db.users[uid]
+    db.galleryOwners ||= []
+    if (!me?.name || db.galleryOwners.includes(uid)) return
+    if (!me.gallery?.length) {
+      const now = Date.now()
+      me.gallery = OWNER_WORK.map((w, i) => {
+        const item = { id: newId(), title: w.title, caption: w.caption, link: w.link, at: now + i }
+        fs.copyFileSync(path.join(assets, 'advo-work', `${w.file}.jpg`), path.join(galleryDir, `${uid}-${item.id}.jpg`))
+        return item
+      })
+    }
+    db.galleryOwners.push(uid)
+    save()
+  }
+
+  function setUpOwner(uid) {
+    seedOwner(uid)
+    seedOwnerProfile(uid)
+    seedOwnerGallery(uid)
+  }
+
   function seed() {
     if (Object.keys(db.users).length) return
     const now = Date.now()
@@ -261,15 +463,21 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
     }
     // Dev only: a founding member code and a fake GCash number, so the pay screen can be tested.
     db.codes.FOUNDERS = { max: 100, used: [], createdAt: now }
-    db.settings = { gcashName: 'BlueLink (dev)', gcashNumber: '0900 000 0000' }
+    db.settings = { gcashName: 'blueLink (dev)', gcashNumber: '0900 000 0000' }
     db.links['demo-bea:demo-migs'] = { from: 'demo-bea', to: 'demo-migs', status: 'accepted', note: '', at: now - 9 * D, acceptedAt: now - 9 * D }
     db.links['demo-kyle:demo-migs'] = { from: 'demo-kyle', to: 'demo-migs', status: 'accepted', note: '', at: now - 8 * D, acceptedAt: now - 8 * D }
     db.links['demo-ana:demo-jill'] = { from: 'demo-jill', to: 'demo-ana', status: 'accepted', note: '', at: now - 6 * D, acceptedAt: now - 6 * D }
     save()
   }
 
+  function seedAll() {
+    seed()
+    ownerUids.forEach(setUpOwner)
+  }
+
   // A new person gets one hello, so the inbox is not empty on day one.
   function onJoin(uid) {
+    if (ownerUids.has(uid)) return setUpOwner(uid)
     setTimeout(() => {
       if (!db.users[uid] || db.links[`${uid}:demo-migs`] || db.links[`demo-migs:${uid}`]) return
       requestLink('demo-migs', uid, 'Hi! I saw you just joined. I help run a tech org and we are looking for people for a campus app project. Want to grab coffee this week?')
@@ -294,5 +502,5 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
     setTimeout(() => sendMessage(to, from, replies[Math.floor(Math.random() * replies.length)]), 2200)
   }
 
-  return { seed, onJoin, onRequest, onMessage }
+  return { seed: seedAll, onJoin, onRequest, onMessage }
 }

@@ -55,3 +55,19 @@ export async function toJpeg(file: File, size = 400): Promise<string> {
   ctx.drawImage(bmp, (bmp.width - s) / 2, (bmp.height - s) / 2, s, s, 0, 0, size, size)
   return canvas.toDataURL('image/jpeg', 0.85)
 }
+
+// Shrink a picture to fit `max` on its long side, keeping its shape. Steps down until it is small enough to upload.
+export async function fitJpeg(file: File, max = 1600, limit = 900_000): Promise<string> {
+  const bmp = await createImageBitmap(file)
+  let out = ''
+  for (const [side, q] of [[max, 0.85], [max, 0.72], [1200, 0.72], [900, 0.7]] as const) {
+    const s = Math.min(1, side / Math.max(bmp.width, bmp.height))
+    const canvas = document.createElement('canvas')
+    canvas.width = Math.round(bmp.width * s)
+    canvas.height = Math.round(bmp.height * s)
+    canvas.getContext('2d')!.drawImage(bmp, 0, 0, canvas.width, canvas.height)
+    out = canvas.toDataURL('image/jpeg', q)
+    if (out.length <= limit) break
+  }
+  return out
+}

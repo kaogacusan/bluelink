@@ -8,6 +8,7 @@ import { ConnectButton } from '../components/Connect'
 import { Menu } from '../components/Menu'
 import { OpenTo } from '../components/OpenTo'
 import { ReportModal } from '../components/Report'
+import { Gallery } from '../components/Gallery'
 import { Linkified } from '../components/Post'
 import { PostList } from './Feed'
 import { api, useFetch } from '../lib/api'
@@ -79,7 +80,7 @@ function Settings() {
         </div>
       </div>
       <div className="setting">
-        <span>Sign out of BlueLink on this device</span>
+        <span>Sign out of blueLink on this device</span>
         <button className="btn btn-sm btn-ghost" onClick={signOut}>
           Sign out
         </button>
@@ -211,6 +212,8 @@ export function Profile({ id }: { id?: string }) {
           </p>
         </section>
       )}
+
+      <Gallery items={user.gallery || []} isMe={isMe} />
 
       {user.skills.length > 0 && (
         <section className="card section">

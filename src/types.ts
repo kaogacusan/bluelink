@@ -14,9 +14,18 @@ export interface Person {
   status?: Status
 }
 
+export interface GalleryItem {
+  id: string
+  title: string
+  caption: string
+  link: string
+  url: string
+}
+
 export interface FullPerson extends Person {
   about: string
   skills: string[]
+  gallery: GalleryItem[]
   createdAt: number
 }
 

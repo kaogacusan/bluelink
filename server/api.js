@@ -52,7 +52,9 @@ export function createApi({ dataDir, dev = false }) {
   fs.mkdirSync(dataDir, { recursive: true })
   const photoDir = path.join(dataDir, 'photos')
   const logoDir = path.join(dataDir, 'logos')
+  const galleryDir = path.join(dataDir, 'gallery')
   fs.mkdirSync(photoDir, { recursive: true })
+  fs.mkdirSync(galleryDir, { recursive: true })
   fs.mkdirSync(logoDir, { recursive: true })
 
   const secretFile = path.join(dataDir, 'secret')
@@ -190,7 +192,8 @@ export function createApi({ dataDir, dev = false }) {
     }
   }
 
-  const full = (u) => ({ ...card(u), about: u.about, skills: u.skills, createdAt: u.createdAt })
+  const galleryItem = (uid) => (g) => ({ id: g.id, title: g.title, caption: g.caption, link: g.link, url: `/api/gallery/${uid}/${g.id}?v=${g.at}` })
+  const full = (u) => ({ ...card(u), about: u.about, skills: u.skills, gallery: (u.gallery || []).map(galleryItem(u.uid)), createdAt: u.createdAt })
 
   // ---- membership: two plans, one tier. Everyone inside gets the same app.
   function membershipOf(uid) {
@@ -337,7 +340,7 @@ export function createApi({ dataDir, dev = false }) {
     notify(to, 'inbox')
   }
 
-  const demo = dev ? createDemo({ db, save, newId, acceptLink, sendMessage, requestLink }) : null
+  const demo = dev ? createDemo({ db, save, newId, acceptLink, sendMessage, requestLink, uidFor, photoDir, logoDir, galleryDir }) : null
   demo?.seed()
 
   // ---- profile input
@@ -594,7 +597,7 @@ export function createApi({ dataDir, dev = false }) {
     const isNew = !prev?.name
     // No profile without a clear yes: 18 or older, and agrees to this version of the Terms and Privacy Notice.
     if (isNew && (body.adult !== true || body.agree !== LEGAL.version))
-      throw new Fail(400, `Check both boxes to join. BlueLink is only for people ${LEGAL.minAge} and older.`)
+      throw new Fail(400, `Check both boxes to join. blueLink is only for people ${LEGAL.minAge} and older.`)
     const consent = isNew ? { consent: { version: LEGAL.version, at: Date.now() } } : {}
     const u = { ...(prev || { uid, photo: 0, createdAt: Date.now() }), ...readProfile(body, prev), ...consent, updatedAt: Date.now() }
     db.users[uid] = u
@@ -636,6 +639,55 @@ export function createApi({ dataDir, dev = false }) {
     fs.createReadStream(file).pipe(res)
   })
 
+  // ---- portfolio: up to 12 pictures of your work on your profile
+  const GALLERY_MAX = 12
+  const galleryFile = (uid, id) => path.join(galleryDir, `${uid}-${id}.jpg`)
+
+  route(
+    'POST',
+    '/api/me/gallery',
+    'member',
+    ({ uid, body }) => {
+      limit('gallery:' + uid, 40, HOUR)
+      const u = db.users[uid]
+      u.gallery ||= []
+      if (u.gallery.length >= GALLERY_MAX) throw new Fail(400, `You can add up to ${GALLERY_MAX}. Remove one first.`)
+      const m = /^data:image\/jpeg;base64,([A-Za-z0-9+/=]+)$/.exec(String(body.data || ''))
+      const bytes = m ? Buffer.from(m[1], 'base64') : null
+      if (!bytes || bytes.length > 700_000 || bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Fail(400, 'That picture did not work. Try another one.')
+      const title = line(body.title, 80)
+      if (!title) throw new Fail(400, 'Give it a title.')
+      const link = line(body.link, 200)
+      if (link && !/^https?:\/\/[^\s]+\.[^\s]+$/i.test(link)) throw new Fail(400, 'Use a full link, like https://example.com.')
+      const item = { id: newId(), title, caption: line(body.caption, 160), link, at: Date.now() }
+      fs.writeFileSync(galleryFile(uid, item.id), bytes)
+      u.gallery.push(item)
+      save()
+      return { user: full(u) }
+    },
+    1_000_000,
+  )
+
+  route('POST', '/api/me/gallery/:id/remove', 'member', ({ uid, params }) => {
+    const u = db.users[uid]
+    const item = (u.gallery || []).find((g) => g.id === params.id)
+    if (!item) throw new Fail(404, 'This picture is gone.')
+    u.gallery = u.gallery.filter((g) => g !== item)
+    fs.rmSync(galleryFile(uid, item.id), { force: true })
+    save()
+    return { user: full(u) }
+  })
+
+  route('GET', '/api/gallery/:uid/:id', 'open', ({ params, res }) => {
+    const u = db.users[params.uid]
+    const ok = /^[\w-]+$/.test(params.uid) && /^[\w-]+$/.test(params.id) && u?.gallery?.some((g) => g.id === params.id)
+    const file = galleryFile(params.uid, params.id)
+    if (!ok || !fs.existsSync(file)) throw new Fail(404, 'No picture.')
+    res.setHeader('Content-Type', 'image/jpeg')
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+    fs.createReadStream(file).pipe(res)
+  })
+
   // Your right to a copy of your data (Data Privacy Act): everything we keep about you, in one file.
   route('GET', '/api/me/export', 'auth', ({ uid }) => {
     limit('export:' + uid, 10, HOUR)
@@ -645,7 +697,7 @@ export function createApi({ dataDir, dev = false }) {
     const links = Object.entries(db.links).filter(([, l]) => l.from === uid || l.to === uid)
     return {
       exportedAt: new Date().toISOString(),
-      note: 'Everything BlueLink keeps about you. We keep a coded version of your email, not the email.',
+      note: 'Everything blueLink keeps about you. We keep a coded version of your email, not the email.',
       profile: { ...u, photo: u.photo ? `/api/photo/${uid}` : null },
       posts: db.posts.filter((p) => p.uid === uid).map((p) => ({ id: p.id, kind: p.kind, text: p.text, at: p.at, event: p.event ?? null })),
       comments: db.posts.flatMap((p) => p.comments.filter((c) => c.uid === uid).map((c) => ({ postId: p.id, text: c.text, at: c.at }))),
@@ -661,6 +713,7 @@ export function createApi({ dataDir, dev = false }) {
   })
 
   route('POST', '/api/me/delete', 'auth', ({ uid }) => {
+    for (const g of db.users[uid]?.gallery || []) fs.rmSync(galleryFile(uid, g.id), { force: true })
     delete db.users[uid]
     db.posts = db.posts.filter((p) => p.uid !== uid)
     for (const p of db.posts) {

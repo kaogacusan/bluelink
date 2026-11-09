@@ -1462,6 +1462,266 @@ textarea.input {
 .section .fine {
   margin-bottom: 2px;
 }
+/* ============ Portfolio ============ */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.section-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px 14px;
+  margin-top: 14px;
+}
+.gallery-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  color: var(--text);
+  cursor: pointer;
+}
+.gallery-frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 7px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-bar);
+  background: var(--surface);
+}
+.gallery-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.4s var(--ease-out);
+}
+.gallery-tile:hover .gallery-frame img {
+  transform: scale(1.025);
+}
+.gallery-tile:hover .gallery-frame,
+.gallery-tile:focus-visible .gallery-frame {
+  border-color: var(--line-strong);
+}
+.gallery-tile b {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gallery-caption {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+.gallery-tile.is-add .gallery-frame {
+  align-content: center;
+  gap: 6px;
+  border-style: dashed;
+  border-color: var(--line-strong);
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.gallery-tile.is-add:hover .gallery-frame {
+  border-color: var(--blue);
+  color: var(--accent-text);
+}
+.gallery-tile.is-add svg {
+  font-size: 20px;
+}
+.gallery-drop {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 180px;
+  max-height: 300px;
+  overflow: hidden;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-bar);
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.gallery-drop svg {
+  font-size: 28px;
+}
+.gallery-drop.has-pic {
+  border-style: solid;
+  background: #03050d;
+}
+.gallery-drop img {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+.gallery-drop:hover {
+  border-color: var(--blue);
+}
+@media (max-width: 640px) {
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 10px;
+  }
+}
+
+/* Full view. Always the night sky, so every picture sits on the same dark field. */
+.viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--void);
+  color: #eef1fa;
+  animation: fadeIn 0.2s var(--ease);
+}
+.viewer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 6px 24px;
+}
+.viewer-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: rgba(238, 241, 250, 0.55);
+}
+.viewer-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  padding: 8px 76px;
+}
+.viewer-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border: 1px solid rgba(170, 185, 255, 0.12);
+  animation: fadeIn 0.25s var(--ease);
+}
+.viewer-btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(170, 185, 255, 0.16);
+  border-radius: var(--r-control);
+  background: rgba(7, 12, 31, 0.6);
+  color: #eef1fa;
+  font-size: 16px;
+  cursor: pointer;
+}
+.viewer-btn:hover {
+  border-color: rgba(170, 185, 255, 0.4);
+  background: rgba(58, 95, 255, 0.18);
+}
+.viewer-btn.is-side {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.viewer-btn.is-prev {
+  left: 20px;
+}
+.viewer-btn.is-next {
+  right: 20px;
+}
+.viewer-info {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 24px 24px;
+}
+.viewer-info b {
+  font-size: 17px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+.viewer-info p {
+  margin-top: 3px;
+  max-width: 640px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(238, 241, 250, 0.68);
+}
+.viewer-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+}
+.viewer .btn-outline {
+  border-color: rgba(170, 185, 255, 0.24);
+  background: transparent;
+  color: #eef1fa;
+}
+.viewer .btn-outline:hover {
+  border-color: rgba(170, 185, 255, 0.5);
+  background: rgba(58, 95, 255, 0.14);
+}
+@media (max-width: 640px) {
+  .viewer-top {
+    padding: 10px 10px 4px 16px;
+  }
+  .viewer-stage {
+    padding: 4px 16px;
+  }
+  .viewer-btn.is-side {
+    top: auto;
+    bottom: 8px;
+    transform: none;
+  }
+  .viewer-btn.is-prev {
+    left: auto;
+    right: 64px;
+  }
+  .viewer-btn.is-next {
+    right: 16px;
+  }
+  .viewer-stage {
+    padding-bottom: 60px;
+  }
+  .viewer-info {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 16px 20px;
+  }
+}
+
 .about {
   white-space: pre-wrap;
   overflow-wrap: anywhere;
