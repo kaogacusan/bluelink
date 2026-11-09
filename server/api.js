@@ -2,8 +2,8 @@ import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
 import { isSchoolEmail } from '../shared/school.js'
-import { KINDS, OPEN_TO, ORG_CATEGORIES, REPORT_REASONS, ROLES, SCHOOLS } from '../shared/options.js'
-import { MEMBERSHIP } from '../shared/membership.js'
+import { KINDS, LEVELS, OPEN_TO, ORG_CATEGORIES, REPORT_REASONS, ROLES, SCHOOLS } from '../shared/options.js'
+import { MEMBERSHIP, LIFETIME_UNTIL, PLANS, planById, isLifetime } from '../shared/membership.js'
 import { LEGAL } from '../shared/legal.js'
 import { openStore } from './store.js'
 import { createDemo } from './seed.js'
@@ -16,6 +16,7 @@ const REPORTS_TO_HIDE = 3
 const OPEN_IDS = new Set(OPEN_TO.map((o) => o.id))
 const SCHOOL_IDS = new Set(SCHOOLS.map((s) => s.id))
 const ROLE_IDS = new Set(ROLES.map((r) => r.id))
+const LEVEL_IDS = new Set(LEVELS.map((l) => l.id))
 const KIND_IDS = new Set(KINDS.map((k) => k.id))
 const REASON_IDS = new Set(REPORT_REASONS.map((r) => r.id))
 const CATEGORY_IDS = new Set(ORG_CATEGORIES.map((c) => c.id))
@@ -181,6 +182,7 @@ export function createApi({ dataDir, dev = false }) {
       role: u.role,
       school: u.school,
       course: u.course,
+      level: u.level || '',
       year: u.year,
       headline: u.headline,
       openTo: u.openTo,
@@ -190,7 +192,7 @@ export function createApi({ dataDir, dev = false }) {
 
   const full = (u) => ({ ...card(u), about: u.about, skills: u.skills, createdAt: u.createdAt })
 
-  // ---- membership: one price, one tier. Everyone inside paid the same.
+  // ---- membership: two plans, one tier. Everyone inside gets the same app.
   function membershipOf(uid) {
     const u = db.users[uid]
     const last = u?.payment ? db.payments.find((p) => p.id === u.payment) : null
@@ -201,7 +203,7 @@ export function createApi({ dataDir, dev = false }) {
       via: free ? 'admin' : u?.via || null,
       status: last?.status || null,
       ref: last?.ref || '',
-      price: MEMBERSHIP.price,
+      lifetime: !free && isLifetime(u?.until),
     }
   }
 
@@ -350,7 +352,9 @@ export function createApi({ dataDir, dev = false }) {
       role,
       school: SCHOOL_IDS.has(body.school) ? body.school : '',
       course: line(body.course, 80),
-      year: role !== 'faculty' && Number.isInteger(year) && year >= 1960 && year <= 2035 ? year : null,
+      // Students give a year level. Alums give the year they finished.
+      level: role === 'student' && LEVEL_IDS.has(body.level) ? body.level : '',
+      year: role === 'alum' && Number.isInteger(year) && year >= 1960 && year <= 2035 ? year : null,
       headline: line(body.headline, 140),
       about: block(body.about, 1200),
       openTo: [...new Set((Array.isArray(body.openTo) ? body.openTo : []).filter((id) => OPEN_IDS.has(id)))],
@@ -428,7 +432,7 @@ export function createApi({ dataDir, dev = false }) {
     return { token: tokenFor(uid), isNew, prefill: { name: line(g.name, 60) || nameFromEmail(email) } }
   })
 
-  route('GET', '/api/config', 'open', () => ({ googleClientId, price: MEMBERSHIP.price, dev }))
+  route('GET', '/api/config', 'open', () => ({ googleClientId, plans: PLANS, dev }))
 
   // ---- membership
   route('GET', '/api/membership', 'profile', ({ uid }) => ({
@@ -442,11 +446,12 @@ export function createApi({ dataDir, dev = false }) {
     const ref = String(body.ref || '').replace(/\D/g, '')
     if (ref.length < 10 || ref.length > 20) throw new Fail(400, 'Type the reference number from your GCash receipt.')
     if (db.payments.some((p) => p.ref === ref && p.status !== 'rejected')) throw new Fail(400, 'This reference number was already used.')
+    const plan = planById(body.plan)
     const u = db.users[uid]
-    const pay = { id: newId(), uid, ref, amount: MEMBERSHIP.price, at: Date.now(), status: 'pending', prevUntil: u.until || 0, prevVia: u.via || null }
+    const pay = { id: newId(), uid, ref, plan: plan.id, amount: plan.price, at: Date.now(), status: 'pending', prevUntil: u.until || 0, prevVia: u.via || null }
     db.payments.push(pay)
     // Trust first: you get in right away. An admin checks the payment later.
-    u.until = Math.max(u.until || 0, Date.now()) + MEMBERSHIP.days * DAY
+    u.until = plan.days ? Math.max(u.until || 0, Date.now()) + plan.days * DAY : LIFETIME_UNTIL
     u.via = 'gcash'
     u.payment = pay.id
     save()
@@ -464,7 +469,7 @@ export function createApi({ dataDir, dev = false }) {
     c.used.push(uid)
     const u = db.users[uid]
     // Time from a code adds on top of any time you already have, so a paid voucher is never wasted.
-    u.until = Math.max(u.until || 0, Date.now()) + (c.days ?? MEMBERSHIP.foundingDays) * DAY
+    if (!isLifetime(u.until)) u.until = Math.max(u.until || 0, Date.now()) + (c.days ?? MEMBERSHIP.codeDays) * DAY
     u.via = 'code'
     u.payment = null
     save()
@@ -485,7 +490,7 @@ export function createApi({ dataDir, dev = false }) {
         earned: db.payments.filter((p) => p.status === 'approved').reduce((s, p) => s + p.amount, 0),
       },
       payments: [...pending, ...done].slice(0, 100).map((p) => ({ id: p.id, ref: p.ref, amount: p.amount, at: p.at, status: p.status, user: who(p.uid) })),
-      codes: Object.entries(db.codes).map(([code, c]) => ({ code, max: c.max, used: c.used.length, days: c.days ?? MEMBERSHIP.foundingDays, createdAt: c.createdAt })),
+      codes: Object.entries(db.codes).map(([code, c]) => ({ code, max: c.max, used: c.used.length, days: c.days ?? MEMBERSHIP.codeDays, createdAt: c.createdAt })),
       gcash: { name: db.settings.gcashName || '', number: db.settings.gcashNumber || '' },
       reports: db.reports
         .slice(-30)
@@ -520,15 +525,12 @@ export function createApi({ dataDir, dev = false }) {
     return { ok: true }
   })
 
-  // A code gives one semester (a voucher someone paid for) or one school year (a founding member).
-  const codeDays = (kind) => (kind === 'semester' ? MEMBERSHIP.days : MEMBERSHIP.foundingDays)
-
   route('POST', '/api/admin/codes', 'admin', ({ body }) => {
     const code = line(body.code, 24).toUpperCase()
     const max = Math.min(Math.max(Number(body.max) || 1, 1), 1000)
     if (!/^[A-Z0-9-]{3,24}$/.test(code)) throw new Fail(400, 'Use 3 to 24 letters, numbers, or dashes.')
     if (db.codes[code]) throw new Fail(400, 'That code already exists.')
-    db.codes[code] = { max, used: [], days: codeDays(body.kind), createdAt: Date.now() }
+    db.codes[code] = { max, used: [], days: MEMBERSHIP.codeDays, createdAt: Date.now() }
     save()
     return { ok: true }
   })
@@ -536,7 +538,7 @@ export function createApi({ dataDir, dev = false }) {
   // One-use codes for printed voucher cards. Each card gets its own code, so a code cannot be passed around.
   route('POST', '/api/admin/codes/batch', 'admin', ({ body }) => {
     const count = Math.min(Math.max(Number(body.count) || 0, 1), 500)
-    const days = codeDays(body.kind)
+    const days = MEMBERSHIP.codeDays
     const ABC = 'ACDEFGHJKMNPQRTUVWXY34679' // no 0/O, 1/I/L, 2/Z, 5/S, 8/B: easy to read off a card
     const made = []
     while (made.length < count) {

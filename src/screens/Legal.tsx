@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Logo } from '../components/Logo'
 import { LEGAL, RULES } from '../../shared/legal.js'
-import { MEMBERSHIP } from '../../shared/membership.js'
+import { MEMBERSHIP, PLANS } from '../../shared/membership.js'
 
 type Doc = 'privacy' | 'terms'
 type Section = { title: string; body: ReactNode }
@@ -159,9 +159,10 @@ const TERMS: Section[] = [
     body: (
       <ul>
         <li>
-          ₱{MEMBERSHIP.price} gives you {MEMBERSHIP.days} days, about one semester. It does not renew by itself.
+          ₱{PLANS[0].price} gives you {PLANS[0].days} days. It does not renew by itself.
         </li>
-        <li>A voucher code gives the time printed on the card. A founding member code gives {MEMBERSHIP.foundingDays} days.</li>
+        <li>₱{PLANS[1].price} gives you a lifetime membership. Lifetime means for as long as BlueLink runs. You pay one time.</li>
+        <li>A voucher code gives the time printed on the card. A founding member code gives {MEMBERSHIP.codeDays} days.</li>
         <li>Everyone gets the same features. There is no premium tier.</li>
       </ul>
     ),
@@ -180,7 +181,7 @@ const TERMS: Section[] = [
     body: (
       <ul>
         <li>
-          Changed your mind? Ask within {LEGAL.refundDays} days of paying and we refund the full ₱{MEMBERSHIP.price}. Write to {LEGAL.contact}.
+          Changed your mind? Ask within {LEGAL.refundDays} days of paying and we refund the full amount you paid. Write to {LEGAL.contact}.
         </li>
         <li>If BlueLink closes before your time runs out, we refund the unused part.</li>
         <li>If we remove you for breaking the rules, we do not refund you.</li>

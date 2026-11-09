@@ -6,7 +6,6 @@ import { useLive } from '../lib/live'
 import { href } from '../lib/router'
 import { ago } from '../lib/format'
 import { REPORT_REASONS } from '../../shared/options.js'
-import { MEMBERSHIP } from '../../shared/membership.js'
 import type { Person } from '../types'
 
 type AdminData = {
@@ -75,11 +74,11 @@ export function Admin() {
     }
   }
 
-  // Voucher cards for the booth: one code per card, each worth one semester.
+  // Voucher cards for the booth: one code per card, each worth one year.
   async function makeCards(e: FormEvent) {
     e.preventDefault()
     try {
-      const r = await api<{ codes: string[] }>('/api/admin/codes/batch', { count: Number(count), kind: 'semester' })
+      const r = await api<{ codes: string[] }>('/api/admin/codes/batch', { count: Number(count) })
       setCards(r.codes)
       reload()
     } catch (err) {
@@ -161,7 +160,7 @@ export function Admin() {
 
       <section className="card section">
         <h2>Voucher cards</h2>
-        <p className="fine">Makes one-use codes worth one semester each, for the printed cards sold at the booth. Save the file and print it with the booth kit. Keep it private: each code is money.</p>
+        <p className="fine">Makes one-use codes worth one year each, for the printed cards sold at the booth. Save the file and print it with the booth kit. Keep it private: each code is money.</p>
         <form className="admin-form" onSubmit={makeCards}>
           <input className="input is-num" type="number" min={1} max={500} value={count} onChange={(e) => setCount(e.target.value)} aria-label="How many cards" />
           <button className="btn btn-primary">Make codes</button>
@@ -175,7 +174,7 @@ export function Admin() {
 
       <section className="card section">
         <h2>Founding member codes</h2>
-        <p className="fine">A code lets people in free for a full school year. Give it to the first members you invite.</p>
+        <p className="fine">A code lets people in free for one year. Give it to the first members you invite.</p>
         <form className="admin-form" onSubmit={addCode}>
           <input className="input" value={code} placeholder="e.g. FOUNDERS" onChange={(e) => setCode(e.target.value.toUpperCase())} aria-label="New code" />
           <input className="input is-num" type="number" min={1} max={1000} value={max} onChange={(e) => setMax(e.target.value)} aria-label="How many people can use it" />
@@ -190,7 +189,7 @@ export function Admin() {
                 <div>
                   <b className="mono">{c.code}</b>
                   <span>
-                    {c.used} of {c.max} used · {c.days === MEMBERSHIP.days ? '1 semester' : '1 year'}
+                    {c.used} of {c.max} used · {c.days === 365 ? '1 year' : `${c.days} days`}
                   </span>
                 </div>
               </div>
@@ -204,7 +203,7 @@ export function Admin() {
 
       <section className="card section">
         <h2>GCash details</h2>
-        <p className="fine">People send their ₱50 here. They see this on the pay screen.</p>
+        <p className="fine">People send their payment here. They see this on the pay screen.</p>
         <GcashForm start={data.gcash} onSaved={reload} />
       </section>
 

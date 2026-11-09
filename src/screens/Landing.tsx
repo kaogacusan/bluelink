@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { ArrowRight } from '@phosphor-icons/react/dist/csr/ArrowRight'
-import { Handshake } from '@phosphor-icons/react/dist/csr/Handshake'
-import { LockSimple } from '@phosphor-icons/react/dist/csr/LockSimple'
+import { ThumbsUp } from '@phosphor-icons/react/dist/csr/ThumbsUp'
+import { ChatCircle } from '@phosphor-icons/react/dist/csr/ChatCircle'
 import { Logo } from '../components/Logo'
 import { Avatar } from '../components/Avatar'
 import { HeroGraph } from '../components/Network'
@@ -10,18 +10,18 @@ import { api, session, useFetch } from '../lib/api'
 import { save } from '../lib/storage'
 import { OPEN_TO } from '../../shared/options.js'
 import { SCHOOL, isSchoolEmail } from '../../shared/school.js'
-import { MEMBERSHIP } from '../../shared/membership.js'
+import { PLANS } from '../../shared/membership.js'
 import { LEGAL, RULES } from '../../shared/legal.js'
 
 const WHY = [
-  { title: 'Your posts stay in the room', text: 'Only Ateneans who joined can see them. Nothing goes on Facebook or LinkedIn.' },
-  { title: 'Everyone here chose to join', text: 'Members pay to be here, so they come to connect, not to scroll.' },
-  { title: 'Safe to ask', text: 'Say you are open for work, need a mentor, or want an intro. Report and block are on every profile.' },
+  { title: 'Exclusive access for Ateneans', text: 'Only Ateneans can join. Your posts stay inside BlueLink.' },
+  { title: 'For people who want to network', text: 'Everyone here joined to meet people and find opportunities, not to scroll.' },
+  { title: 'A safe space for networking', text: 'Ask for work, a mentor, or an intro. Report and block are on every profile.' },
 ]
 
 const STEPS = [
   { title: 'Sign in with your Ateneo account', text: 'One tap with Google. We never show or keep your email.' },
-  { title: `Pay ₱${MEMBERSHIP.price} with GCash`, text: `You get in right away. It covers ${MEMBERSHIP.days} days, about one semester. Full refund within ${LEGAL.refundDays} days.` },
+  { title: 'Pay the membership fee', text: `You get in right away. Full refund within ${LEGAL.refundDays} days.` },
   { title: 'Post, ask, and connect', text: 'Find people by course, skill, or what they are open to, and say hi.' },
 ]
 
@@ -57,7 +57,7 @@ function finish(r: SignedIn) {
 }
 
 function SignInForm() {
-  const config = useFetch<{ googleClientId: string; price: number }>('/api/config')
+  const config = useFetch<{ googleClientId: string }>('/api/config')
   const google = config.data?.googleClientId
   const [step, setStep] = useState<'start' | 'email' | 'code'>('start')
   const [email, setEmail] = useState('')
@@ -107,7 +107,7 @@ function SignInForm() {
 
   const fine = (
     <p className="l-fine">
-      {MEMBERSHIP.label}. {LEGAL.minAge}+ only. By joining, you agree to the <a href="#/terms">Terms</a> and the <a href="#/privacy">Privacy Notice</a>.
+      By joining, you agree to the <a href="#/terms">Terms</a> and the <a href="#/privacy">Privacy Notice</a>.
     </p>
   )
 
@@ -184,50 +184,50 @@ function SignInForm() {
 }
 
 // What it looks like: an "Open for work" post that only members can see, and two replies.
+// It copies a real feed post, so people see the actual product, not a mockup.
 function Preview() {
-  const sam = { uid: 'demo-sam', name: 'Sam Cruz', photo: null }
-  const migs = { uid: 'demo-migs', name: 'Migs Reyes', photo: null }
-  const paolo = { uid: 'demo-paolo', name: 'Paolo Lim', photo: null }
+  const sam = { uid: 'demo-sam5', name: 'Sam Cruz', photo: null }
+  const migs = { uid: 'demo-migs5', name: 'Migs Reyes', photo: null }
+  const paolo = { uid: 'demo-paolo3', name: 'Paolo Lim', photo: null }
   return (
     <div className="l-visual" aria-hidden>
       <div className="card l-card">
-        <i className="plate is-tl" />
-        <i className="plate is-tr" />
-        <i className="plate is-bl" />
-        <i className="plate is-br" />
-        <p className="l-card-tag">
-          <span>Example post</span>
-          <span>Members only</span>
-        </p>
         <div className="l-card-top">
-          <Avatar person={sam} size={52} />
+          <Avatar person={sam} size={44} />
           <div>
             <b>Sam Cruz</b>
-            <span>AB Communication &rsquo;29 · 2h</span>
+            <span>
+              AB Communication &rsquo;29 · 2h
+            </span>
           </div>
         </div>
-        <p className="post-kind">
-          <Handshake weight="bold" /> Open for work
+        <p className="post-kind kind-work">
+          <i className="l-live" /> Open for work
         </p>
         <p className="l-card-headline">I edit videos for orgs and small brands. Reels, event recaps, and interviews. Looking for paid projects this break.</p>
+        <p className="l-card-stats">
+          <span>
+            <ThumbsUp weight="bold" /> 14
+          </span>
+          <span>
+            <ChatCircle weight="bold" /> 2
+          </span>
+        </p>
         <div className="l-replies">
           <div className="l-reply">
-            <Avatar person={migs} size={30} />
+            <Avatar person={migs} size={28} />
             <p>
               <b>Migs Reyes</b> Sent you a message. We need a reel for our launch.
             </p>
           </div>
           <div className="l-reply">
-            <Avatar person={paolo} size={30} />
+            <Avatar person={paolo} size={28} />
             <p>
               <b>Paolo Lim</b> Saving this. My team needs an editor next month.
             </p>
           </div>
         </div>
       </div>
-      <p className="l-lock">
-        <LockSimple weight="bold" /> Only BlueLink members can see this post.
-      </p>
     </div>
   )
 }
@@ -246,13 +246,10 @@ export function Landing() {
 
         <section className="l-hero">
           <div className="l-copy">
-            <p className="l-kicker">
-              <i /> Members only · For {SCHOOL.people}
-            </p>
             <h1>
-              The private network where asking is <em>normal.</em>
+              Welcome to <em>Atenean Networking</em>
             </h1>
-            <p className="l-sub">Ask for work, find a mentor, or offer what you are good at. Only {SCHOOL.people} who join can see your posts.</p>
+            <p className="l-sub">Find opportunities, network with each other. Exclusive for the {SCHOOL.short} Community.</p>
             <SignInForm />
           </div>
           <Preview />
@@ -276,13 +273,16 @@ export function Landing() {
 
       <section className="l-band">
         <div className="l-band-inner">
-          <p className="l-price">
-            <b>₱{MEMBERSHIP.price}</b>
-            <span>per semester</span>
-          </p>
+          <div className="l-plans">
+            {PLANS.map((p) => (
+              <p key={p.id} className="l-price">
+                <b>₱{p.price}</b>
+                <span>{p.name}</span>
+              </p>
+            ))}
+          </div>
           <div>
-            <h2>One price. Everyone gets the same thing.</h2>
-            <p>No badges, no ranks, no premium tier. The price keeps the room small and serious.</p>
+            <h2>Both plans get everything.</h2>
             <ul className="tags is-lg">
               {OPEN_TO.map((o) => (
                 <li key={o.id} className="tag">

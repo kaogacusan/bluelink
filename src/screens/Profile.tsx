@@ -52,7 +52,9 @@ function Settings() {
           Membership
           {membership.via === 'admin'
             ? ': admin'
-            : membership.until
+            : membership.lifetime
+              ? ': lifetime'
+              : membership.until
               ? ` until ${new Date(membership.until).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })}`
               : ''}
           {membership.status === 'pending' ? ' (payment being checked)' : ''}

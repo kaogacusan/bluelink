@@ -1,7 +1,16 @@
-// One place to change the price and how long a membership lasts.
+// One place to change the prices and how long a membership lasts.
+// A lifetime membership is stored as a date far in the future, so every "until" check still works.
+export const LIFETIME_UNTIL = Date.UTC(9999, 0, 1)
+
+export const PLANS = [
+  { id: 'year', price: 99, name: '1 year', days: 365 },
+  { id: 'life', price: 250, name: 'Lifetime', days: null },
+]
+
 export const MEMBERSHIP = {
-  price: 50,
-  label: '₱50 per semester',
-  days: 150, // about one semester
-  foundingDays: 365, // founding member codes give a full school year
+  plans: PLANS,
+  codeDays: 365, // voucher cards and founding member codes give one year
 }
+
+export const planById = (id) => PLANS.find((p) => p.id === id) || PLANS[0]
+export const isLifetime = (until) => (until || 0) >= LIFETIME_UNTIL

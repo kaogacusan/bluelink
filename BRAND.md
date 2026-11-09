@@ -5,13 +5,13 @@ Everything looks like a real night sky seen from an observatory: dark, calm, exa
 
 ## Promise (UVP)
 
-- Headline: **The private network where asking is normal.**
-- Support line: Ask for work, find a mentor, or offer what you are good at. Only Ateneans who join can see your posts.
+- Headline: **Welcome to Atenean Networking**
+- Support line: Find opportunities, network with each other. Exclusive for the Ateneo Community.
 - Proof points (use 1–3, never more):
-  1. Members only. Your posts stay in the room.
-  2. Everyone here chose to join, so they come to connect, not to scroll.
-  3. Safe to ask. Report and block are on every profile.
-- Price line: **₱50 a semester.** Same for everyone. No premium tier.
+  1. Exclusive access for Ateneans. Your posts stay inside BlueLink.
+  2. For people who want to network. Everyone here joined to meet people and find opportunities.
+  3. A safe space for networking. Report and block are on every profile.
+- Price line: **₱99 for 1 year. ₱250 for lifetime.** Both plans get the same app. No premium tier.
 - Short sign-off for prints: **Find your people.**
 
 ## Legal lines (on every public piece)
@@ -21,7 +21,7 @@ Say only what is true and what the app really does. Never promise replies, jobs,
 - **Not official:** "Made by Ateneans. Not an official Ateneo de Manila University service." Never use the Ateneo seal, logo, Blue Eagle, or official marks.
 - **Age:** "18+ only. College students, alumni, and faculty."
 - **Privacy:** "We never sell your data. Privacy Notice: bluelink…/#/privacy"
-- **Money:** price, what it gives (150 days, about one semester), and "Full refund within 7 days." A voucher card also says "Not an official receipt."
+- **Money:** price, what it gives (365 days, or lifetime), and "Full refund within 7 days." A voucher card also says "Not an official receipt."
 - No fake members, fake numbers, or fake reviews. Example content is labeled "Example".
 - The facts live in `shared/legal.js`. The full text is in the app at `#/privacy` and `#/terms`.
 

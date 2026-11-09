@@ -3,7 +3,7 @@ import { Check } from '@phosphor-icons/react/dist/csr/Check'
 import { Copy } from '@phosphor-icons/react/dist/csr/Copy'
 import { Logo } from '../components/Logo'
 import { api, useFetch } from '../lib/api'
-import { MEMBERSHIP } from '../../shared/membership.js'
+import { PLANS, planById } from '../../shared/membership.js'
 import { LEGAL } from '../../shared/legal.js'
 import type { Membership } from '../types'
 
@@ -17,9 +17,10 @@ const PERKS = [
 
 const day = (ts: number) => new Date(ts).toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' })
 
-// The members-only door: pay ₱50 by GCash, or use a founding member code.
+// The members-only door: pay for 1 year or lifetime by GCash, or use a code.
 export function Join({ firstName, onJoined, onSignOut }: { firstName: string; onJoined: () => void; onSignOut: () => void }) {
   const { data } = useFetch<JoinData>('/api/membership')
+  const [planId, setPlanId] = useState(PLANS[0].id)
   const [ref, setRef] = useState('')
   const [code, setCode] = useState('')
   const [showCode, setShowCode] = useState(false)
@@ -33,13 +34,14 @@ export function Join({ firstName, onJoined, onSignOut }: { firstName: string; on
   const rejected = m?.status === 'rejected'
   const gcash = data?.gcash
   const refDigits = ref.replace(/\D/g, '')
+  const plan = planById(planId)
 
   async function pay(e: FormEvent) {
     e.preventDefault()
     setBusy(true)
     setError('')
     try {
-      await api('/api/membership/pay', { ref })
+      await api('/api/membership/pay', { ref, plan: plan.id })
       onJoined()
     } catch (err) {
       setError((err as Error).message)
@@ -80,7 +82,7 @@ export function Join({ firstName, onJoined, onSignOut }: { firstName: string; on
         <h1>{expired ? 'Renew your membership' : `Last step${firstName ? `, ${firstName}` : ''}.`}</h1>
         <p className="lead">
           {expired ? `Your membership ended on ${day(m!.until)}. ` : ''}
-          BlueLink is members only. It is {MEMBERSHIP.label}, the same for everyone.
+          BlueLink is members only. Pick 1 year or lifetime. Both get the same app.
         </p>
 
         <ul className="perks">
@@ -98,7 +100,14 @@ export function Join({ firstName, onJoined, onSignOut }: { firstName: string; on
         )}
 
         <section className="card pay-card">
-          <h2>Pay ₱{MEMBERSHIP.price} with GCash</h2>
+          <h2>Pay with GCash</h2>
+          <div className="picker plan-picker" role="radiogroup" aria-label="Plan">
+            {PLANS.map((p) => (
+              <button key={p.id} type="button" role="radio" aria-checked={p.id === plan.id} className={`pick ${p.id === plan.id ? 'is-on' : ''}`} onClick={() => setPlanId(p.id)}>
+                {p.name} <b>₱{p.price}</b>
+              </button>
+            ))}
+          </div>
           {gcash?.number ? (
             <form onSubmit={pay}>
               <ol className="pay-steps">
@@ -106,7 +115,7 @@ export function Join({ firstName, onJoined, onSignOut }: { firstName: string; on
                   <span className="pay-num">1</span>
                   <div>
                     <p>
-                      Send <b>₱{MEMBERSHIP.price}</b> to this GCash number.
+                      Send <b>₱{plan.price}</b> to this GCash number.
                     </p>
                     <div className="gcash">
                       <div>
@@ -137,7 +146,7 @@ export function Join({ firstName, onJoined, onSignOut }: { firstName: string; on
               </ol>
               {error && <p className="form-error">{error}</p>}
               <button className="btn btn-primary btn-lg btn-block" disabled={busy || refDigits.length < 10}>
-                I paid ₱{MEMBERSHIP.price}. Let me in.
+                I paid ₱{plan.price}. Let me in.
               </button>
               <p className="fine pay-fine">
                 You get in right away. We check every payment within a day. Changed your mind? Full refund within {LEGAL.refundDays} days. By paying, you agree to the{' '}
