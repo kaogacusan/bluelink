@@ -39,7 +39,7 @@ export const F = {
   privacy: 'bluelink.example/#/privacy',
   terms: 'bluelink.example/#/terms',
   headline: ['Welcome to', 'Atenean', '*Networking*'],   // *word* = the one blue word
-  support: 'Ask for work, find a mentor, or offer what you are good at.',
+  support: 'Find work, find a mentor, or offer what you are good at.',
   signoff: ['Find your', '*people.*'],
   // Prices from ~/BlueLink/shared/membership.js. Both plans get the same app.
   price: '₱99',
@@ -79,8 +79,8 @@ export const F = {
   once: 'Code works once.',
   // The voucher card. The front reads like a paid plan. Real codes never go in assets/ (the site is public):
   // `npm run cards -- <codes.txt>` makes a private PDF next to the codes file.
-  // Real codes look like BL-ACDE-FGHJ (easy-to-read letters and digits). The public sample shows this one, marked SAMPLE.
-  sampleCode: 'BL-ACDE-FGHJ',
+  // Real codes look like ACD-FGH (easy-to-read letters and digits). The public sample shows this one, marked SAMPLE.
+  sampleCode: 'ACD-FGH',
 };
 
 // Passes a voucher can be for. In the app each code works once and adds its days on top of any time already left.
@@ -98,23 +98,21 @@ export const URLS = {
   terms: 'https://bluelink.example/#/terms',
 };
 
-// Catalog labels next to constellation stars. Things people ask for, never made-up members.
-export const LABELS = ['Open for work', 'Find a mentor', 'Ask for an intro', 'Study buddies'];
+// Catalog labels next to constellation stars. Things people look for, never made-up members.
+export const LABELS = ['Open for work', 'Find a mentor', 'Get an intro', 'Internships'];
 
 // Hooks: one short question for the hook flyers and the Instagram posts. *word* = the one blue word.
 // sub = one short line, only when the question needs it. cap = the Instagram caption. flyer = also a hook flyer.
 // Never a promise of replies, jobs, or results.
 export const HOOKS = [
   { id: 'want-connections', q: ['Want', '*connections?*'], flyer: true, cap: 'BlueLink is a private network for Ateneans. Students, alumni, and faculty.' },
-  { id: 'need-a-mentor', q: ['Need a', '*mentor?*'], sub: 'Ask an upperclassman.', flyer: true, cap: 'Someone has already been where you are. Ask them on BlueLink.' },
+  { id: 'need-a-mentor', q: ['Need a', '*mentor?*'], sub: 'Meet an upperclassman.', flyer: true, cap: 'Someone has already been where you are. Find them on BlueLink.' },
   { id: 'shy-to-network', q: ['Shy to', '*network?*'], sub: 'Everyone here joined to meet people.', flyer: true, cap: 'No cold DMs to strangers. Everyone on BlueLink is here to meet people.' },
-  { id: 'need-an-intro', q: ['Need an', '*intro?*'], sub: 'Ask for one.', cap: 'Know who you want to meet? Ask an Atenean who knows them.' },
+  { id: 'need-an-intro', q: ['Need an', '*intro?*'], sub: 'Get one here.', cap: 'Know who you want to meet? Find an Atenean who knows them.' },
   { id: 'open-for-work', q: ['Open for', '*work?*'], sub: 'Tell other Ateneans.', flyer: true, cap: 'Put “Open for work” on your profile. Only Ateneans can see it.' },
   { id: 'good-at-something', q: ['Good at', '*something?*'], sub: 'Offer it to other Ateneans.', cap: 'Design, code, edit, tutor. Offer it on BlueLink.' },
-  { id: 'study-buddy', q: ['Need a', 'study *buddy?*'], flyer: true, cap: 'Same subject, same week of hell. Find someone to study with.' },
   { id: 'co-founder', q: ['Your co-founder', 'could be in', 'your *block.*'], cap: 'The person you need might be one block over. Find them on BlueLink.' },
   { id: 'only-ateneans', q: ['Networking,', 'only for', '*Ateneans.*'], cap: 'Sign in with your Ateneo email. Your posts stay inside BlueLink.' },
-  { id: 'thesis-partner', q: ['Looking for a', 'thesis *partner?*'], cap: 'Post what your thesis needs. Ask who wants in.' },
   { id: 'startup', q: ['Building a', '*startup?*'], sub: 'Find your team here.', flyer: true, cap: 'Find a co-founder, a designer, or a first user. All Ateneans.' },
   { id: 'find-your-people', q: ['Find your', '*people.*'], cap: 'BlueLink. A private network for Ateneans.' },
 ];

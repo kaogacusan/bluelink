@@ -314,7 +314,7 @@
      "look": "v1",
      "note": "The question, the QR, and the price on the night sky. The back is the flyer back.",
      "pdf": "/assets/print/booth/hook-need-a-mentor/v1.pdf",
-     "pdfKb": 182,
+     "pdfKb": 183,
      "jpg": [
       "/assets/print/booth/hook-need-a-mentor/v1-1.jpg",
       "/assets/print/booth/hook-need-a-mentor/v1-2.jpg"
@@ -333,7 +333,7 @@
      "look": "v2",
      "note": "The same on light paper.",
      "pdf": "/assets/print/booth/hook-need-a-mentor/v2.pdf",
-     "pdfKb": 139,
+     "pdfKb": 140,
      "jpg": [
       "/assets/print/booth/hook-need-a-mentor/v2-1.jpg",
       "/assets/print/booth/hook-need-a-mentor/v2-2.jpg"
@@ -512,80 +512,6 @@
      "t": [
       "/assets/print/booth/hook-open-for-work/v3-1.t.jpg",
       "/assets/print/booth/hook-open-for-work/v3-2.t.jpg"
-     ]
-    }
-   ]
-  },
-  {
-   "id": "hook-study-buddy",
-   "piece": "flyers",
-   "name": "Flyer: “Need a study buddy?”",
-   "size": "A6, 105 × 148 mm, two sides",
-   "mm": [
-    105,
-    148
-   ],
-   "pages": [
-    "Front",
-    "Back"
-   ],
-   "print": "Print 4 per A4 sheet, both sides (flip on the long edge), then cut. 120 gsm or more.",
-   "versions": [
-    {
-     "id": "v1",
-     "look": "v1",
-     "note": "The question, the QR, and the price on the night sky. The back is the flyer back.",
-     "pdf": "/assets/print/booth/hook-study-buddy/v1.pdf",
-     "pdfKb": 176,
-     "jpg": [
-      "/assets/print/booth/hook-study-buddy/v1-1.jpg",
-      "/assets/print/booth/hook-study-buddy/v1-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-study-buddy/v1-1.m.jpg",
-      "/assets/print/booth/hook-study-buddy/v1-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-study-buddy/v1-1.t.jpg",
-      "/assets/print/booth/hook-study-buddy/v1-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v2",
-     "look": "v2",
-     "note": "The same on light paper.",
-     "pdf": "/assets/print/booth/hook-study-buddy/v2.pdf",
-     "pdfKb": 128,
-     "jpg": [
-      "/assets/print/booth/hook-study-buddy/v2-1.jpg",
-      "/assets/print/booth/hook-study-buddy/v2-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-study-buddy/v2-1.m.jpg",
-      "/assets/print/booth/hook-study-buddy/v2-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-study-buddy/v2-1.t.jpg",
-      "/assets/print/booth/hook-study-buddy/v2-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v3",
-     "look": "v3",
-     "note": "Only the question, bigger, and the QR.",
-     "pdf": "/assets/print/booth/hook-study-buddy/v3.pdf",
-     "pdfKb": 166,
-     "jpg": [
-      "/assets/print/booth/hook-study-buddy/v3-1.jpg",
-      "/assets/print/booth/hook-study-buddy/v3-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-study-buddy/v3-1.m.jpg",
-      "/assets/print/booth/hook-study-buddy/v3-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-study-buddy/v3-1.t.jpg",
-      "/assets/print/booth/hook-study-buddy/v3-2.t.jpg"
      ]
     }
    ]
@@ -860,7 +786,7 @@
    "id": "insta",
    "piece": "insta",
    "name": "Instagram posts",
-   "size": "1080 × 1350 px (4:5), 12 posts",
+   "size": "1080 × 1350 px (4:5), 10 posts",
    "mm": [
     285.75,
     357.1875
@@ -873,10 +799,8 @@
     "Need an intro?",
     "Open for work?",
     "Good at something?",
-    "Need a study buddy?",
     "Your co-founder could be in your block.",
     "Networking, only for Ateneans.",
-    "Looking for a thesis partner?",
     "Building a startup?",
     "Find your people."
    ],
@@ -887,7 +811,7 @@
      "look": "v1",
      "note": "The night sky: the question top left, a constellation, the logo, and “Link in bio”.",
      "pdf": "/assets/print/booth/insta/v1.pdf",
-     "pdfKb": 1756,
+     "pdfKb": 1485,
      "jpg": [
       "/assets/print/booth/insta/v1-1.jpg",
       "/assets/print/booth/insta/v1-2.jpg",
@@ -898,9 +822,7 @@
       "/assets/print/booth/insta/v1-7.jpg",
       "/assets/print/booth/insta/v1-8.jpg",
       "/assets/print/booth/insta/v1-9.jpg",
-      "/assets/print/booth/insta/v1-10.jpg",
-      "/assets/print/booth/insta/v1-11.jpg",
-      "/assets/print/booth/insta/v1-12.jpg"
+      "/assets/print/booth/insta/v1-10.jpg"
      ],
      "m": [
       "/assets/print/booth/insta/v1-1.m.jpg",
@@ -912,9 +834,7 @@
       "/assets/print/booth/insta/v1-7.m.jpg",
       "/assets/print/booth/insta/v1-8.m.jpg",
       "/assets/print/booth/insta/v1-9.m.jpg",
-      "/assets/print/booth/insta/v1-10.m.jpg",
-      "/assets/print/booth/insta/v1-11.m.jpg",
-      "/assets/print/booth/insta/v1-12.m.jpg"
+      "/assets/print/booth/insta/v1-10.m.jpg"
      ],
      "t": [
       "/assets/print/booth/insta/v1-1.t.jpg",
@@ -926,9 +846,7 @@
       "/assets/print/booth/insta/v1-7.t.jpg",
       "/assets/print/booth/insta/v1-8.t.jpg",
       "/assets/print/booth/insta/v1-9.t.jpg",
-      "/assets/print/booth/insta/v1-10.t.jpg",
-      "/assets/print/booth/insta/v1-11.t.jpg",
-      "/assets/print/booth/insta/v1-12.t.jpg"
+      "/assets/print/booth/insta/v1-10.t.jpg"
      ]
     },
     {
@@ -936,7 +854,7 @@
      "look": "v2",
      "note": "The same on light paper.",
      "pdf": "/assets/print/booth/insta/v2.pdf",
-     "pdfKb": 450,
+     "pdfKb": 386,
      "jpg": [
       "/assets/print/booth/insta/v2-1.jpg",
       "/assets/print/booth/insta/v2-2.jpg",
@@ -947,9 +865,7 @@
       "/assets/print/booth/insta/v2-7.jpg",
       "/assets/print/booth/insta/v2-8.jpg",
       "/assets/print/booth/insta/v2-9.jpg",
-      "/assets/print/booth/insta/v2-10.jpg",
-      "/assets/print/booth/insta/v2-11.jpg",
-      "/assets/print/booth/insta/v2-12.jpg"
+      "/assets/print/booth/insta/v2-10.jpg"
      ],
      "m": [
       "/assets/print/booth/insta/v2-1.m.jpg",
@@ -961,9 +877,7 @@
       "/assets/print/booth/insta/v2-7.m.jpg",
       "/assets/print/booth/insta/v2-8.m.jpg",
       "/assets/print/booth/insta/v2-9.m.jpg",
-      "/assets/print/booth/insta/v2-10.m.jpg",
-      "/assets/print/booth/insta/v2-11.m.jpg",
-      "/assets/print/booth/insta/v2-12.m.jpg"
+      "/assets/print/booth/insta/v2-10.m.jpg"
      ],
      "t": [
       "/assets/print/booth/insta/v2-1.t.jpg",
@@ -975,9 +889,7 @@
       "/assets/print/booth/insta/v2-7.t.jpg",
       "/assets/print/booth/insta/v2-8.t.jpg",
       "/assets/print/booth/insta/v2-9.t.jpg",
-      "/assets/print/booth/insta/v2-10.t.jpg",
-      "/assets/print/booth/insta/v2-11.t.jpg",
-      "/assets/print/booth/insta/v2-12.t.jpg"
+      "/assets/print/booth/insta/v2-10.t.jpg"
      ]
     },
     {
@@ -985,7 +897,7 @@
      "look": "v3",
      "note": "Big type: only the question, in the middle.",
      "pdf": "/assets/print/booth/insta/v3.pdf",
-     "pdfKb": 1603,
+     "pdfKb": 1310,
      "jpg": [
       "/assets/print/booth/insta/v3-1.jpg",
       "/assets/print/booth/insta/v3-2.jpg",
@@ -996,9 +908,7 @@
       "/assets/print/booth/insta/v3-7.jpg",
       "/assets/print/booth/insta/v3-8.jpg",
       "/assets/print/booth/insta/v3-9.jpg",
-      "/assets/print/booth/insta/v3-10.jpg",
-      "/assets/print/booth/insta/v3-11.jpg",
-      "/assets/print/booth/insta/v3-12.jpg"
+      "/assets/print/booth/insta/v3-10.jpg"
      ],
      "m": [
       "/assets/print/booth/insta/v3-1.m.jpg",
@@ -1010,9 +920,7 @@
       "/assets/print/booth/insta/v3-7.m.jpg",
       "/assets/print/booth/insta/v3-8.m.jpg",
       "/assets/print/booth/insta/v3-9.m.jpg",
-      "/assets/print/booth/insta/v3-10.m.jpg",
-      "/assets/print/booth/insta/v3-11.m.jpg",
-      "/assets/print/booth/insta/v3-12.m.jpg"
+      "/assets/print/booth/insta/v3-10.m.jpg"
      ],
      "t": [
       "/assets/print/booth/insta/v3-1.t.jpg",
@@ -1024,9 +932,7 @@
       "/assets/print/booth/insta/v3-7.t.jpg",
       "/assets/print/booth/insta/v3-8.t.jpg",
       "/assets/print/booth/insta/v3-9.t.jpg",
-      "/assets/print/booth/insta/v3-10.t.jpg",
-      "/assets/print/booth/insta/v3-11.t.jpg",
-      "/assets/print/booth/insta/v3-12.t.jpg"
+      "/assets/print/booth/insta/v3-10.t.jpg"
      ]
     }
    ]

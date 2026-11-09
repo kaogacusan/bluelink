@@ -107,7 +107,7 @@ const layers = [
 // ---------- page text ----------
 // the sale, in five steps (the voucher flow in the app: a code on the join screen)
 const steps = [
-  ['1', 'Show', 'Let them see the landing page on the laptop: private, members only, asking is normal.'],
+  ['1', 'Show', 'Let them see the landing page on the laptop: private, members only, made for networking.'],
   ['2', 'Check and sign in', 'They are 18+ with an Ateneo email. They scan the QR and sign in.'],
   ['3', 'Pay ₱50', 'Cash, or they scan the GCash QR. Check the payment came in.'],
   ['4', 'Give the card', 'Write or print the code on the back of a voucher card. Give it.'],

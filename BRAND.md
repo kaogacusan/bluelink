@@ -1,6 +1,6 @@
-# blueLink brand direction — "Deep Field"
+# BlueLink brand direction — "Deep Field"
 
-One idea: **Ateneans are stars. blueLink draws the lines between them.**
+One idea: **Ateneans are stars. BlueLink draws the lines between them.**
 Everything looks like a real night sky seen from an observatory: dark, calm, exact. Not a cartoon galaxy.
 
 ## Promise (UVP)
@@ -8,7 +8,7 @@ Everything looks like a real night sky seen from an observatory: dark, calm, exa
 - Headline: **Welcome to Atenean Networking**
 - Support line: Find opportunities, network with each other. Exclusive for the Ateneo Community.
 - Proof points (use 1–3, never more):
-  1. Exclusive access for Ateneans. Your posts stay inside blueLink.
+  1. Exclusive access for Ateneans. Your posts stay inside BlueLink.
   2. For people who want to network. Everyone here joined to meet people and find opportunities.
   3. A safe space for networking. Report and block are on every profile.
 - Price line: **₱99 for 1 year. ₱250 for lifetime.** Both plans get the same app. No premium tier.
@@ -37,7 +37,7 @@ One idea per sentence. Numbers as digits.
 | Void | `#03050D` | Main dark background. The sky. |
 | Deep | `#070C1F` | Panels on dark. The night side of the planet. |
 | Ink | `#0A1540` | Text on light. Brand navy. |
-| Signal | `#1D45E5` | The blueLink blue. Buttons, links, one key word. |
+| Signal | `#1D45E5` | The BlueLink blue. Buttons, links, one key word. |
 | Glow | `#3A5FFF` | Blue on dark. Atmosphere rim light. |
 | Peri | `#93A8FF` | Lines on dark, the back link of the logo, small labels. |
 | Starlight | `#EEF1FA` | Text on dark. |
@@ -50,7 +50,7 @@ Ratio on any piece: about 70% Void/Deep, 20% Starlight, 10% Signal/Glow/Peri, a 
 ## Type
 
 - **Inter** (variable), with `cv11` `cv05` `ss03` (single-storey a, tailed l, round punctuation). Headlines 700–800, tracking −0.035em, line height 0.95–1.05.
-- **JetBrains Mono** for small labels, numbers, codes, coordinates. Uppercase, tracking +0.08em, 11–13px on screen.
+- **No mono font in the app.** Small labels, tabs and tags use Inter too, normal case.
 - Two weights per piece at most. No italics.
 
 ## Shape
@@ -64,13 +64,13 @@ Ratio on any piece: about 70% Void/Deep, 20% Starlight, 10% Signal/Glow/Peri, a 
 1. **Star field.** Real stars: many tiny, a few bright with a soft glow, slight warm/cool color. No sparkle emojis, no four-point cartoon stars.
 2. **Constellation lines.** Thin (0.6–1px), 15–30% opacity, linking 4–7 stars. A line = two people connected.
 3. **The horizon.** The edge of a planet at the bottom, with a thin bright atmosphere rim. Content below the rim sits on the planet's night side, same color, no hard cut.
-4. **Catalog labels.** Mono micro-labels like `BL-027 · SOSE '27`, `MEMBERS ONLY`, and Ateneo's coordinates `14.6395° N  121.0781° E`.
+4. **Catalog labels.** Print only, never in the app. Mono micro-labels like `BL-027 · SOSE '27`, `MEMBERS ONLY`, and Ateneo's coordinates `14.6395° N  121.0781° E`.
 5. **Plate marks.** Small corner crosshairs (+) on frames, like a star-chart plate. Use on prints and the hero card.
 
 ## Logo
 
 Two chain links hooked into each other: two people connected. Back link Peri `#93A8FF`, front link Signal `#1D45E5` (on light) or white (on dark).
-Wordmark: "blueLink" in Inter 700, tracking −0.02em. Keep clear space = the mark's height on every side.
+Wordmark: "BlueLink" in Inter 700, tracking −0.02em. Keep clear space = the mark's height on every side.
 
 ## Do / don't
 

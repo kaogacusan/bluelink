@@ -7,9 +7,9 @@
 //   npm run cards -- ~/Downloads/codes.txt v2              any look: v1, v2, v3
 //   npm run cards -- ~/Downloads/codes.txt v1 founding     every code in the file is a founding member code
 //
-// codes.txt: one code per line (like BL-ACDE-FGHJ). Lines that start with # are skipped.
+// codes.txt: one code per line (like ACD-FGH). Lines that start with # are skipped.
 // A line with only a code prints the file's pass (Semester pass unless you add `founding`).
-// One line can name its own pass after a comma:  BL-ACDE-FGHJ, founding
+// One line can name its own pass after a comma:  ACD-FGH, founding
 // The founding card leaves the price paid blank, to write in.
 import { chromium } from 'playwright-core';
 import { readFile } from 'node:fs/promises';
