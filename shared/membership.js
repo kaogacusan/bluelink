@@ -10,7 +10,7 @@ export const PLANS = [
 // Alumni and faculty join free for now, so the network grows faster.
 export const FREE_ROLES = ['alum', 'faculty']
 
-// Early access: anyone who signs up before this time gets in free, no code needed.
+// Early access: anyone who signs up before this time gets lifetime for free, no code needed.
 // November 10, 2026 only. It ends at midnight Philippine time (UTC+8).
 export const EARLY_ACCESS_UNTIL = Date.UTC(2026, 10, 10, 16)
 export const earlyAccessOpen = (now = Date.now()) => now < EARLY_ACCESS_UNTIL

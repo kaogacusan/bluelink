@@ -707,9 +707,9 @@ export function createApi({ dataDir, dev = false }) {
   // ---- me
   route('GET', '/api/me', 'auth', ({ uid }) => {
     const u = db.users[uid]
-    // Early access: anyone with a profile who is not a member yet gets a free year. No payment, no code.
+    // Early access: anyone with a profile who is not a member yet gets lifetime for free. No payment, no code.
     if (u?.name && earlyAccessOpen() && !membershipOf(uid).active) {
-      u.until = Date.now() + MEMBERSHIP.codeDays * DAY
+      u.until = LIFETIME_UNTIL
       u.via = 'early'
       save()
     }
