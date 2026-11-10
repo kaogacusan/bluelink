@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>BlueLink — Booth plan</title>
-  <meta name="description" content="Layout, materials, and print files for the BlueLink booth: the tarpaulin, voucher cards, flyers, and the QR sign." />
+  <meta name="description" content="Layout, materials, and print files for the BlueLink booth: the standee, header, voucher cards, flyers, and the QR sign." />
   <meta name="robots" content="noindex" />
   <meta name="theme-color" content="#03050d" />
   <link rel="icon" href="/assets/kit/brand/icon-32.png" />
@@ -34,13 +34,14 @@
       <h1 class="display">Bazaar booth <span class="blue">plan</span></h1>
       <p class="lede">Layout, materials, and print files for the BlueLink booth. Drag the model to turn it. Numbers on the model match the item list.</p>
       <ul class="facts">
-        <li><b>₱50</b><span>A semester. One price</span></li>
+        <li><b>₱99</b><span>A year, or ₱250 for lifetime</span></li>
         <li><b>1.5 m × 3 m</b><span>Half of a shared tent (assumed)</span></li>
-        <li><b>4 × 3 ft</b><span>Tarpaulin on the back bar</span></li>
-        <li><b>4 prints</b><span>Tarp, QR sign, flyer, voucher card, plus a staff FAQ</span></li>
+        <li><b>2 × 5 ft</b><span>Standee at the back of the walkway</span></li>
+        <li><b>5 prints</b><span>Standee, header (optional), QR sign, flyer, voucher card, plus a staff FAQ</span></li>
         <li><b>3 looks</b><span>Deep Field, Paper, Big type</span></li>
       </ul>
       <a class="btn rhero__go" href="#assets">View print files ↓</a>
+      <a class="btn rhero__go" href="#social" style="margin-left:8px">Instagram posts ↓</a>
     </section>
 
     <section class="viewer wrap" aria-label="3D booth">
@@ -69,7 +70,7 @@
       <div class="sec__head">
         <div>
           <h2 class="display">Print files</h2>
-          <p class="sec__sub">Each piece comes in three looks. Picking a look changes the 3D model. Use the PDF to print and the JPG to share. Logos and backgrounds are in the <a href="/kit/">brand kit</a>.</p>
+          <p class="sec__sub">The standee, header, QR sign, and voucher cards come in three looks, and picking a look changes the 3D model. Each flyer has one design of its own, with backs that alternate dark and white. Use the PDF to print and the JPG to share. Logos and backgrounds are in the <a href="/kit/">brand kit</a>.</p>
         </div>
       </div>
       <div class="looks">
@@ -80,11 +81,52 @@
       <div class="assets" id="assetList"></div>
     </section>
 
+    <section class="sec wrap rise" id="social">
+      <div class="sec__head">
+        <div>
+          <h2 class="display">Instagram</h2>
+          <p class="sec__sub">Posts for the BlueLink account. Not for print. The info reel at the top is a 38-second video with sound, made for Reels. The teasers ask one question each, the info carousel explains BlueLink in 5 slides, and the booth posts tell people where to find us. One design for all of them: Deep Field. <code>npm run posts</code> saves every post as a PNG with its caption.</p>
+        </div>
+      </div>
+      <!-- The info reel. Source and how to re-render: scripts/social/reel/ (video.html, audio.js, render.mjs). -->
+      <article class="reel" id="reel" aria-labelledby="reelTitle">
+        <div class="reel__media">
+          <video src="/assets/social/reel/bluelink-reel.mp4" poster="/assets/social/reel/poster.jpg" controls playsinline preload="metadata" aria-label="blueLink info reel, 38 seconds, with sound"></video>
+        </div>
+        <div class="reel__body">
+          <p class="asset__k"><span>Instagram Reel · 1080 × 1920 px (9:16) · 38 s · with sound</span></p>
+          <h3 id="reelTitle">Info reel: “Find your people.”</h3>
+          <p class="asset__note">What blueLink is, in 38 seconds, for people who have never heard of it. Deep Field look: one camera flies through a night sky where every star is an Atenean, and the app screens hang on the stars. The music and sound effects were made for this reel, so there is nothing to license.</p>
+          <ol class="reel__scenes">
+            <li><b>0:00</b><span>The hook: “This is you.” The camera pulls back and the sky fills with Ateneans, most of whom you haven’t met yet. Lines draw between the stars while it says “blueLink helps you meet them.”</span></li>
+            <li><b>0:08</b><span>The two links lock together into the logo, set big like a poster, then “Welcome to Atenean Networking.”</span></li>
+            <li><b>0:12</b><span>Three questions, cut on the beat: “Want connections?”, “Open to work?”, and “Good at something?”</span></li>
+            <li><b>0:16</b><span>The app: a profile with what Sam is open to, an Open for work post with replies, and a people search that ends with Connect. Every screen is labeled Example.</span></li>
+            <li><b>0:25</b><span>“Only Ateneans can join.” You sign up with your Ateneo email.</span></li>
+            <li><b>0:29</b><span>₱99 a year or ₱250 for life, and a full refund within 7 days.</span></li>
+            <li><b>0:33</b><span>The planet’s edge rises: “Find your people.”, the link in bio, and the line that it isn’t an official Ateneo service.</span></li>
+          </ol>
+          <p class="asset__k"><span>Caption</span></p>
+          <p class="reel__cap" id="reelCap">Every star in this video is an Atenean, and you probably haven’t met most of them yet. blueLink is an app for Ateneo students, alumni, and faculty to find each other.
+Post that you’re looking for work, ask an upperclassman for advice, or let people know what you’re good at.
+It’s ₱99 a year or ₱250 for life. If you change your mind within 7 days, we’ll give you a full refund. The link’s in our bio.
+Made by Ateneans. Not an official Ateneo de Manila University service.</p>
+          <div class="asset__dl">
+            <a class="btn btn--pri" href="/assets/social/reel/bluelink-reel.mp4" download="bluelink-info-reel.mp4">MP4<small id="reelSize"></small></a>
+            <a class="btn" href="/assets/social/reel/poster.jpg" download="bluelink-info-reel-cover.jpg">Cover JPG</a>
+            <button type="button" class="btn btn--ghost" data-copy="#reelCap">Copy caption</button>
+          </div>
+          <p class="asset__print">Post it as a Reel and keep “Also share to feed” on. The cover JPG is the headline frame; Instagram also lets you pick any frame. To change the reel, edit <code>scripts/social/reel/video.html</code> and run <code>node scripts/social/reel/render.mjs</code>.</p>
+        </div>
+      </article>
+      <div class="assets" id="socialList"></div>
+    </section>
+
     <section class="sec wrap rise">
       <div class="sec__head">
         <div>
           <h2 class="display">How a sale works</h2>
-          <p class="sec__sub">Online payment is not on yet. At the booth they pay ₱50 in cash or GCash, and get a voucher card with a code. They type the code under “Have a code?” on the join screen.</p>
+          <p class="sec__sub">Online payment is not on yet. At the booth they pay ₱99 (1 year) or ₱250 (lifetime) in cash or GCash, and get a voucher card with a code. They type the code under “Have a code?” on the join screen.</p>
         </div>
       </div>
       <ol class="steps" id="steps"></ol>
@@ -100,7 +142,7 @@
         <div class="card">
           <h3>Open and close</h3>
           <ul>
-            <li>Hang the tarp. Check the zip ties.</li>
+            <li>Set up the standee. If we have the header, hang it and check the zip ties.</li>
             <li>Test the QR on 2 phones, the hotspot, and one voucher code.</li>
             <li>Open the landing page on the laptop.</li>
           </ul>
@@ -135,11 +177,11 @@
         <div class="card">
           <h3>What we know</h3>
           <ul>
-            <li><b>Price:</b> ₱50 a semester. One price, no premium tier. <span class="src">App, shared/membership.js</span></li>
+            <li><b>Price:</b> ₱99 a year or ₱250 for lifetime. Same app on both, no premium tier. <span class="src">App, shared/membership.js</span></li>
             <li><b>Who can join:</b> Ateneo emails only (student.ateneo.edu, obf.ateneo.edu, ateneo.edu). <span class="src">App, shared/school.js</span></li>
-            <li><b>Codes:</b> look like ACD-FGH. Each works once. A semester code gives 150 days, a founding member code 365 days, on top of any time left. Admins make them in the app: Admin → Voucher cards → Make codes → Save codes (a .txt). Then <code>npm run cards -- codes.txt</code> prints the cards. <span class="src">App, Admin and Join</span></li>
+            <li><b>Codes:</b> look like ACD-FGH. Each works once. A lifetime code gives lifetime access; a 1-year code gives 365 days on top of any time left. Admins make them in the app: Admin → Voucher cards → pick Lifetime or 1 year → Make codes → Save codes (a .txt). Then <code>npm run cards -- codes.txt</code> prints the cards. <span class="src">App, Admin and Join</span></li>
             <li><b>Headline:</b> “Welcome to Atenean Networking.” Sign-off: “Find your people.” <span class="src">BRAND.md</span></li>
-            <li><b>On every print:</b> “Made by Ateneans. Not an official Ateneo de Manila University service.” No Ateneo logo, seal, or Blue Eagle. 18+ only. The privacy line on the flyer and the voucher. <span class="src">Legal check</span></li>
+            <li><b>On every print:</b> “Made by Ateneans. Not an official Ateneo de Manila University service.” No Ateneo logo, seal, or Blue Eagle. No “18+” on visitor pieces. <span class="src">Legal check</span></li>
             <li><b>Never on a print:</b> promises of replies or jobs, member counts, testimonials, “free”, raffles, or prizes. <span class="src">Legal check</span></li>
             <li><b>Look:</b> Deep Field. Night sky, sharp corners, one blue word. <span class="src">BRAND.md</span></li>
           </ul>
@@ -147,14 +189,14 @@
         <div class="card card--warn">
           <h3>Still to check</h3>
           <ul>
-            <li><b>Domain:</b> BlueLink has no live link yet. Every print and QR says <code>bluelink.example</code>. Change <code>F.site</code> and <code>URLS.home</code> in <code>scripts/print/kit.mjs</code>, run <code>npm run print</code>, then test the QR.</li>
+            <li><b>Domain:</b> every print and QR goes to <code>bluelinkph.com</code>. Make sure the site is live before printing, then test the printed QR on 2 phones.</li>
             <li><b>Receipts and permission:</b> ask the entrep coordinator if the sales need official receipts (BIR), and if the school allows selling memberships at the bazaar.</li>
-            <li><b>Privacy notice:</b> it must be live at <code>bluelink.example/#/privacy</code> before printing. Ask Ateneo’s Data Protection Office to look at it.</li>
+            <li><b>Privacy notice:</b> it must be live at <code>bluelinkph.com/#/privacy</code> before printing. Ask Ateneo’s Data Protection Office to look at it.</li>
             <li><b>Voucher terms:</b> the refund contact and the valid-until date print as “[… — to confirm]”. Fill in <code>F.refundContact</code> and <code>F.validUntil</code> in <code>scripts/print/kit.mjs</code>.</li>
             <li><b>Founding member cards:</b> the price paid is a blank to write in. Decide the price, or if these are given away (then no “price paid” line, and no “free” wording).</li>
             <li><b>Event:</b> the venue, the dates, the stall, the fee, and the tent size.</li>
             <li><b>Team:</b> who staffs the booth and the shifts. Not on this page yet.</li>
-            <li><b>Tarpaulin:</b> 4 × 3 ft fits our half. Measure the back bar to the table. Get 2 quotes.</li>
+            <li><b>Standee and header:</b> the standee is 2 × 5 ft on an X-stand. The header (optional) is 3.5 × 1.25 ft: measure the eave first. With a 2.0 m eave its bottom edge is at 1.62 m. Get 2 quotes.</li>
             <li><b>Table:</b> who brings it, and its size.</li>
             <li><b>GCash:</b> the GCash name and number in the app’s Admin settings, and a printed GCash QR.</li>
             <li><b>Testing:</b> sign in, pay, and redeem one code before the first day. Test the printed QR on 2 phones.</li>
@@ -167,5 +209,6 @@
   </main>
 
   <script type="module" src="/booth.js"></script>
+  <script type="module" src="/render/reel.js"></script>
 </body>
 </html>

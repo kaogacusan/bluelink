@@ -4,7 +4,7 @@
   {
    "id": "v1",
    "label": "Deep Field",
-   "about": "The night sky: near-black ground and a few real stars. The planet edge is on the tarpaulin only."
+   "about": "The night sky: near-black ground and a few real stars. The planet edge is on the standee only."
   },
   {
    "id": "v2",
@@ -19,65 +19,129 @@
  ],
  "assets": [
   {
-   "id": "tarp",
-   "piece": "tarp",
-   "name": "Tarpaulin",
-   "size": "4 × 3 ft (1219 × 914 mm), landscape",
+   "id": "standee",
+   "piece": "standee",
+   "name": "Standee",
+   "size": "2 × 5 ft (610 × 1524 mm), portrait",
    "mm": [
-    1219.2,
-    914.4
+    609.6,
+    1524
    ],
    "pages": [
-    "Tarpaulin"
+    "Standee"
    ],
-   "print": "Tarpaulin, 4 × 3 ft, matte, with grommets in the 4 corners. Send the PDF. Hang it on the back wall of our half with zip ties, top edge at the eave.",
+   "print": "Tarpaulin standee, 2 × 5 ft (24 × 60 in), matte, portrait, with eyelets in the 4 corners for an X-stand. Send the PDF. Test the QR on 2 phones from 1 m and 2 m before printing. Stand it at the back of the walkway, facing the aisle.",
    "versions": [
     {
      "id": "v1",
      "look": "v1",
-     "note": "The night sky: the logo, “Welcome to Atenean Networking”, the QR, and ₱99 a year.",
-     "pdf": "/assets/print/booth/tarp/v1.pdf",
-     "pdfKb": 322,
+     "note": "The night sky: the logo, “Welcome to Atenean Networking”, a dipper-shaped constellation of what people are open to, and the planet’s edge with a blue glow. On the night side: the QR beside “Scan to join.”, then both plans.",
+     "pdf": "/assets/print/booth/standee/v1.pdf",
+     "pdfKb": 386,
      "jpg": [
-      "/assets/print/booth/tarp/v1-1.jpg"
+      "/assets/print/booth/standee/v1-1.jpg"
      ],
      "m": [
-      "/assets/print/booth/tarp/v1-1.m.jpg"
+      "/assets/print/booth/standee/v1-1.m.jpg"
      ],
      "t": [
-      "/assets/print/booth/tarp/v1-1.t.jpg"
+      "/assets/print/booth/standee/v1-1.t.jpg"
      ]
     },
     {
      "id": "v2",
      "look": "v2",
      "note": "Paper: the same layout on light paper, navy type, “Networking” in BlueLink blue.",
-     "pdf": "/assets/print/booth/tarp/v2.pdf",
-     "pdfKb": 176,
+     "pdf": "/assets/print/booth/standee/v2.pdf",
+     "pdfKb": 204,
      "jpg": [
-      "/assets/print/booth/tarp/v2-1.jpg"
+      "/assets/print/booth/standee/v2-1.jpg"
      ],
      "m": [
-      "/assets/print/booth/tarp/v2-1.m.jpg"
+      "/assets/print/booth/standee/v2-1.m.jpg"
      ],
      "t": [
-      "/assets/print/booth/tarp/v2-1.t.jpg"
+      "/assets/print/booth/standee/v2-1.t.jpg"
      ]
     },
     {
      "id": "v3",
      "look": "v3",
-     "note": "Big type: “Find your people.”, the QR, and the price. Reads from across the road.",
-     "pdf": "/assets/print/booth/tarp/v3.pdf",
-     "pdfKb": 291,
+     "note": "Big type: “Find your people.”, an unlabelled constellation, the planet’s edge, and the QR and both plans on the night side.",
+     "pdf": "/assets/print/booth/standee/v3.pdf",
+     "pdfKb": 366,
      "jpg": [
-      "/assets/print/booth/tarp/v3-1.jpg"
+      "/assets/print/booth/standee/v3-1.jpg"
      ],
      "m": [
-      "/assets/print/booth/tarp/v3-1.m.jpg"
+      "/assets/print/booth/standee/v3-1.m.jpg"
      ],
      "t": [
-      "/assets/print/booth/tarp/v3-1.t.jpg"
+      "/assets/print/booth/standee/v3-1.t.jpg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "header",
+   "piece": "header",
+   "name": "Header",
+   "size": "3.5 × 1.25 ft (1067 × 381 mm), landscape",
+   "mm": [
+    1066.8,
+    381
+   ],
+   "pages": [
+    "Header"
+   ],
+   "print": "Tarpaulin, 3.5 × 1.25 ft (42 × 15 in), matte, with grommets in the 4 corners. Optional. Zip-tie the top grommets to the front bar of the tent, across our half only. Measure the eave first: with a 2.0 m eave the bottom edge is at 1.62 m.",
+   "versions": [
+    {
+     "id": "v1",
+     "look": "v1",
+     "note": "The night sky: the logo big, “Find your people.”, and the planet’s edge along the bottom.",
+     "pdf": "/assets/print/booth/header/v1.pdf",
+     "pdfKb": 260,
+     "jpg": [
+      "/assets/print/booth/header/v1-1.jpg"
+     ],
+     "m": [
+      "/assets/print/booth/header/v1-1.m.jpg"
+     ],
+     "t": [
+      "/assets/print/booth/header/v1-1.t.jpg"
+     ]
+    },
+    {
+     "id": "v2",
+     "look": "v2",
+     "note": "Paper: the same layout on light paper, navy type, “people.” in BlueLink blue.",
+     "pdf": "/assets/print/booth/header/v2.pdf",
+     "pdfKb": 129,
+     "jpg": [
+      "/assets/print/booth/header/v2-1.jpg"
+     ],
+     "m": [
+      "/assets/print/booth/header/v2-1.m.jpg"
+     ],
+     "t": [
+      "/assets/print/booth/header/v2-1.t.jpg"
+     ]
+    },
+    {
+     "id": "v3",
+     "look": "v3",
+     "note": "Big type: the logo big and “Welcome to Atenean Networking” (the V3 standee says “Find your people.”).",
+     "pdf": "/assets/print/booth/header/v3.pdf",
+     "pdfKb": 222,
+     "jpg": [
+      "/assets/print/booth/header/v3-1.jpg"
+     ],
+     "m": [
+      "/assets/print/booth/header/v3-1.m.jpg"
+     ],
+     "t": [
+      "/assets/print/booth/header/v3-1.t.jpg"
      ]
     }
    ]
@@ -86,7 +150,7 @@
    "id": "qr",
    "piece": "qr",
    "name": "QR sign",
-   "size": "A4, 210 × 297 mm, QR 12 cm",
+   "size": "A4, 210 × 297 mm, QR 12–14 cm",
    "mm": [
     210,
     297
@@ -99,9 +163,9 @@
     {
      "id": "v1",
      "look": "v1",
-     "note": "Flat near-black: “Scan to join.”, a big QR, and the price.",
+     "note": "Centred, near-black: “Scan to join.”, a 128 mm QR, and both plans split by a hairline.",
      "pdf": "/assets/print/booth/qr/v1.pdf",
-     "pdfKb": 59,
+     "pdfKb": 69,
      "jpg": [
       "/assets/print/booth/qr/v1-1.jpg"
      ],
@@ -115,9 +179,9 @@
     {
      "id": "v2",
      "look": "v2",
-     "note": "Flat paper: the same sign on light paper, navy type.",
+     "note": "Price list, on paper: “Scan to join.”, a 136 mm QR, and both plans in a ruled two-column table.",
      "pdf": "/assets/print/booth/qr/v2.pdf",
-     "pdfKb": 59,
+     "pdfKb": 63,
      "jpg": [
       "/assets/print/booth/qr/v2-1.jpg"
      ],
@@ -131,9 +195,9 @@
     {
      "id": "v3",
      "look": "v3",
-     "note": "Flat near-black: “Find your people.”, the QR, and the price.",
+     "note": "Big type, near-black: “Find your people.”, a 118 mm QR, and both plans set large, left and right.",
      "pdf": "/assets/print/booth/qr/v3.pdf",
-     "pdfKb": 69,
+     "pdfKb": 61,
      "jpg": [
       "/assets/print/booth/qr/v3-1.jpg"
      ],
@@ -163,10 +227,10 @@
    "versions": [
     {
      "id": "v1",
-     "look": "v1",
-     "note": "Front: the headline, the QR, and the price. Back: 3 reasons, both plans, the refund line, the privacy line, 18+, and “not an official Ateneo service”.",
+     "look": "flyer",
+     "note": "Front: the headline in the sky, the planet’s edge, and the QR and the price on its night side. Dark back: 3 reasons, both plans, the refund line, and “not an official Ateneo service”.",
      "pdf": "/assets/print/booth/flyer/v1.pdf",
-     "pdfKb": 182,
+     "pdfKb": 187,
      "jpg": [
       "/assets/print/booth/flyer/v1-1.jpg",
       "/assets/print/booth/flyer/v1-2.jpg"
@@ -178,44 +242,6 @@
      "t": [
       "/assets/print/booth/flyer/v1-1.t.jpg",
       "/assets/print/booth/flyer/v1-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v2",
-     "look": "v2",
-     "note": "Paper: the same two sides on light paper. Cheapest to print in color.",
-     "pdf": "/assets/print/booth/flyer/v2.pdf",
-     "pdfKb": 129,
-     "jpg": [
-      "/assets/print/booth/flyer/v2-1.jpg",
-      "/assets/print/booth/flyer/v2-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/flyer/v2-1.m.jpg",
-      "/assets/print/booth/flyer/v2-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/flyer/v2-1.t.jpg",
-      "/assets/print/booth/flyer/v2-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v3",
-     "look": "v3",
-     "note": "Big type: “Find your people.” and the QR on the front. The same back as Deep Field.",
-     "pdf": "/assets/print/booth/flyer/v3.pdf",
-     "pdfKb": 166,
-     "jpg": [
-      "/assets/print/booth/flyer/v3-1.jpg",
-      "/assets/print/booth/flyer/v3-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/flyer/v3-1.m.jpg",
-      "/assets/print/booth/flyer/v3-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/flyer/v3-1.t.jpg",
-      "/assets/print/booth/flyer/v3-2.t.jpg"
      ]
     }
    ]
@@ -237,10 +263,10 @@
    "versions": [
     {
      "id": "v1",
-     "look": "v1",
-     "note": "The question, the QR, and the price on the night sky. The back is the flyer back.",
+     "look": "flyer",
+     "note": "Front: a hand-placed constellation: you in the middle, joined to Events, Opportunities, Businesses, and Orgs; the question under it, and a ruled footer with the QR. White back: 3 reasons, both plans, the refund line, and the legal lines.",
      "pdf": "/assets/print/booth/hook-want-connections/v1.pdf",
-     "pdfKb": 175,
+     "pdfKb": 140,
      "jpg": [
       "/assets/print/booth/hook-want-connections/v1-1.jpg",
       "/assets/print/booth/hook-want-connections/v1-2.jpg"
@@ -252,44 +278,6 @@
      "t": [
       "/assets/print/booth/hook-want-connections/v1-1.t.jpg",
       "/assets/print/booth/hook-want-connections/v1-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v2",
-     "look": "v2",
-     "note": "The same on light paper.",
-     "pdf": "/assets/print/booth/hook-want-connections/v2.pdf",
-     "pdfKb": 127,
-     "jpg": [
-      "/assets/print/booth/hook-want-connections/v2-1.jpg",
-      "/assets/print/booth/hook-want-connections/v2-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-want-connections/v2-1.m.jpg",
-      "/assets/print/booth/hook-want-connections/v2-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-want-connections/v2-1.t.jpg",
-      "/assets/print/booth/hook-want-connections/v2-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v3",
-     "look": "v3",
-     "note": "Only the question, bigger, and the QR.",
-     "pdf": "/assets/print/booth/hook-want-connections/v3.pdf",
-     "pdfKb": 165,
-     "jpg": [
-      "/assets/print/booth/hook-want-connections/v3-1.jpg",
-      "/assets/print/booth/hook-want-connections/v3-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-want-connections/v3-1.m.jpg",
-      "/assets/print/booth/hook-want-connections/v3-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-want-connections/v3-1.t.jpg",
-      "/assets/print/booth/hook-want-connections/v3-2.t.jpg"
      ]
     }
    ]
@@ -311,10 +299,10 @@
    "versions": [
     {
      "id": "v1",
-     "look": "v1",
-     "note": "The question, the QR, and the price on the night sky. The back is the flyer back.",
+     "look": "flyer",
+     "note": "Front: two stars and one long line (you, in warm Flare, up to a bright star), the QR top right, the question at the bottom. Dark back: 3 reasons, both plans, the refund line, and the legal lines.",
      "pdf": "/assets/print/booth/hook-need-a-mentor/v1.pdf",
-     "pdfKb": 183,
+     "pdfKb": 139,
      "jpg": [
       "/assets/print/booth/hook-need-a-mentor/v1-1.jpg",
       "/assets/print/booth/hook-need-a-mentor/v1-2.jpg"
@@ -326,44 +314,6 @@
      "t": [
       "/assets/print/booth/hook-need-a-mentor/v1-1.t.jpg",
       "/assets/print/booth/hook-need-a-mentor/v1-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v2",
-     "look": "v2",
-     "note": "The same on light paper.",
-     "pdf": "/assets/print/booth/hook-need-a-mentor/v2.pdf",
-     "pdfKb": 140,
-     "jpg": [
-      "/assets/print/booth/hook-need-a-mentor/v2-1.jpg",
-      "/assets/print/booth/hook-need-a-mentor/v2-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-need-a-mentor/v2-1.m.jpg",
-      "/assets/print/booth/hook-need-a-mentor/v2-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-need-a-mentor/v2-1.t.jpg",
-      "/assets/print/booth/hook-need-a-mentor/v2-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v3",
-     "look": "v3",
-     "note": "Only the question, bigger, and the QR.",
-     "pdf": "/assets/print/booth/hook-need-a-mentor/v3.pdf",
-     "pdfKb": 165,
-     "jpg": [
-      "/assets/print/booth/hook-need-a-mentor/v3-1.jpg",
-      "/assets/print/booth/hook-need-a-mentor/v3-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-need-a-mentor/v3-1.m.jpg",
-      "/assets/print/booth/hook-need-a-mentor/v3-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-need-a-mentor/v3-1.t.jpg",
-      "/assets/print/booth/hook-need-a-mentor/v3-2.t.jpg"
      ]
     }
    ]
@@ -385,10 +335,10 @@
    "versions": [
     {
      "id": "v1",
-     "look": "v1",
-     "note": "The question, the QR, and the price on the night sky. The back is the flyer back.",
+     "look": "flyer",
+     "note": "Front: plain: the question set big in the middle, the QR bottom left. White back: 3 reasons, both plans, the refund line, and the legal lines.",
      "pdf": "/assets/print/booth/hook-shy-to-network/v1.pdf",
-     "pdfKb": 188,
+     "pdfKb": 142,
      "jpg": [
       "/assets/print/booth/hook-shy-to-network/v1-1.jpg",
       "/assets/print/booth/hook-shy-to-network/v1-2.jpg"
@@ -400,44 +350,6 @@
      "t": [
       "/assets/print/booth/hook-shy-to-network/v1-1.t.jpg",
       "/assets/print/booth/hook-shy-to-network/v1-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v2",
-     "look": "v2",
-     "note": "The same on light paper.",
-     "pdf": "/assets/print/booth/hook-shy-to-network/v2.pdf",
-     "pdfKb": 140,
-     "jpg": [
-      "/assets/print/booth/hook-shy-to-network/v2-1.jpg",
-      "/assets/print/booth/hook-shy-to-network/v2-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-shy-to-network/v2-1.m.jpg",
-      "/assets/print/booth/hook-shy-to-network/v2-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-shy-to-network/v2-1.t.jpg",
-      "/assets/print/booth/hook-shy-to-network/v2-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v3",
-     "look": "v3",
-     "note": "Only the question, bigger, and the QR.",
-     "pdf": "/assets/print/booth/hook-shy-to-network/v3.pdf",
-     "pdfKb": 167,
-     "jpg": [
-      "/assets/print/booth/hook-shy-to-network/v3-1.jpg",
-      "/assets/print/booth/hook-shy-to-network/v3-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-shy-to-network/v3-1.m.jpg",
-      "/assets/print/booth/hook-shy-to-network/v3-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-shy-to-network/v3-1.t.jpg",
-      "/assets/print/booth/hook-shy-to-network/v3-2.t.jpg"
      ]
     }
    ]
@@ -459,10 +371,10 @@
    "versions": [
     {
      "id": "v1",
-     "look": "v1",
-     "note": "The question, the QR, and the price on the night sky. The back is the flyer back.",
+     "look": "flyer",
+     "note": "Front: the app’s People screen: the search box, the Projects filter on, and three example members with their skills (video, design, tutoring), each with Connect. Dark back: 3 reasons, both plans, the refund line, and the legal lines.",
      "pdf": "/assets/print/booth/hook-open-for-work/v1.pdf",
-     "pdfKb": 186,
+     "pdfKb": 227,
      "jpg": [
       "/assets/print/booth/hook-open-for-work/v1-1.jpg",
       "/assets/print/booth/hook-open-for-work/v1-2.jpg"
@@ -475,43 +387,41 @@
       "/assets/print/booth/hook-open-for-work/v1-1.t.jpg",
       "/assets/print/booth/hook-open-for-work/v1-2.t.jpg"
      ]
-    },
+    }
+   ]
+  },
+  {
+   "id": "hook-events",
+   "piece": "flyers",
+   "name": "Flyer: “Into events?”",
+   "size": "A6, 105 × 148 mm, two sides",
+   "mm": [
+    105,
+    148
+   ],
+   "pages": [
+    "Front",
+    "Back"
+   ],
+   "print": "Print 4 per A4 sheet, both sides (flip on the long edge), then cut. 120 gsm or more.",
+   "versions": [
     {
-     "id": "v2",
-     "look": "v2",
-     "note": "The same on light paper.",
-     "pdf": "/assets/print/booth/hook-open-for-work/v2.pdf",
-     "pdfKb": 137,
+     "id": "v1",
+     "look": "flyer",
+     "note": "Front: the app’s Upcoming events list (Examples): three talks and workshops with their date, time, and place, and the Going button. White back: 3 reasons, both plans, the refund line, and the legal lines.",
+     "pdf": "/assets/print/booth/hook-events/v1.pdf",
+     "pdfKb": 201,
      "jpg": [
-      "/assets/print/booth/hook-open-for-work/v2-1.jpg",
-      "/assets/print/booth/hook-open-for-work/v2-2.jpg"
+      "/assets/print/booth/hook-events/v1-1.jpg",
+      "/assets/print/booth/hook-events/v1-2.jpg"
      ],
      "m": [
-      "/assets/print/booth/hook-open-for-work/v2-1.m.jpg",
-      "/assets/print/booth/hook-open-for-work/v2-2.m.jpg"
+      "/assets/print/booth/hook-events/v1-1.m.jpg",
+      "/assets/print/booth/hook-events/v1-2.m.jpg"
      ],
      "t": [
-      "/assets/print/booth/hook-open-for-work/v2-1.t.jpg",
-      "/assets/print/booth/hook-open-for-work/v2-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v3",
-     "look": "v3",
-     "note": "Only the question, bigger, and the QR.",
-     "pdf": "/assets/print/booth/hook-open-for-work/v3.pdf",
-     "pdfKb": 166,
-     "jpg": [
-      "/assets/print/booth/hook-open-for-work/v3-1.jpg",
-      "/assets/print/booth/hook-open-for-work/v3-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-open-for-work/v3-1.m.jpg",
-      "/assets/print/booth/hook-open-for-work/v3-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-open-for-work/v3-1.t.jpg",
-      "/assets/print/booth/hook-open-for-work/v3-2.t.jpg"
+      "/assets/print/booth/hook-events/v1-1.t.jpg",
+      "/assets/print/booth/hook-events/v1-2.t.jpg"
      ]
     }
    ]
@@ -533,10 +443,10 @@
    "versions": [
     {
      "id": "v1",
-     "look": "v1",
-     "note": "The question, the QR, and the price on the night sky. The back is the flyer back.",
+     "look": "flyer",
+     "note": "Front: the planet’s edge high on the page with the sun coming up, the question on the night side. Dark back: 3 reasons, both plans, the refund line, and the legal lines.",
      "pdf": "/assets/print/booth/hook-startup/v1.pdf",
-     "pdfKb": 186,
+     "pdfKb": 206,
      "jpg": [
       "/assets/print/booth/hook-startup/v1-1.jpg",
       "/assets/print/booth/hook-startup/v1-2.jpg"
@@ -549,65 +459,27 @@
       "/assets/print/booth/hook-startup/v1-1.t.jpg",
       "/assets/print/booth/hook-startup/v1-2.t.jpg"
      ]
-    },
-    {
-     "id": "v2",
-     "look": "v2",
-     "note": "The same on light paper.",
-     "pdf": "/assets/print/booth/hook-startup/v2.pdf",
-     "pdfKb": 141,
-     "jpg": [
-      "/assets/print/booth/hook-startup/v2-1.jpg",
-      "/assets/print/booth/hook-startup/v2-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-startup/v2-1.m.jpg",
-      "/assets/print/booth/hook-startup/v2-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-startup/v2-1.t.jpg",
-      "/assets/print/booth/hook-startup/v2-2.t.jpg"
-     ]
-    },
-    {
-     "id": "v3",
-     "look": "v3",
-     "note": "Only the question, bigger, and the QR.",
-     "pdf": "/assets/print/booth/hook-startup/v3.pdf",
-     "pdfKb": 169,
-     "jpg": [
-      "/assets/print/booth/hook-startup/v3-1.jpg",
-      "/assets/print/booth/hook-startup/v3-2.jpg"
-     ],
-     "m": [
-      "/assets/print/booth/hook-startup/v3-1.m.jpg",
-      "/assets/print/booth/hook-startup/v3-2.m.jpg"
-     ],
-     "t": [
-      "/assets/print/booth/hook-startup/v3-1.t.jpg",
-      "/assets/print/booth/hook-startup/v3-2.t.jpg"
-     ]
     }
    ]
   },
   {
    "id": "card",
    "piece": "card",
-   "name": "Voucher card, front",
-   "size": "A7 landscape, 105 × 74 mm, “1 semester of BlueLink”",
+   "name": "Voucher card, front: Lifetime",
+   "size": "Business card, 90 × 54 mm, “Lifetime access to BlueLink”",
    "mm": [
-    105,
-    74
+    90,
+    54
    ],
    "pages": [
     "Front"
    ],
-   "print": "Card stock, 300 gsm, matte. 8 per A4 sheet. Print this on one side and “Voucher card, back” on the other. Cut to 105 × 74 mm, square corners.",
+   "print": "Card stock, 300 gsm, matte. 10 per A4 sheet (2 × 5). Print this on one side and “Voucher card, back” on the other. Cut to 90 × 54 mm, square corners.",
    "versions": [
     {
      "id": "v1",
      "look": "v1",
-     "note": "The night sky: “1 semester of BlueLink”, the Semester pass tag, and a small constellation.",
+     "note": "The night sky: “Lifetime access to BlueLink” and a small constellation.",
      "pdf": "/assets/print/booth/card/v1.pdf",
      "pdfKb": 100,
      "jpg": [
@@ -623,9 +495,9 @@
     {
      "id": "v2",
      "look": "v2",
-     "note": "Paper: the same card on light paper, navy type, “1 semester” in BlueLink blue.",
+     "note": "Paper: the same card on light paper, navy type, “lifetime” in BlueLink blue.",
      "pdf": "/assets/print/booth/card/v2.pdf",
-     "pdfKb": 44,
+     "pdfKb": 28,
      "jpg": [
       "/assets/print/booth/card/v2-1.jpg"
      ],
@@ -639,9 +511,9 @@
     {
      "id": "v3",
      "look": "v3",
-     "note": "Big type: “1 semester of BlueLink”, nothing else.",
+     "note": "Big type: “Lifetime access to BlueLink”, nothing else.",
      "pdf": "/assets/print/booth/card/v3.pdf",
-     "pdfKb": 70,
+     "pdfKb": 58,
      "jpg": [
       "/assets/print/booth/card/v3-1.jpg"
      ],
@@ -658,22 +530,22 @@
    "id": "card-founding",
    "piece": "card",
    "name": "Voucher card, front: Founding member",
-   "size": "A7 landscape, 105 × 74 mm, “1 year of BlueLink”",
+   "size": "Business card, 90 × 54 mm, “1 year of BlueLink”",
    "mm": [
-    105,
-    74
+    90,
+    54
    ],
    "pages": [
     "Front"
    ],
-   "print": "Card stock, 300 gsm, matte. 8 per A4 sheet. Print this on one side and “Voucher card, back” on the other. Cut to 105 × 74 mm, square corners.",
+   "print": "Card stock, 300 gsm, matte. 10 per A4 sheet (2 × 5). Print this on one side and “Voucher card, back” on the other. Cut to 90 × 54 mm, square corners.",
    "versions": [
     {
      "id": "v1",
      "look": "v1",
-     "note": "The night sky: “1 year of BlueLink”, the Founding member tag with a warm star, and a small constellation.",
+     "note": "The night sky: “1 year of BlueLink” and a small constellation with one warm star.",
      "pdf": "/assets/print/booth/card-founding/v1.pdf",
-     "pdfKb": 110,
+     "pdfKb": 98,
      "jpg": [
       "/assets/print/booth/card-founding/v1-1.jpg"
      ],
@@ -689,7 +561,7 @@
      "look": "v2",
      "note": "Paper: the same card on light paper, navy type, “1 year” in BlueLink blue.",
      "pdf": "/assets/print/booth/card-founding/v2.pdf",
-     "pdfKb": 45,
+     "pdfKb": 26,
      "jpg": [
       "/assets/print/booth/card-founding/v2-1.jpg"
      ],
@@ -705,7 +577,7 @@
      "look": "v3",
      "note": "Big type: “1 year of BlueLink”, nothing else.",
      "pdf": "/assets/print/booth/card-founding/v3.pdf",
-     "pdfKb": 80,
+     "pdfKb": 72,
      "jpg": [
       "/assets/print/booth/card-founding/v3-1.jpg"
      ],
@@ -722,10 +594,10 @@
    "id": "cardback",
    "piece": "card",
    "name": "Voucher card, back",
-   "size": "A7 landscape, 105 × 74 mm, the voucher code",
+   "size": "Business card, 90 × 54 mm, the voucher code",
    "mm": [
-    105,
-    74
+    90,
+    54
    ],
    "pages": [
     "Back"
@@ -737,7 +609,7 @@
      "look": "v1",
      "note": "Deep navy. The code in a big white box, one line on how to use it, and where to redeem it.",
      "pdf": "/assets/print/booth/cardback/v1.pdf",
-     "pdfKb": 48,
+     "pdfKb": 32,
      "jpg": [
       "/assets/print/booth/cardback/v1-1.jpg"
      ],
@@ -753,7 +625,7 @@
      "look": "v2",
      "note": "White. The code in a thin-line box, one line on how to use it, and where to redeem it. Cheapest to print.",
      "pdf": "/assets/print/booth/cardback/v2.pdf",
-     "pdfKb": 48,
+     "pdfKb": 32,
      "jpg": [
       "/assets/print/booth/cardback/v2-1.jpg"
      ],
@@ -769,7 +641,7 @@
      "look": "v3",
      "note": "Near-black, the same as Big type. The code in a big white box, and where to redeem it.",
      "pdf": "/assets/print/booth/cardback/v3.pdf",
-     "pdfKb": 48,
+     "pdfKb": 32,
      "jpg": [
       "/assets/print/booth/cardback/v3-1.jpg"
      ],
@@ -785,8 +657,9 @@
   {
    "id": "insta",
    "piece": "insta",
-   "name": "Instagram posts",
-   "size": "1080 × 1350 px (4:5), 10 posts",
+   "section": "social",
+   "name": "Teaser posts",
+   "size": "1080 × 1350 px (4:5), 12 posts",
    "mm": [
     285.75,
     357.1875
@@ -799,19 +672,21 @@
     "Need an intro?",
     "Open for work?",
     "Good at something?",
+    "Into events?",
     "Your co-founder could be in your block.",
     "Networking, only for Ateneans.",
+    "Looking for a thesis partner?",
     "Building a startup?",
     "Find your people."
    ],
-   "print": "Not for print. Post the JPG. Captions: npm run posts makes captions.txt. Put the legal line in every caption.",
+   "print": "Single posts, one question each, to build interest before and during the bazaar. Post the JPG. Captions: npm run posts makes captions.txt. Put the legal line in every caption.",
    "versions": [
     {
      "id": "v1",
      "look": "v1",
-     "note": "The night sky: the question top left, a constellation, the logo, and “Link in bio”.",
+     "note": "The question top left, a constellation, the logo, and “Link in bio”.",
      "pdf": "/assets/print/booth/insta/v1.pdf",
-     "pdfKb": 1485,
+     "pdfKb": 1700,
      "jpg": [
       "/assets/print/booth/insta/v1-1.jpg",
       "/assets/print/booth/insta/v1-2.jpg",
@@ -822,7 +697,9 @@
       "/assets/print/booth/insta/v1-7.jpg",
       "/assets/print/booth/insta/v1-8.jpg",
       "/assets/print/booth/insta/v1-9.jpg",
-      "/assets/print/booth/insta/v1-10.jpg"
+      "/assets/print/booth/insta/v1-10.jpg",
+      "/assets/print/booth/insta/v1-11.jpg",
+      "/assets/print/booth/insta/v1-12.jpg"
      ],
      "m": [
       "/assets/print/booth/insta/v1-1.m.jpg",
@@ -834,7 +711,9 @@
       "/assets/print/booth/insta/v1-7.m.jpg",
       "/assets/print/booth/insta/v1-8.m.jpg",
       "/assets/print/booth/insta/v1-9.m.jpg",
-      "/assets/print/booth/insta/v1-10.m.jpg"
+      "/assets/print/booth/insta/v1-10.m.jpg",
+      "/assets/print/booth/insta/v1-11.m.jpg",
+      "/assets/print/booth/insta/v1-12.m.jpg"
      ],
      "t": [
       "/assets/print/booth/insta/v1-1.t.jpg",
@@ -846,93 +725,135 @@
       "/assets/print/booth/insta/v1-7.t.jpg",
       "/assets/print/booth/insta/v1-8.t.jpg",
       "/assets/print/booth/insta/v1-9.t.jpg",
-      "/assets/print/booth/insta/v1-10.t.jpg"
+      "/assets/print/booth/insta/v1-10.t.jpg",
+      "/assets/print/booth/insta/v1-11.t.jpg",
+      "/assets/print/booth/insta/v1-12.t.jpg"
      ]
-    },
+    }
+   ]
+  },
+  {
+   "id": "insta-info",
+   "piece": "insta",
+   "section": "social",
+   "name": "Info carousel",
+   "size": "1080 × 1350 px (4:5), 5 slides",
+   "mm": [
+    285.75,
+    357.1875
+   ],
+   "px": 1350,
+   "pages": [
+    "Welcome",
+    "What you can do",
+    "Members only",
+    "Membership",
+    "How to join"
+   ],
+   "print": "One carousel post, 5 slides in this order. The main explainer: pin it to the top of the profile. npm run posts makes the caption.",
+   "versions": [
     {
-     "id": "v2",
-     "look": "v2",
-     "note": "The same on light paper.",
-     "pdf": "/assets/print/booth/insta/v2.pdf",
-     "pdfKb": 386,
+     "id": "v1",
+     "look": "v1",
+     "note": "One idea per slide, each with its own layout: the headline, one statement with its key phrases lit, members only with a closed ring of stars, the price as big as it gets, and the steps as a constellation. One line of stars runs along the bottom of all 5.",
+     "pdf": "/assets/print/booth/insta-info/v1.pdf",
+     "pdfKb": 624,
      "jpg": [
-      "/assets/print/booth/insta/v2-1.jpg",
-      "/assets/print/booth/insta/v2-2.jpg",
-      "/assets/print/booth/insta/v2-3.jpg",
-      "/assets/print/booth/insta/v2-4.jpg",
-      "/assets/print/booth/insta/v2-5.jpg",
-      "/assets/print/booth/insta/v2-6.jpg",
-      "/assets/print/booth/insta/v2-7.jpg",
-      "/assets/print/booth/insta/v2-8.jpg",
-      "/assets/print/booth/insta/v2-9.jpg",
-      "/assets/print/booth/insta/v2-10.jpg"
+      "/assets/print/booth/insta-info/v1-1.jpg",
+      "/assets/print/booth/insta-info/v1-2.jpg",
+      "/assets/print/booth/insta-info/v1-3.jpg",
+      "/assets/print/booth/insta-info/v1-4.jpg",
+      "/assets/print/booth/insta-info/v1-5.jpg"
      ],
      "m": [
-      "/assets/print/booth/insta/v2-1.m.jpg",
-      "/assets/print/booth/insta/v2-2.m.jpg",
-      "/assets/print/booth/insta/v2-3.m.jpg",
-      "/assets/print/booth/insta/v2-4.m.jpg",
-      "/assets/print/booth/insta/v2-5.m.jpg",
-      "/assets/print/booth/insta/v2-6.m.jpg",
-      "/assets/print/booth/insta/v2-7.m.jpg",
-      "/assets/print/booth/insta/v2-8.m.jpg",
-      "/assets/print/booth/insta/v2-9.m.jpg",
-      "/assets/print/booth/insta/v2-10.m.jpg"
+      "/assets/print/booth/insta-info/v1-1.m.jpg",
+      "/assets/print/booth/insta-info/v1-2.m.jpg",
+      "/assets/print/booth/insta-info/v1-3.m.jpg",
+      "/assets/print/booth/insta-info/v1-4.m.jpg",
+      "/assets/print/booth/insta-info/v1-5.m.jpg"
      ],
      "t": [
-      "/assets/print/booth/insta/v2-1.t.jpg",
-      "/assets/print/booth/insta/v2-2.t.jpg",
-      "/assets/print/booth/insta/v2-3.t.jpg",
-      "/assets/print/booth/insta/v2-4.t.jpg",
-      "/assets/print/booth/insta/v2-5.t.jpg",
-      "/assets/print/booth/insta/v2-6.t.jpg",
-      "/assets/print/booth/insta/v2-7.t.jpg",
-      "/assets/print/booth/insta/v2-8.t.jpg",
-      "/assets/print/booth/insta/v2-9.t.jpg",
-      "/assets/print/booth/insta/v2-10.t.jpg"
+      "/assets/print/booth/insta-info/v1-1.t.jpg",
+      "/assets/print/booth/insta-info/v1-2.t.jpg",
+      "/assets/print/booth/insta-info/v1-3.t.jpg",
+      "/assets/print/booth/insta-info/v1-4.t.jpg",
+      "/assets/print/booth/insta-info/v1-5.t.jpg"
      ]
-    },
+    }
+   ]
+  },
+  {
+   "id": "insta-booth",
+   "piece": "insta",
+   "section": "social",
+   "name": "Booth carousel",
+   "size": "1080 × 1350 px (4:5), 3 slides",
+   "mm": [
+    285.75,
+    357.1875
+   ],
+   "px": 1350,
+   "pages": [
+    "Visit us",
+    "Where we are",
+    "Signing up"
+   ],
+   "print": "One carousel post for the bazaar week (Nov 9–13). Check the hours with the organizers before posting.",
+   "versions": [
     {
-     "id": "v3",
-     "look": "v3",
-     "note": "Big type: only the question, in the middle.",
-     "pdf": "/assets/print/booth/insta/v3.pdf",
-     "pdfKb": 1310,
+     "id": "v1",
+     "look": "v1",
+     "note": "1: where, when, and the time, over a sunrise. 2: a simple map of the bazaar from above, with a path from JSEC to our glowing tent. 3: how signing up at the booth works.",
+     "pdf": "/assets/print/booth/insta-booth/v1.pdf",
+     "pdfKb": 603,
      "jpg": [
-      "/assets/print/booth/insta/v3-1.jpg",
-      "/assets/print/booth/insta/v3-2.jpg",
-      "/assets/print/booth/insta/v3-3.jpg",
-      "/assets/print/booth/insta/v3-4.jpg",
-      "/assets/print/booth/insta/v3-5.jpg",
-      "/assets/print/booth/insta/v3-6.jpg",
-      "/assets/print/booth/insta/v3-7.jpg",
-      "/assets/print/booth/insta/v3-8.jpg",
-      "/assets/print/booth/insta/v3-9.jpg",
-      "/assets/print/booth/insta/v3-10.jpg"
+      "/assets/print/booth/insta-booth/v1-1.jpg",
+      "/assets/print/booth/insta-booth/v1-2.jpg",
+      "/assets/print/booth/insta-booth/v1-3.jpg"
      ],
      "m": [
-      "/assets/print/booth/insta/v3-1.m.jpg",
-      "/assets/print/booth/insta/v3-2.m.jpg",
-      "/assets/print/booth/insta/v3-3.m.jpg",
-      "/assets/print/booth/insta/v3-4.m.jpg",
-      "/assets/print/booth/insta/v3-5.m.jpg",
-      "/assets/print/booth/insta/v3-6.m.jpg",
-      "/assets/print/booth/insta/v3-7.m.jpg",
-      "/assets/print/booth/insta/v3-8.m.jpg",
-      "/assets/print/booth/insta/v3-9.m.jpg",
-      "/assets/print/booth/insta/v3-10.m.jpg"
+      "/assets/print/booth/insta-booth/v1-1.m.jpg",
+      "/assets/print/booth/insta-booth/v1-2.m.jpg",
+      "/assets/print/booth/insta-booth/v1-3.m.jpg"
      ],
      "t": [
-      "/assets/print/booth/insta/v3-1.t.jpg",
-      "/assets/print/booth/insta/v3-2.t.jpg",
-      "/assets/print/booth/insta/v3-3.t.jpg",
-      "/assets/print/booth/insta/v3-4.t.jpg",
-      "/assets/print/booth/insta/v3-5.t.jpg",
-      "/assets/print/booth/insta/v3-6.t.jpg",
-      "/assets/print/booth/insta/v3-7.t.jpg",
-      "/assets/print/booth/insta/v3-8.t.jpg",
-      "/assets/print/booth/insta/v3-9.t.jpg",
-      "/assets/print/booth/insta/v3-10.t.jpg"
+      "/assets/print/booth/insta-booth/v1-1.t.jpg",
+      "/assets/print/booth/insta-booth/v1-2.t.jpg",
+      "/assets/print/booth/insta-booth/v1-3.t.jpg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "insta-story",
+   "piece": "insta",
+   "section": "social",
+   "name": "Booth story",
+   "size": "1080 × 1920 px (9:16), 1 story",
+   "mm": [
+    285.75,
+    508
+   ],
+   "px": 1920,
+   "pages": [
+    "Story"
+   ],
+   "print": "A story for each day of the bazaar. Post the JPG and put a link sticker under the dates. Check the hours with the organizers first.",
+   "versions": [
+    {
+     "id": "v1",
+     "look": "v1",
+     "note": "The bazaar map from above with our glowing tent, and the dates and time.",
+     "pdf": "/assets/print/booth/insta-story/v1.pdf",
+     "pdfKb": 206,
+     "jpg": [
+      "/assets/print/booth/insta-story/v1-1.jpg"
+     ],
+     "m": [
+      "/assets/print/booth/insta-story/v1-1.m.jpg"
+     ],
+     "t": [
+      "/assets/print/booth/insta-story/v1-1.t.jpg"
      ]
     }
    ]
@@ -957,7 +878,7 @@
      "look": "staff",
      "note": "White, two pages. Page 1: is it official, who can join, why pay, refunds, privacy, messages, deleting an account, safety, cheating. Page 2: what to do when someone has a concern, the sale in 4 steps, and what never to say.",
      "pdf": "/assets/print/booth/faq/v1.pdf",
-     "pdfKb": 861,
+     "pdfKb": 763,
      "jpg": [
       "/assets/print/booth/faq/v1-1.jpg",
       "/assets/print/booth/faq/v1-2.jpg"

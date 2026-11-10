@@ -99,7 +99,7 @@ const word = (px, color) => `<span class="wm" style="font-size:${px}px;color:${c
 const lock = (px, { word: wc = '#fff', front = '#fff', back = C.peri } = {}) => `<div class="lockup" style="gap:${px * 0.3}px">${markSvg({ front, back, size: `${px}px` })}${word(px * 0.68, wc)}</div>`;
 const mono = (t, px, color, extra = '') => `<span class="m nw" style="font-size:${px}px;color:${color};${extra}">${t}</span>`;
 const hl = (t) => t.replace(/\*(.+?)\*/g, `<span style="color:${C.peri}">$1</span>`);
-// top = null: no planet (the share cards). The planet stays on the tarpaulin, the screen, and the motif sheet.
+// top = null: no planet (the share cards). The planet stays on the standee, the screen, and the motif sheet.
 const deepField = (w, h, top, { seed = 'share', density = 0.03, cons, sun = true } = {}) =>
   bg(C.void) + skySvg({ w, h, seed, density, band: 0.38 }) + (cons ? constellationSvg({ w, h, seed: `${seed}-c`, count: 6, unit: Math.min(w, h) / 100, ...cons }) : '') + (top == null ? '' : horizonSvg({ w, h, top, sun })) + plateSvg({ w, h, inset: Math.round(Math.min(w, h) * 0.04), color: C.star, opacity: 0.45 });
 
@@ -165,7 +165,7 @@ const screen = () => `${deepField(1280, 800, 640, { seed: 'screen', cons: { box:
   <div class="abs" style="left:64px;top:150px"><div class="d" style="font-size:68px;color:${C.star}">${hl('Welcome to<br>Atenean<br>*Networking*')}</div>
     <div class="t" style="font-size:21px;margin-top:26px;max-width:560px;color:${C.sub}">${F.support} Only members see your posts.</div>
     <div style="display:flex;gap:10px;margin-top:30px"><div style="width:330px;height:52px;border:1px solid rgba(170,185,255,0.22);display:flex;align-items:center;padding:0 16px;font-size:17px;color:rgba(238,241,250,0.4)">you@student.ateneo.edu</div><div style="height:52px;padding:0 22px;background:${C.signal};color:#fff;display:flex;align-items:center;font-size:17px;font-weight:650">Join BlueLink →</div></div></div>
-  <div class="abs" style="left:64px;bottom:40px">${mono('₱50 a semester · Members only', 14, C.muted)}</div>`;
+  <div class="abs" style="left:64px;bottom:40px">${mono('₱99 a year · ₱250 lifetime', 14, C.muted)}</div>`;
 
 // ---------- photograph ----------
 const browser = await chromium.launch();

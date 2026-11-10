@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>blueLink reel</title>
+<!--
+  blueLink Instagram reel. 1080 x 1920 (9:16), 37.7 s, 30 fps.
+  Every frame is a pure function of time: window.seek(t). render.mjs steps it frame by frame.
+  Open with #play to watch it loop in a browser, ?t=12.3 for one frame (seconds), or ?b=24 (beats).
+
+  Look: "Deep Field" (~/bluelink/BRAND.md). A dark sky with real stars, constellation lines, sharp corners,
+  Inter + JetBrains Mono, one blue word per headline, and one warm star: you. No HUD chrome (crosshairs, brackets,
+  scrambling letters): the sky and the type carry it.
+  Editing: one camera flying through a 3D star field. Words rise into focus, and each line hands over to the next.
+  The three hook questions are hard cuts on the beat. The app screens hang on stars, and the camera flies between them.
+
+  Music: 124 BPM in F# minor (beat 0.484 s, bar 1.935 s). Everything here is timed in beats (B).
+   bars 0-3   B0-16   The sky: "This is you." Pull back: "These are Ateneans." Labels. "blueLink helps you meet them."
+   bar 4      B16-20  Drop. The two links hook together: the logo, set big as a poster.
+   bar 5      B20-24  Welcome to Atenean Networking.
+   bars 6-7   B24-34  Three hook questions, hard cuts. Then "On blueLink, asking for help is normal."
+   bars 8-12  B34-52  The app: a profile (open to), a post, people search + connect. Example content, labeled.
+   bars 13-14 B52-60  Breakdown: "Only Ateneans can join."
+   bars 15-16 B60-68  Drop: ₱99 a year, ₱250 lifetime, refund.
+   bars 17-18 B68-78  The horizon. Logo, "Find your people.", link in bio, the legal line.
+  Facts and legal lines follow BRAND.md and kit.mjs: no member counts, no promises of replies or jobs, not an official
+  Ateneo service, and no "18+" on screen (it reads as NSFW; the age rule lives in the app's terms). Copy is whole sentences.
+-->
+<style>
+@font-face{font-family:"Inter BL";src:url("fonts/InterVariable-latin.woff2") format("woff2");font-weight:100 900;font-display:block}
+@font-face{font-family:"JBM";src:url("fonts/JetBrainsMono-latin.woff2") format("woff2");font-weight:400 700;font-display:block}
+:root{
+  --void:#03050d; --deep:#070c1f; --signal:#1d45e5; --glow:#3a5fff; --peri:#93a8ff; --star:#eef1fa; --flare:#ffc48a;
+  --sub:#a9b2cf; --muted:#7a84a6;
+  --sans:"Inter BL",-apple-system,"SF Pro Display",system-ui,sans-serif;
+  --mono:"JBM",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#03050d}
+#stage{position:relative;width:1080px;height:1920px;overflow:hidden;background:var(--void);color:var(--star);
+  font-family:var(--sans);font-feature-settings:"cv11","cv05","ss03";-webkit-font-smoothing:antialiased}
+canvas{position:absolute;left:0;top:0}
+.layer{position:absolute;inset:0}
+.mono{font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.hl{color:var(--peri)}
+.peso{font-family:-apple-system,"SF Pro Display",system-ui,sans-serif;letter-spacing:0;margin-right:-0.005em}
+
+/* big type: Inter 700, tight. Words are .w spans so each one can rise into focus on its own. */
+.big{position:absolute;left:84px;right:84px;top:0;font-weight:700;letter-spacing:-.04em;line-height:.98;white-space:nowrap;display:none}
+.big .ln{display:block}
+.big .w{display:inline-block;will-change:transform,filter,opacity}
+.c{text-align:center}.r{text-align:right}
+.subl{position:absolute;left:84px;right:84px;font-size:46px;font-weight:500;letter-spacing:-.015em;line-height:1.3;color:var(--sub);display:none}
+
+/* labels next to named stars: plain catalog text, no brackets */
+.lab{position:absolute;left:0;top:0;display:none;font-family:var(--mono);font-size:24px;letter-spacing:.12em;text-transform:uppercase;color:var(--peri);white-space:nowrap;font-weight:500}
+.lab.you{color:var(--flare)}
+
+/* ---------- the logo, set as a poster: an oversized mark over a full-width wordmark ---------- */
+#lmk{position:absolute;left:0;top:0;width:520px;height:520px;transform-origin:0 0;display:none;overflow:visible}
+#lwd{position:absolute;left:0;top:0;font-size:236px;font-weight:700;letter-spacing:-.02em;line-height:1;color:#fff;transform-origin:0 0;white-space:nowrap;display:none}
+#elogo svg{display:block;overflow:visible}
+#ew{font-weight:700;letter-spacing:-.02em;line-height:1;color:#fff;display:inline-block}
+
+/* ---------- app panels (example content) ---------- */
+.panel{position:absolute;left:0;top:0;width:900px;transform-origin:0 0;display:none;border-radius:4px;
+  border:2px solid rgba(147,168,255,.2);color:var(--star);padding:50px 52px 46px;
+  background:radial-gradient(110% 55% at 50% -8%,rgba(58,95,255,.30),rgba(58,95,255,0) 72%),radial-gradient(70% 50% at 100% 100%,rgba(147,168,255,.07),rgba(147,168,255,0) 70%),#070c1f;
+  box-shadow:0 0 0 2px rgba(0,0,0,.4),0 60px 160px -60px rgba(29,69,229,.5)}
+.panel::before{content:"";position:absolute;top:-2px;left:8%;right:8%;height:2px;
+  background:linear-gradient(90deg,rgba(147,168,255,0),rgba(147,168,255,.9) 35%,#fff 50%,rgba(147,168,255,.9) 65%,rgba(147,168,255,0));box-shadow:0 0 20px 2px rgba(90,125,255,.5)}
+.ex{position:absolute;right:34px;top:30px;font-size:21px;color:var(--muted);z-index:2}
+.av{display:grid;place-items:center;border-radius:50%;color:#fff;font-weight:700;letter-spacing:-.02em;flex:none}
+.pp{padding:0}
+.cover{height:190px;background:radial-gradient(80% 120% at 30% 0%,rgba(58,95,255,.35),rgba(58,95,255,0) 70%),#03050d;border-bottom:2px solid rgba(147,168,255,.14)}
+.cover svg{display:block}
+.pb{padding:0 52px 48px}
+.pb .av{width:156px;height:156px;font-size:56px;margin-top:-78px;border:7px solid #070c1f;background:#4b3fb0}
+.nm{font-size:60px;font-weight:700;letter-spacing:-.03em;margin-top:22px}
+.mt{font-size:34px;color:var(--sub);margin-top:6px;font-weight:500}
+.lb{font-size:23px;color:var(--peri);margin:40px 0 18px}
+.tags{display:flex;flex-wrap:wrap;gap:16px}
+.tag{display:inline-flex;align-items:center;gap:13px;height:68px;padding:0 24px;border:2px solid rgba(147,168,255,.3);background:rgba(147,168,255,.07);
+  border-radius:3px;font-size:33px;font-weight:500;color:var(--peri);white-space:nowrap}
+.tag::before{content:"";width:11px;height:11px;border-radius:50%;background:currentColor;opacity:.6}
+.tag.plain{border-color:rgba(190,205,255,.14);background:none;color:var(--sub)}
+.tag.plain::before{display:none}
+.tag.m{border-color:var(--glow)}.tag.m::before{opacity:1}
+.top{display:flex;align-items:center;gap:26px}
+.top .av{width:100px;height:100px;font-size:38px;background:#4b3fb0}
+.top b{display:block;font-size:40px;font-weight:700;letter-spacing:-.02em}
+.top div span{display:block;font-size:30px;color:var(--sub);margin-top:4px;font-weight:500}
+.kind{display:inline-flex;align-items:center;gap:16px;height:62px;padding:0 22px;margin-top:36px;border:2px solid rgba(147,168,255,.3);border-radius:3px;
+  background:rgba(147,168,255,.08);color:var(--peri);font-size:31px;font-weight:500}
+.live{position:relative;width:15px;height:15px;border-radius:50%;background:var(--flare);box-shadow:0 0 16px 2px rgba(255,196,138,.7)}
+.live b{position:absolute;inset:0;border-radius:50%;background:var(--flare)}
+.hd{font-size:40px;line-height:1.5;margin-top:26px;font-weight:500;color:var(--star)}
+.hd .w{display:inline}
+.stats{display:flex;gap:40px;margin-top:28px;font-size:32px;color:var(--sub);font-weight:500}
+.stats span{display:flex;align-items:center;gap:12px}
+.ic{width:36px;height:36px;fill:currentColor;flex:none}
+.reps{margin-top:34px;padding-top:34px;border-top:2px solid rgba(147,168,255,.12);display:grid;gap:28px}
+.rep{display:flex;gap:22px;align-items:flex-start}
+.rep .av{width:66px;height:66px;font-size:25px}
+.rep p{font-size:32px;line-height:1.4;color:var(--sub);font-weight:500}
+.rep p b{color:var(--star);font-weight:700;margin-right:8px}
+.search{position:relative;display:flex;align-items:center;gap:22px;height:104px;padding:0 30px;border:2px solid rgba(190,205,255,.18);border-radius:3px;background:#050916;font-size:38px;font-weight:500}
+.search .ic{width:40px;height:40px;color:var(--muted)}
+.search .ph{position:absolute;left:94px;color:var(--muted)}
+.caret{display:inline-block;width:3px;height:46px;background:var(--peri);margin-left:2px}
+.filt{position:relative;display:flex;gap:40px;margin-top:34px;padding-bottom:20px;border-bottom:2px solid rgba(147,168,255,.12);font-size:31px;color:var(--muted);font-weight:500}
+.filt .on{color:var(--star)}
+.ul{position:absolute;left:0;bottom:-2px;height:4px;background:var(--glow)}
+.row{display:flex;align-items:center;gap:26px;padding:30px 0;border-bottom:2px solid rgba(147,168,255,.1)}
+.row .av{width:92px;height:92px;font-size:34px}
+.who{flex:1;min-width:0}
+.who b{display:block;font-size:38px;font-weight:700;letter-spacing:-.02em}
+.who>span{display:block;font-size:29px;color:var(--sub);margin-top:4px;font-weight:500}
+.who .tag{display:inline-flex;color:var(--peri);height:52px;font-size:26px;padding:0 16px;gap:10px;margin-top:14px}
+.who .tag::before{width:9px;height:9px}
+.cbtn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:12px;height:76px;width:228px;border:2px solid rgba(190,205,255,.24);border-radius:3px;font-size:31px;font-weight:700;color:var(--star);flex:none}
+.cbtn .ic{width:32px;height:32px}
+.cbtn>span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:12px}
+.tap{position:absolute;left:50%;top:50%;border:3px solid rgba(238,241,250,.9);border-radius:50%}
+.toast{position:absolute;left:52px;right:52px;bottom:40px;height:92px;display:flex;align-items:center;gap:18px;padding:0 30px;border-radius:3px;
+  background:#18224a;border:2px solid rgba(147,168,255,.3);font-size:32px;font-weight:500;color:var(--star);box-shadow:0 30px 60px -20px rgba(0,0,0,.8)}
+.toast .ic{color:var(--peri)}
+
+/* ---------- price ---------- */
+.prow{position:absolute;left:84px;right:84px;display:none}
+.amt{font-size:290px;font-weight:700;letter-spacing:-.045em;line-height:.9;display:inline-block}
+.per{position:absolute;right:0;bottom:22px;font-size:60px;font-weight:500;color:var(--sub);letter-spacing:-.02em}
+.rule{position:absolute;left:84px;right:84px;height:2px;background:rgba(147,168,255,.35);transform-origin:0 0;display:none}
+
+/* ---------- end ---------- */
+#elogo{position:absolute;left:0;top:0;display:none;align-items:center;white-space:nowrap}
+.legal{position:absolute;left:60px;right:60px;text-align:center;font-size:25px;line-height:1.5;color:var(--muted);font-weight:500;display:none}
+
+#bloom{background:radial-gradient(circle at 50% 50%,rgba(255,240,226,1) 0%,rgba(200,212,255,.75) 14%,rgba(58,95,255,.28) 38%,rgba(3,5,13,0) 70%);opacity:0}
+#vig{background:radial-gradient(120% 70% at 50% 50%,rgba(3,5,13,0) 55%,rgba(0,0,0,.5) 100%)}
+</style>
+</head>
+<body>
+<div id="stage">
+  <canvas id="sky" width="1080" height="1920"></canvas>
+
+  <!-- things that hang in the sky: star labels and the app panels -->
+  <div class="layer" id="world">
+    <span class="lab you" id="rYOU">You</span>
+    <span class="lab" id="rL1">Open for work</span>
+    <span class="lab" id="rL2">Find a mentor</span>
+    <span class="lab" id="rL3">Study buddies</span>
+    <span class="lab" id="rL4">Ask for an intro</span>
+    <span class="lab" id="rL5">Building a startup</span>
+
+    <!-- 1: a profile, what they are open to -->
+    <div class="panel pp" id="p1">
+      <div class="cover"><svg width="900" height="190" id="p1sky"></svg></div>
+      <span class="ex mono">Example</span>
+      <div class="pb">
+        <span class="av">SC</span>
+        <div class="nm">Sam Cruz</div>
+        <div class="mt">AB Communication ’29</div>
+        <div class="lb mono">Open to</div>
+        <div class="tags" id="p1t"><span class="tag">Coffee chats</span><span class="tag">Projects</span><span class="tag">Study buddies</span><span class="tag">Finding a mentor</span></div>
+        <div class="lb mono" id="p1l2">Can help with</div>
+        <div class="tags" id="p1h"><span class="tag plain">Video editing</span><span class="tag plain">Reels</span><span class="tag plain">Interviews</span></div>
+      </div>
+    </div>
+
+    <!-- 2: a post, open for work, two replies -->
+    <div class="panel" id="p2">
+      <span class="ex mono">Example</span>
+      <div class="top"><span class="av">SC</span><div><b>Sam Cruz</b><span>AB Communication ’29 · 2h</span></div></div>
+      <p class="kind" id="p2k"><i class="live"><b id="p2ping"></b></i>Open for work</p>
+      <p class="hd" id="p2h"><span class="w">I edit videos for orgs and small brands.</span> <span class="w">Reels, event recaps, and interviews.</span> <span class="w">Looking for paid projects this break.</span></p>
+      <p class="stats" id="p2s"><span><svg class="ic" viewBox="0 0 256 256"><path d="M237,77.47A28,28,0,0,0,216,68H164V56a44.05,44.05,0,0,0-44-44,12,12,0,0,0-10.73,6.63L72.58,92H32a20,20,0,0,0-20,20v88a20,20,0,0,0,20,20H204a28,28,0,0,0,27.78-24.53l12-96A28,28,0,0,0,237,77.47ZM36,116H68v80H36ZM220,96.5l-12,96a4,4,0,0,1-4,3.5H92V106.83L126.82,37.2A20,20,0,0,1,140,56V80a12,12,0,0,0,12,12h64a4,4,0,0,1,4,4.5Z"/></svg>14</span>
+        <span><svg class="ic" viewBox="0 0 256 256"><path d="M128,20A108,108,0,0,0,31.85,177.23L21,209.66A20,20,0,0,0,46.34,235l32.43-10.81A108,108,0,1,0,128,20Zm0,192a84,84,0,0,1-42.06-11.27,12,12,0,0,0-6-1.62,12.1,12.1,0,0,0-3.8.62l-29.79,9.93,9.93-29.79a12,12,0,0,0-1-9.81A84,84,0,1,1,128,212Z"/></svg>2</span></p>
+      <div class="reps">
+        <div class="rep" id="p2r1"><span class="av" style="background:#235f6b">MR</span><p><b>Migs Reyes</b>Sent you a message. We need a reel for our launch.</p></div>
+        <div class="rep" id="p2r2"><span class="av" style="background:#9a4a22">PL</span><p><b>Paolo Lim</b>Saving this. My team needs an editor next month.</p></div>
+      </div>
+    </div>
+
+    <!-- 3: find people by skill, then connect -->
+    <div class="panel" id="p3">
+      <span class="ex mono">Example</span>
+      <div class="search"><svg class="ic" viewBox="0 0 256 256"><path d="M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z"/></svg><span id="p3q"></span><i class="caret" id="p3c"></i><span class="ph" id="p3ph">Search names, courses, or skills</span></div>
+      <div class="filt" id="p3f"><span>All</span><span>Coffee chats</span><span>Projects</span><span>Internships</span><i class="ul" id="p3ul"></i></div>
+      <div class="row" id="p3r0"><span class="av" style="background:#4b3fb0">SC</span><div class="who"><b>Sam Cruz</b><span>AB Communication ’29</span><span class="tag m">Video editing</span></div>
+        <span class="cbtn" id="p3b"><span id="p3b1"><svg class="ic" viewBox="0 0 256 256"><path d="M256,136a12,12,0,0,1-12,12h-8v8a12,12,0,0,1-24,0v-8h-8a12,12,0,0,1,0-24h8v-8a12,12,0,0,1,24,0v8h8A12,12,0,0,1,256,136Zm-54.81,56.28a12,12,0,1,1-18.38,15.44C169.12,191.42,145,172,108,172c-28.89,0-55.46,12.68-74.81,35.72a12,12,0,0,1-18.38-15.44A124.08,124.08,0,0,1,63.5,156.53a72,72,0,1,1,89,0A124,124,0,0,1,201.19,192.28ZM108,148a48,48,0,1,0-48-48A48.05,48.05,0,0,0,108,148Z"/></svg>Connect</span><span id="p3b2"><svg class="ic" viewBox="0 0 256 256"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"/></svg>Pending</span><i class="tap" id="p3tap"></i></span></div>
+      <div class="row" id="p3r1"><span class="av" style="background:#235f6b">BS</span><div class="who"><b>Bea Santos</b><span>BFA Information Design ’28</span><span class="tag m">Motion graphics</span></div>
+        <span class="cbtn"><span class="cx">Connect</span></span></div>
+      <div class="row" id="p3r2"><span class="av" style="background:#14587a">JR</span><div class="who"><b>Joaquin Reyes</b><span>BS Computer Science ’27</span><span class="tag m">Videography</span></div>
+        <span class="cbtn"><span class="cx">Connect</span></span></div>
+      <div class="toast" id="p3toast"><svg class="ic" viewBox="0 0 256 256"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"/></svg>Request sent to Sam.</div>
+    </div>
+  </div>
+
+  <!-- type -->
+  <div class="layer" id="type">
+    <div class="big c" id="i1" data-t="This is *you.*" style="top:430px;font-size:150px"></div>
+    <div class="big c" id="i2" data-t="These are|*Ateneans.*" style="top:390px;font-size:150px"></div>
+    <div class="big c" id="i3" data-t="Most of them,|you haven’t|met *yet.*" style="top:330px;font-size:128px"></div>
+    <div class="big c" id="i4" data-t="blueLink helps|you *meet* them." style="top:390px;font-size:132px"></div>
+
+    <svg id="lmk" viewBox="0 0 32 32" fill="none" stroke-width="4"><defs><clipPath id="lkclip"><circle cx="20" cy="13" r="4.2"/></clipPath></defs>
+      <rect id="lkA" x="3" y="7" width="17" height="12" rx="6" stroke="#93a8ff" pathLength="100"/>
+      <g id="lkBg"><rect id="lkB" x="12" y="13" width="17" height="12" rx="6" stroke="#ffffff" pathLength="100"/></g>
+      <rect id="lkC" x="3" y="7" width="17" height="12" rx="6" stroke="#93a8ff" clip-path="url(#lkclip)"/></svg>
+    <span id="lwd">blueLink</span>
+    <div class="subl" id="lsub" style="top:1140px">An app for Ateneans to find each other.</div>
+
+    <div class="big" id="h1" data-t="Welcome to|Atenean|*Networking.*" style="top:610px;font-size:166px"></div>
+    <div class="subl" id="h1s" style="top:1170px">It’s only for Ateneo students, alumni, and faculty.</div>
+
+    <div class="big" id="q1" data-t="Want|*connections?*" style="top:520px;font-size:190px"></div>
+    <div class="big r" id="q2" data-t="Open to|*work?*" style="top:780px;font-size:200px"></div>
+    <div class="big" id="q3" data-t="Good at|*something?*" style="top:860px;font-size:190px"></div>
+    <div class="big c" id="ans" data-t="On blueLink,|asking for help|is *normal.*" style="top:500px;font-size:128px"></div>
+
+    <div class="big" id="c1" data-t="Say what you’re|*open to.*" style="top:400px;font-size:84px"></div>
+    <div class="big" id="c2" data-t="Ask for work, a mentor,|or an *intro.*" style="top:400px;font-size:84px"></div>
+    <div class="big" id="c3" data-t="Search by course or skill.|Then say *hi.*" style="top:400px;font-size:84px"></div>
+
+    <div class="big" id="why" data-t="Only Ateneans|can *join.*" style="top:720px;font-size:166px"></div>
+    <div class="subl" id="whys" style="top:1086px">You sign up with your Ateneo email.</div>
+
+    <div class="prow" id="pr1" style="top:520px"><span class="amt"><span class="peso">₱</span>99</span><span class="per">1 year</span></div>
+    <i class="rule" id="pru1" style="top:842px"></i>
+    <div class="prow" id="pr2" style="top:884px"><span class="amt"><span class="peso">₱</span>250</span><span class="per">Lifetime</span></div>
+    <i class="rule" id="pru2" style="top:1206px"></i>
+    <div class="subl" id="pl3" style="top:1258px">You can get a full refund within 7 days.</div>
+
+    <div id="elogo"><svg id="em" viewBox="0 0 32 32" fill="none" stroke-width="4"><defs><clipPath id="ekclip"><circle cx="20" cy="13" r="4.2"/></clipPath></defs>
+      <rect id="ekA" x="3" y="7" width="17" height="12" rx="6" stroke="#93a8ff" pathLength="100"/>
+      <g id="ekBg"><rect id="ekB" x="12" y="13" width="17" height="12" rx="6" stroke="#ffffff" pathLength="100"/></g>
+      <rect id="ekC" x="3" y="7" width="17" height="12" rx="6" stroke="#93a8ff" clip-path="url(#ekclip)"/></svg><span id="ew">blueLink</span></div>
+    <div class="big c" id="ef" data-t="Find your|*people.*" style="top:720px;font-size:176px"></div>
+    <div class="subl c" id="elink" style="top:1110px;font-size:42px">Sign up through the link in our bio.</div>
+    <div class="legal" id="eg1" style="top:1468px">For college students, alumni, and faculty.</div>
+    <div class="legal" id="eg2" style="top:1508px">Made by Ateneans. Not an official Ateneo de Manila University service.</div>
+  </div>
+
+  <div class="layer" id="bloom"></div>
+  <div class="layer" id="vig"></div>
+</div>
+
+<script src="audio.js"></script>
+<script>
+/* ================= time ================= */
+const BPM = 124, BEAT = 60 / BPM;
+const b2s = (n) => n * BEAT;
+const END = 78;
+const DURATION = b2s(END); // 37.74 s
+window.DURATION = DURATION;
+window.BEAT = BEAT;
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const clamp = (x, a = 0, b = 1) => (x < a ? a : x > b ? b : x);
+const P = (x, a, b) => clamp((x - a) / (b - a));
+const lerp = (a, b, k) => a + (b - a) * k;
+const TAU = Math.PI * 2;
+const E = {
+  lin: (x) => x,
+  sine: (x) => -(Math.cos(Math.PI * x) - 1) / 2,
+  outCubic: (x) => 1 - Math.pow(1 - x, 3),
+  inCubic: (x) => x * x * x,
+  inOutCubic: (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2),
+  outQuint: (x) => 1 - Math.pow(1 - x, 5),
+  outExpo: (x) => (x >= 1 ? 1 : 1 - Math.pow(2, -10 * x)),
+  inExpo: (x) => (x <= 0 ? 0 : Math.pow(2, 10 * x - 10)),
+  inOutQuint: (x) => (x < 0.5 ? 16 * x ** 5 : 1 - Math.pow(-2 * x + 2, 5) / 2),
+};
+const rnd = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+function seeded(a) {
+  return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+const st = (el, o) => Object.assign(el.style, o);
+const vis = (el, v, disp = "block") => { el.style.display = v ? disp : "none"; return v; };
+
+/* ================= the camera ================= */
+// World units: 1 unit = 1 px at depth F. A point at depth d is drawn at scale F / d.
+const F = 900;
+const V = (x, y, z) => ({ x, y, z });
+const add = (a, x, y, z) => V(a.x + x, a.y + y, a.z + z);
+const CAM = {
+  logo: V(5000, 3000, 0),
+  q1: V(13100, 9500, 0), q2: V(14900, 8700, 0), q3: V(14000, 9100, 0),
+  ans: V(14000, 7733, -1500),
+  t1: V(14600, 9500, 600), t2: V(16300, 8400, 2100), t3: V(14700, 7200, 3600),
+  price: V(-12000, -15000, 0),
+};
+// [beat, position, ease used to get here]. "cut" jumps at that beat.
+const KEYS = [
+  [0, V(0, 0, 0)],
+  [4, V(30, -10, 70), "sine"],
+  [7, V(80, -40, -2600), "outExpo"],
+  [12, V(220, -70, -2450), "sine"],
+  [15, V(190, -40, -2150), "sine"],
+  [16, V(0, 110, 405), "inExpo"],
+  [16, CAM.logo, "cut"],
+  [24, add(CAM.logo, 0, 0, -420), "sine"],
+  [24, CAM.q1, "cut"], [26, add(CAM.q1, 0, 0, 170), "lin"],
+  [26, CAM.q2, "cut"], [28, add(CAM.q2, 0, 0, 170), "lin"],
+  [28, CAM.q3, "cut"], [30, add(CAM.q3, 0, 0, 170), "lin"],
+  [34, CAM.ans, "outCubic"],
+  [35, CAM.t1, "inOutQuint"], [40, add(CAM.t1, 0, 0, 70), "lin"],
+  [41, CAM.t2, "inOutQuint"], [46, add(CAM.t2, 0, 0, 70), "lin"],
+  [47, CAM.t3, "inOutQuint"], [52.2, add(CAM.t3, 0, 0, 70), "lin"],
+  [53.6, add(CAM.t3, 0, 350, -2300), "outExpo"],
+  [58.4, add(CAM.t3, 0, 350, -1900), "sine"],
+  [60, add(CAM.t3, 0, 350, 900), "inExpo"],
+  [60, CAM.price, "cut"],
+  [68, add(CAM.price, 0, 0, 260), "sine"],
+  [71.5, add(CAM.price, 0, 760, 330), "inOutQuint"],
+  [END, add(CAM.price, 0, 800, 380), "sine"],
+];
+function camAt(B) {
+  if (B <= KEYS[0][0]) return KEYS[0][1];
+  for (let i = 1; i < KEYS.length; i++) {
+    const [b1, p1, e] = KEYS[i];
+    if (B < b1) {
+      const [b0, p0] = KEYS[i - 1];
+      if (e === "cut") return p0;
+      const k = E[e](P(B, b0, b1));
+      return V(lerp(p0.x, p1.x, k), lerp(p0.y, p1.y, k), lerp(p0.z, p1.z, k));
+    }
+  }
+  return KEYS[KEYS.length - 1][1];
+}
+function proj(p, c) { const d = p.z - c.z; if (d < 12) return null; const s = F / d; return { x: 540 + (p.x - c.x) * s, y: 960 + (p.y - c.y) * s, s, d }; }
+const fromScreen = (sx, sy, d, c) => V(c.x + ((sx - 540) * d) / F, c.y + ((sy - 960) * d) / F, c.z + d);
+const CUTS = [16, 24, 26, 28, 60];
+
+/* ================= the sky ================= */
+const cv = $("#sky"), g = cv.getContext("2d");
+const TINTS = ["242,244,255", "242,244,255", "242,244,255", "226,234,255", "205,218,255", "255,236,214", "255,214,174"];
+// The field is a box that repeats in every direction around the camera. Its width is fixed (the frustum at the far
+// plane), so a star never jumps when the camera moves: it only wraps when it is off screen.
+const NS = 7600, NEAR = 40, DEPTH = 3600;
+const RX = (780 * (DEPTH + NEAR)) / F, RY = (1220 * (DEPTH + NEAR)) / F;
+const rs = seeded(1207);
+const STARS = Array.from({ length: NS }, () => {
+  const m = rs();
+  return { X: (rs() * 2 - 1) * RX, Y: (rs() * 2 - 1) * RY, Z: rs() * DEPTH, r0: 0.6 + Math.pow(m, 7) * 2.4, a0: 0.3 + 0.7 * Math.pow(m, 1.7),
+    glow: m > 0.972, tint: TINTS[Math.floor(rs() * TINTS.length)], tw: 0.5 + rs() * 2.4, ph: rs() * TAU, near: rs() };
+});
+const GLOW = {};
+function glowSprite(tint) {
+  if (GLOW[tint]) return GLOW[tint];
+  const c = document.createElement("canvas"); c.width = c.height = 128;
+  const x = c.getContext("2d"), gr = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+  gr.addColorStop(0, `rgba(${tint},0.6)`); gr.addColorStop(0.1, `rgba(${tint},0.22)`); gr.addColorStop(0.32, `rgba(${tint},0.05)`); gr.addColorStop(1, `rgba(${tint},0)`);
+  x.fillStyle = gr; x.fillRect(0, 0, 128, 128);
+  return (GLOW[tint] = c);
+}
+function starPos(s, c) {
+  const d = NEAR + ((((s.Z - c.z) % DEPTH) + DEPTH) % DEPTH);
+  const k = F / d;
+  const dx = ((((s.X - c.x + RX) % (2 * RX)) + 2 * RX) % (2 * RX)) - RX;
+  const dy = ((((s.Y - c.y + RY) % (2 * RY)) + 2 * RY) % (2 * RY)) - RY;
+  return [540 + dx * k, 960 + dy * k, d];
+}
+// The Milky Way: soft clouds along a band, darker dust, many faint stars. Painted once.
+const band = document.createElement("canvas");
+band.width = 2600; band.height = 1200;
+(function paintBand() {
+  const x = band.getContext("2d"), r = seeded(77), bell = () => (r() + r() + r() - 1.5) / 1.5;
+  // clouds and dust are drawn stretched along the band, so they read as a soft river, not blobs
+  const blob = (px, py, rad, rgba0, sx) => {
+    x.save(); x.translate(px, py); x.scale(sx, 1);
+    const gr = x.createRadialGradient(0, 0, 0, 0, 0, rad); gr.addColorStop(0, rgba0); gr.addColorStop(1, rgba0.replace(/[\d.]+\)$/, "0)"));
+    x.fillStyle = gr; x.fillRect(-rad, -rad, rad * 2, rad * 2); x.restore();
+  };
+  for (let i = 0; i < 160; i++) {
+    const px = r() * 2600, py = 600 + bell() * 170, rad = 120 + r() * 300, core = Math.max(0, 1 - Math.abs(px - 1300) / 1500);
+    const tint = r() < core * 0.5 ? "255,214,182" : "140,160,255";
+    blob(px, py, rad, `rgba(${tint},${(0.02 * (0.35 + core)).toFixed(4)})`, 2.4);
+  }
+  for (let i = 0; i < 60; i++) blob(r() * 2600, 600 + bell() * 50 + 26, 40 + r() * 90, "rgba(3,5,13,0.13)", 3.5); // dust lanes
+  for (let i = 0; i < 9000; i++) {
+    const px = r() * 2600, py = 600 + bell() * 260, a = 0.08 + r() * 0.42 * Math.max(0, 1 - Math.abs(py - 600) / 420);
+    x.fillStyle = `rgba(235,240,255,${a.toFixed(3)})`; x.beginPath(); x.arc(px, py, 0.45 + r() * 0.65, 0, TAU); x.fill();
+  }
+})();
+// Where the band sits per section: [beat, {a: angle, x, y, al: alpha}, ease]
+const MWK = [
+  [0, { a: -0.95, x: 60, y: 260, al: 0.35 }],
+  [7, { a: -0.9, x: 20, y: 120, al: 0.95 }, "outExpo"],
+  [16, { a: -0.82, x: 0, y: 60, al: 0.85 }, "sine"],
+  [16, { a: 0.42, x: -60, y: -320, al: 0.5 }, "cut"], [24, { a: 0.38, x: -40, y: -300, al: 0.5 }, "sine"],
+  [24, { a: -0.55, x: 140, y: 540, al: 0.5 }, "cut"], [26, { a: -0.55, x: 140, y: 540, al: 0.5 }, "lin"],
+  [26, { a: 0.75, x: -220, y: 300, al: 0.45 }, "cut"], [28, { a: 0.75, x: -220, y: 300, al: 0.45 }, "lin"],
+  [28, { a: -0.2, x: 0, y: -380, al: 0.5 }, "cut"], [30, { a: -0.2, x: 0, y: -380, al: 0.5 }, "lin"],
+  [34, { a: -0.35, x: 60, y: -150, al: 0.7 }, "outCubic"],
+  [35, { a: -0.62, x: -120, y: 80, al: 0.3 }, "inOutQuint"], [40, { a: -0.62, x: -120, y: 80, al: 0.3 }, "lin"],
+  [41, { a: -0.58, x: -330, y: 260, al: 0.3 }, "inOutQuint"], [46, { a: -0.58, x: -330, y: 260, al: 0.3 }, "lin"],
+  [47, { a: -0.66, x: 60, y: 460, al: 0.3 }, "inOutQuint"], [52.2, { a: -0.66, x: 60, y: 460, al: 0.3 }, "lin"],
+  [53.6, { a: 0.3, x: 0, y: 300, al: 0.42 }, "outExpo"], [60, { a: 0.36, x: 0, y: 260, al: 0.42 }, "sine"],
+  [60, { a: -0.14, x: 0, y: -520, al: 0.45 }, "cut"], [68, { a: -0.12, x: 0, y: -500, al: 0.5 }, "sine"],
+  [71.5, { a: -0.1, x: 0, y: -1050, al: 0.85 }, "inOutQuint"], [END, { a: -0.1, x: 0, y: -1080, al: 0.85 }, "sine"],
+];
+function mwAt(B) {
+  for (let i = 1; i < MWK.length; i++) {
+    const [b1, p1, e] = MWK[i];
+    if (B < b1) { const [b0, p0] = MWK[i - 1]; if (e === "cut") return p0; const k = E[e](P(B, b0, b1)); const o = {}; for (const key in p0) o[key] = lerp(p0[key], p1[key], k); return o; }
+  }
+  return MWK[MWK.length - 1][1];
+}
+// In the first 4 beats only a few stars are out. Then the sky fills in.
+const fieldAt = (B) => (B < 4 ? 0.16 : lerp(0.16, 1.08, E.outCubic(P(B, 4, 7))));
+// After a hard cut, the exposure settles, like a telescope camera.
+function exposureAt(B) { let e = 1; for (const c of CUTS) if (B >= c && B < c + 1) e = 1 + 0.75 * (1 - E.outCubic(P(B, c, c + 0.7))); return e; }
+
+function drawStar(x, y, r, tint, a, core = "255,255,255", glowK = 9) {
+  if (a <= 0.003) return;
+  const gs = r * glowK;
+  g.globalAlpha = clamp(a); g.drawImage(glowSprite(tint), x - gs, y - gs, gs * 2, gs * 2); g.globalAlpha = 1;
+  g.fillStyle = `rgba(${core},${clamp(a).toFixed(3)})`; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill();
+}
+
+/* ================= named stars and the lines between them ================= */
+const AN = {};
+const LABELS = [["L1", 170, 930, 3200, 0], ["L2", 860, 880, 2800, 1], ["L3", 290, 1330, 3100, 0], ["L4", 800, 1250, 2600, 1], ["L5", 560, 1580, 3400, 0]];
+const PANELS = [{ id: "p1", cam: CAM.t1, a: 35, dep: 40 }, { id: "p2", cam: CAM.t2, a: 41, dep: 46 }, { id: "p3", cam: CAM.t3, a: 47, dep: 52.2 }];
+let LINES = [];
+function buildAnchors() {
+  AN.YOU = { p: V(0, 110, 450), tint: "255,196,138", core: "255,232,208", r: 4.4, win: [0, 16.05] };
+  const c10 = camAt(10);
+  LABELS.forEach(([id, sx, sy, d], i) => (AN[id] = { p: fromScreen(sx, sy, d, c10), tint: "205,218,255", r: 3.2, win: [5.5, 16.05], fade: [5.5 + i * 0.3, 7.5 + i * 0.3] }));
+  AN.H1 = { p: fromScreen(850, 380, 900, camAt(24)), tint: "205,218,255", r: 2.6, win: [24, 34.9] };
+  AN.H2 = { p: fromScreen(220, 1500, 900, camAt(26)), tint: "205,218,255", r: 2.6, win: [26, 34.9] };
+  AN.H3 = { p: fromScreen(860, 760, 900, camAt(28)), tint: "205,218,255", r: 2.6, win: [28, 34.9] };
+  PANELS.forEach((pn, i) => {
+    const el = $("#" + pn.id);
+    el.style.display = "block"; pn.w = el.offsetWidth; pn.h = el.offsetHeight; el.style.display = "none";
+    pn.W = add(pn.cam, 0, 130, 900);
+    AN["T" + (i + 1)] = { p: add(pn.W, -pn.w / 2 - 24, -pn.h / 2 - 24, 0), tint: "205,218,255", r: 2.4, win: [pn.a - 1.6, 53.6], fade: [pn.a - 1.6, pn.a - 0.6] };
+  });
+  // [from, to, start, end, gone]
+  LINES = [
+    ["YOU", "L1", 12.1, 12.9, 16.05], ["YOU", "L4", 12.4, 13.2, 16.05], ["L1", "L3", 12.8, 13.6, 16.05],
+    ["L4", "L2", 13.1, 13.9, 16.05], ["L3", "L5", 13.4, 14.2, 16.05], ["L5", "L4", 13.7, 14.5, 16.05],
+    ["H1", "H3", 30.8, 31.6, 34.9], ["H3", "H2", 31.2, 32.0, 34.9], ["H3", "T1", 33.2, 34.1, 41.5],
+    ["T1", "T2", 39.6, 40.4, 47.5], ["T2", "T3", 45.6, 46.4, 53.6],
+  ];
+}
+function anAlpha(a, B) {
+  if (B < a.win[0] || B >= a.win[1]) return 0;
+  return a.fade ? E.sine(P(B, a.fade[0], a.fade[1])) : 1;
+}
+
+/* ================= text ================= */
+// "*word*" = the one blue word. "|" = new line.
+function split(el) {
+  let hi = false;
+  el.innerHTML = el.dataset.t.split("|").map((line) => '<span class="ln">' + line.split(" ").map((w) => {
+    let s = w, on = hi;
+    if (s.startsWith("*")) { s = s.slice(1); on = hi = true; }
+    if (s.endsWith("*")) { s = s.slice(0, -1); hi = false; }
+    return `<span class="w${on ? " hl" : ""}">${s}</span>`;
+  }).join(" ") + "</span>").join("");
+  el._ws = [...el.querySelectorAll(".w")];
+}
+// Shrink a block until its widest line of text fits.
+function fit(el, max) {
+  const was = el.style.display;
+  el.style.display = "block";
+  let fs = parseFloat(getComputedStyle(el).fontSize);
+  const textW = (l) => { const r = document.createRange(); r.selectNodeContents(l); return r.getBoundingClientRect().width; };
+  for (let i = 0; i < 60; i++) { const w = Math.max(...[...el.querySelectorAll(".ln")].map(textW)); if (w <= max) break; fs -= 2; el.style.fontSize = fs + "px"; }
+  el.style.display = was;
+}
+// Words rise into focus and leave the same way. Only opacity, blur, and a small lift: nothing that moves the
+// words sideways while they appear, so the line never jitters.
+function focus(el, B, tIn, tOut, o = {}) {
+  const ws = el._ws || [el];
+  const stag = o.stag ?? 0.07, dur = o.dur ?? 1.0, blur = o.blur ?? 12, dy = o.dy ?? 24, od = o.outDur ?? 0.6;
+  const on = B >= tIn - 0.001 && (tOut == null || B < tOut + od + ws.length * 0.02 + 0.05);
+  if (!vis(el, on)) return;
+  ws.forEach((w, i) => {
+    const k = (o.ease || E.outQuint)(P(B, tIn + i * stag, tIn + i * stag + dur));
+    const x = tOut == null ? 0 : E.inOutCubic(P(B, tOut + i * 0.02, tOut + i * 0.02 + od));
+    w.style.opacity = (k * (1 - x)).toFixed(3);
+    const bl = (1 - k) * blur + x * 8;
+    w.style.filter = bl > 0.05 ? `blur(${bl.toFixed(2)}px)` : "none";
+    w.style.transform = `translateY(${((1 - k) * dy - x * dy * 0.7).toFixed(2)}px)`;
+  });
+}
+// a single line (or block) that fades and lifts in
+function fade(el, B, tIn, tOut, o = {}) { el._ws = el._ws || [el]; focus(el, B, tIn, tOut, { stag: 0, dur: o.dur ?? 1.1, dy: o.dy ?? 16, blur: o.blur ?? 10, outDur: o.outDur ?? 0.6 }); }
+
+/* ---------- the logo: two links draw, then hook together ---------- */
+function linkMark(B, t0, hook, ids) {
+  const [A, Bb, Bg, C] = ids.map((i) => $(i));
+  const dA = E.inOutCubic(P(B, t0, t0 + 0.7)), dB = E.inOutCubic(P(B, t0 + 0.2, hook));
+  A.style.strokeDasharray = "100 100"; A.style.strokeDashoffset = (100 - 100 * dA).toFixed(2);
+  Bb.style.strokeDasharray = "100 100"; Bb.style.strokeDashoffset = (100 - 100 * dB).toFixed(2);
+  // the front link slides in and hooks exactly on the beat, with a small recoil
+  const m = E.inCubic(P(B, t0 + 0.1, hook));
+  const rec = B >= hook ? Math.sin(P(B, hook, hook + 0.5) * Math.PI * 2) * Math.exp(-6 * P(B, hook, hook + 0.5)) * 0.5 : 0;
+  Bg.setAttribute("transform", `translate(${(lerp(7, 0, m) - rec).toFixed(3)},${(lerp(6, 0, m) - rec * 0.8).toFixed(3)})`);
+  C.style.opacity = B >= hook ? 1 : 0;
+}
+
+/* ================= setup ================= */
+const M = {};
+function measure() {
+  $$(".big[data-t]").forEach(split);
+  ["#i1", "#i2", "#i3", "#i4", "#h1", "#q1", "#q2", "#q3", "#ans", "#c1", "#c2", "#c3", "#why", "#ef"].forEach((s) => fit($(s), 912));
+  // the poster logo: the wordmark fills the text column
+  const wd = $("#lwd"); wd.style.display = "block";
+  const w0 = wd.getBoundingClientRect().width; M.lwFont = (236 * 916) / w0; wd.style.fontSize = M.lwFont + "px"; wd.style.display = "none";
+  const el = $("#elogo"); el.style.display = "flex";
+  $("#em").style.width = $("#em").style.height = "150px"; $("#ew").style.fontSize = "108px"; $("#ew").style.marginLeft = "40px";
+  M.eW = el.offsetWidth; M.eH = el.offsetHeight; el.style.display = "none";
+  // the profile cover: a small patch of sky with one constellation
+  const r = seeded(5); let s = "";
+  for (let i = 0; i < 90; i++) s += `<circle cx="${(r() * 900).toFixed(1)}" cy="${(r() * 190).toFixed(1)}" r="${(0.6 + Math.pow(r(), 6) * 2.2).toFixed(2)}" fill="#eef1fa" opacity="${(0.25 + r() * 0.6).toFixed(2)}"/>`;
+  const pts = [[560, 120], [640, 62], [742, 92], [812, 44], [700, 150]];
+  s += `<polyline points="${pts.slice(0, 4).map((p) => p.join(",")).join(" ")}" fill="none" stroke="#93a8ff" stroke-opacity=".45" stroke-width="2"/><line x1="742" y1="92" x2="700" y2="150" stroke="#93a8ff" stroke-opacity=".45" stroke-width="2"/>`;
+  s += pts.map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4" fill="#fff"/>`).join("");
+  $("#p1sky").innerHTML = s;
+  // the people filters: where the underline goes
+  const f = $$("#p3f span"); $("#p3").style.display = "block";
+  M.ul = f.map((e) => [e.offsetLeft, e.offsetWidth]);
+  $("#p3").style.display = "none";
+  // the Connect icon in the other two buttons
+  const icon = $("#p3b1 svg").outerHTML;
+  $$(".cx").forEach((e) => (e.innerHTML = icon + "Connect"));
+  buildAnchors();
+}
+
+/* typing: the time each letter lands */
+function sched(text, t0, t1, seed = 1) {
+  const w = []; let s = 0;
+  for (let i = 0; i < text.length; i++) { const v = 0.6 + rnd(i + seed * 97) * 0.8; w.push(v); s += v; }
+  let a = 0; return w.map((v) => ((a += v), t0 + ((t1 - t0) * a) / s));
+}
+const count = (sc, B) => { let n = 0; while (n < sc.length && sc[n] <= B) n++; return n; };
+const QUERY = "video";
+const scQ = sched(QUERY, 47.3, 48.0, 3);
+
+/* ================= sound cues (beats -> seconds) ================= */
+function cueList() {
+  const C = [];
+  const add = (at, type, o = {}) => C.push({ at, type, ...o });
+  // the sky
+  add(0, "pulse", { v: 0.9 });
+  add(4, "air", { to: 6.4, v: 0.75, f0: 160, f1: 900 });
+  LABELS.forEach((l, i) => add(8.2 + i * 0.4, "click", { v: 0.35, pan: (l[1] - 540) / 600 }));
+  LINES.slice(0, 6).forEach(([, , t0, t1]) => add(t0, "line", { to: t1, v: 0.5 }));
+  add(15, "streak", { to: 16, v: 0.9 });
+  // the logo docks
+  add(16, "dock", { v: 1 }); add(16, "boom", { v: 0.8 });
+  add(16.2, "air", { to: 17.2, v: 0.25, f0: 500, f1: 2400 });
+  add(19, "air", { to: 20, v: 0.35, f0: 300, f1: 1800, p0: 0.3, p1: -0.5 });
+  // hooks: hard cuts
+  [24, 26, 28].forEach((t) => add(t, "shutter", { v: 1 }));
+  add(30, "air", { to: 33, v: 0.5, f0: 120, f1: 700 });
+  add(30.8, "line", { to: 31.6, v: 0.4 }); add(31.2, "line", { to: 32, v: 0.4 }); add(33.2, "line", { to: 34.1, v: 0.35 });
+  // the app
+  [[34, 35], [40, 41], [46, 47]].forEach(([a, b]) => add(a, "air", { to: b, v: 0.85, f0: 220, f1: 2600, p0: -0.4, p1: 0.4 }));
+  [39.6, 45.6].forEach((t) => add(t, "line", { to: t + 0.8, v: 0.35 }));
+  [35.6, 35.9, 36.2, 36.5].forEach((t, i) => add(t, "click", { v: 0.5, pan: -0.3 + i * 0.2 }));
+  [37.5, 37.7, 37.9].forEach((t) => add(t, "click", { v: 0.3 }));
+  add(41.4, "click", { v: 0.45 }); add(42.7, "click", { v: 0.3 });
+  add(43.4, "msg", { v: 0.8 }); add(44.4, "msg", { v: 0.55 });
+  scQ.forEach((t) => add(t, "type", { v: 0.7 }));
+  add(48.2, "click", { v: 0.4 }); [48.4, 48.6, 48.8].forEach((t) => add(t, "click", { v: 0.35 }));
+  add(50, "tap", { v: 0.9 }); add(50.3, "msg", { v: 0.8 });
+  add(52.2, "air", { to: 53.6, v: 0.6, f0: 900, f1: 140 });
+  // only Ateneans
+  add(52.2, "swell", { to: 52.7, v: 0.3 });
+  add(58.4, "streak", { to: 60, v: 0.8 });
+  // price
+  add(60, "boom", { v: 0.7 }); add(60.5, "line", { to: 61.3, v: 0.35 });
+  add(62, "boom", { v: 0.5 }); add(62.5, "line", { to: 63.3, v: 0.35 });
+  add(67.4, "air", { to: 68.4, v: 0.4, f0: 1200, f1: 200 });
+  // the horizon
+  add(68, "air", { to: 71, v: 0.55, f0: 100, f1: 500, p0: 0, p1: 0 });
+  add(69, "dock", { v: 0.7 });
+  add(70.5, "sunrise", { v: 0.8 });
+  add(74, "pulse", { v: 0.45 });
+  return C.map((c) => ({ ...c, t: b2s(c.at), t1: c.to !== undefined ? b2s(c.to) : undefined })).sort((a, b) => a.t - b.t);
+}
+
+/* ================= the frame ================= */
+function frame(B) {
+  const c = camAt(B), cp = camAt(B - 0.075);
+  const jump = Math.abs(c.x - cp.x) + Math.abs(c.y - cp.y) + Math.abs(c.z - cp.z) > 1400 || CUTS.some((t) => B >= t && B - 0.075 < t);
+
+  /* ---- sky ---- */
+  g.globalAlpha = 1; g.fillStyle = "#03050d"; g.fillRect(0, 0, 1080, 1920);
+  const mw = mwAt(B);
+  g.save(); g.globalAlpha = mw.al; g.translate(540 + mw.x, 960 + mw.y); g.rotate(mw.a); g.drawImage(band, -1300, -600); g.restore(); g.globalAlpha = 1;
+  const field = fieldAt(B), ex = exposureAt(B), sec = B * BEAT;
+  g.lineCap = "round";
+  for (const s of STARS) {
+    const [x, y, d] = starPos(s, c);
+    if (x < -60 || x > 1140 || y < -60 || y > 1980) continue;
+    const a = s.a0 * clamp((d - NEAR) / 420) * clamp((DEPTH + NEAR - d) / 700) * (0.78 + 0.22 * Math.sin(sec * s.tw + s.ph)) * ex * clamp((field - s.near) * 6);
+    if (a < 0.012) continue;
+    const r = s.r0 * clamp(0.5 + 420 / d, 0.5, 3.4);
+    if (!jump) {
+      const [px, py, pd] = starPos(s, cp), dx = x - px, dy = y - py, L = Math.hypot(dx, dy);
+      if (L > 3 && L < 700 && Math.abs(pd - d) < DEPTH / 2) {
+        g.strokeStyle = `rgba(${s.tint},${clamp(a * Math.min(1, (2.4 * r) / L + 0.3)).toFixed(3)})`;
+        g.lineWidth = r * 1.7; g.beginPath(); g.moveTo(px, py); g.lineTo(x, y); g.stroke();
+        continue;
+      }
+    }
+    if (s.glow) drawStar(x, y, r, s.tint, a * 0.85, s.tint, 7);
+    else { g.fillStyle = `rgba(${s.tint},${clamp(a).toFixed(3)})`; g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); }
+  }
+
+  /* ---- constellation lines and named stars ---- */
+  const Q = {};
+  for (const k in AN) { const a = anAlpha(AN[k], B); if (a > 0) { const q = proj(AN[k].p, c); if (q) Q[k] = { ...q, a }; } }
+  g.lineWidth = 2.2;
+  for (const [a, b, t0, t1, gone] of LINES) {
+    if (B < t0 || B >= gone || !Q[a] || !Q[b]) continue;
+    const k = E.inOutCubic(P(B, t0, t1)), A = Q[a], Bq = Q[b];
+    const hx = lerp(A.x, Bq.x, k), hy = lerp(A.y, Bq.y, k);
+    const fd = 1 - P(B, gone - 0.6, gone);
+    g.strokeStyle = `rgba(147,168,255,${(0.5 * Math.min(A.a, Bq.a) * fd).toFixed(3)})`;
+    g.beginPath(); g.moveTo(A.x, A.y); g.lineTo(hx, hy); g.stroke();
+    if (k > 0 && k < 1) drawStar(hx, hy, 2.2, "205,218,255", 0.9 * fd, "255,255,255", 6);
+  }
+  for (const k in Q) {
+    const a = AN[k], q = Q[k];
+    const r = a.r * clamp(Math.pow(q.s, 0.5) * 1.3, 0.7, 9);
+    drawStar(q.x, q.y, r, a.tint, q.a, a.core || "255,255,255", k === "YOU" ? 11 : 8);
+  }
+
+  /* ---- the planet, at the end ---- */
+  const hy = lerp(2350, 1330, E.outExpo(P(B, 68.1, 71.4)));
+  if (B >= 68) {
+    const R = 3600, cx = 540, cy = hy + R;
+    let gr = g.createRadialGradient(cx, cy, R - 6, cx, cy, R + 340);
+    gr.addColorStop(0, "rgba(58,95,255,0.55)"); gr.addColorStop(0.06, "rgba(58,95,255,0.24)"); gr.addColorStop(0.3, "rgba(58,95,255,0.07)"); gr.addColorStop(1, "rgba(58,95,255,0)");
+    g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, R + 340, 0, TAU); g.fill();
+    g.fillStyle = "#060a19"; g.beginPath(); g.arc(cx, cy, R, 0, TAU); g.fill();
+    gr = g.createRadialGradient(cx, cy, R - 260, cx, cy, R);
+    gr.addColorStop(0, "rgba(58,95,255,0)"); gr.addColorStop(1, "rgba(58,95,255,0.16)");
+    g.fillStyle = gr; g.beginPath(); g.arc(cx, cy, R, 0, TAU); g.fill();
+    const lgr = g.createLinearGradient(0, 0, 1080, 0);
+    lgr.addColorStop(0, "rgba(147,168,255,0)"); lgr.addColorStop(0.28, "rgba(147,168,255,0.65)"); lgr.addColorStop(0.5, "rgba(255,255,255,0.95)"); lgr.addColorStop(0.72, "rgba(147,168,255,0.65)"); lgr.addColorStop(1, "rgba(147,168,255,0)");
+    g.strokeStyle = lgr; g.lineWidth = 3; g.beginPath(); g.arc(cx, cy, R, Math.PI * 1.25, Math.PI * 1.75); g.stroke();
+    // you, rising over the edge: the one warm star
+    const fr = E.outCubic(P(B, 70.5, 74));
+    if (fr > 0) drawStar(540, hy - lerp(-6, 46, fr), 3.6, "255,196,138", fr, "255,232,208", 12);
+  }
+
+  /* ---- star labels: plain text that fades in next to the star ---- */
+  const lab = (id, k, t0, left) => {
+    const q = Q[k], el = $("#r" + id);
+    const a = q ? q.a * E.outCubic(P(B, t0, t0 + 0.8)) * (1 - P(B, 14.8, 15.4)) : 0;
+    if (!vis(el, a > 0.01)) return;
+    const w = el.offsetWidth;
+    st(el, { transform: `translate(${(left ? q.x - 22 - w : q.x + 22).toFixed(1)}px,${(q.y - 14 + (1 - E.outCubic(P(B, t0, t0 + 0.8))) * 8).toFixed(1)}px)`, opacity: a.toFixed(3) });
+  };
+  lab("YOU", "YOU", 0.4, false);
+  LABELS.forEach(([id, , , , left], i) => lab(id, id, 8.2 + i * 0.4, !!left));
+
+  /* ---- S1: the sky, B0-16. Each line hands over to the next. ---- */
+  focus($("#i1"), B, 0, 3.55, { dur: 0.9 });
+  focus($("#i2"), B, 4.0, 7.5);
+  focus($("#i3"), B, 7.85, 11.45);
+  focus($("#i4"), B, 11.8, 15.1, { outDur: 0.5 });
+  const bl = E.inExpo(P(B, 15.1, 15.95)) * (B < 16 ? 1 : 0) + (B >= 16 ? 1 - E.outCubic(P(B, 16, 16.9)) : 0);
+  $("#bloom").style.opacity = (bl * 0.92).toFixed(3);
+
+  /* ---- S2: the logo as a poster, B16-20. Then it tucks into the corner until the end. ---- */
+  const lmk = $("#lmk"), lwd = $("#lwd");
+  const lon = B >= 15.6 && B < 68.4;
+  vis(lmk, lon); vis(lwd, lon && B >= 16.1);
+  if (lon) {
+    linkMark(B, 15.4, 16, ["#lkA", "#lkB", "#lkBg", "#lkC"]);
+    const mv = E.inOutQuint(P(B, 19.0, 20.0)), fadeOut = 1 - P(B, 67.6, 68.3);
+    const pulse = 1 + 0.03 * Math.sin(P(B, 16, 16.5) * Math.PI);
+    st(lmk, { transform: `translate(${lerp(36, 72, mv).toFixed(2)}px,${lerp(390, 86, mv).toFixed(2)}px) scale(${(lerp(1, 60 / 520, mv) * pulse).toFixed(4)})`, opacity: fadeOut.toFixed(3) });
+    const wp = E.outQuint(P(B, 16.1, 17.2));
+    st(lwd, { transform: `translate(${lerp(78, 141, mv).toFixed(2)}px,${lerp(860, 97, mv).toFixed(2)}px) scale(${lerp(1, 40 / M.lwFont, mv).toFixed(4)})`,
+      clipPath: `inset(-20% ${(100 - wp * 100).toFixed(2)}% -20% 0)`, filter: wp < 1 ? `blur(${((1 - wp) * 14).toFixed(2)}px)` : "none", opacity: (Math.min(1, wp * 1.4) * fadeOut).toFixed(3) });
+  }
+  fade($("#lsub"), B, 17.0, 18.8);
+
+  /* ---- S3: headline, B20-24 ---- */
+  focus($("#h1"), B, 20.0, null, { stag: 0.1 });
+  if (B >= 24) $("#h1").style.display = "none";
+  fade($("#h1s"), B, 21.0, null);
+  if (B >= 24) $("#h1s").style.display = "none";
+
+  /* ---- S4: three hooks, hard cuts on B24, 26, 28 ---- */
+  [["#q1", 24, "0 0"], ["#q2", 26, "100% 0"], ["#q3", 28, "0 0"]].forEach(([id, t, org], i) => {
+    const el = $(id), end = i === 2 ? 30 : t + 2;
+    focus(el, B, t, i === 2 ? 30 : null, { stag: 0.04, dur: 0.45, blur: 8, dy: 12, outDur: 0.5 });
+    if (i < 2 && B >= end) el.style.display = "none";
+    st(el, { transform: `scale(${(1 + 0.04 * P(B, t, t + 2)).toFixed(4)})`, transformOrigin: org });
+  });
+  focus($("#ans"), B, 30.25, 33.3);
+
+  /* ---- S5: the app, B34-52. The panels hang in the sky. ---- */
+  PANELS.forEach((pn) => {
+    const el = $("#" + pn.id);
+    const a = E.sine(P(B, pn.a - 1.1, pn.a - 0.25)) * (1 - E.sine(P(B, pn.dep + 0.2, pn.dep + 1.1)));
+    const q = proj(pn.W, c);
+    if (!q || a <= 0.01 || B < pn.a - 1.6 || B > pn.dep + 1.4) { el.style.display = "none"; return; }
+    el.style.display = "block";
+    const blur = Math.min(18, Math.abs(Math.log(q.s)) * 16);
+    st(el, { transform: `translate(${(q.x - (pn.w / 2) * q.s).toFixed(2)}px,${(q.y - (pn.h / 2) * q.s).toFixed(2)}px) scale(${q.s.toFixed(4)})`, opacity: a.toFixed(3), filter: blur > 0.3 ? `blur(${blur.toFixed(2)}px)` : "none" });
+  });
+  focus($("#c1"), B, 34.7, 40.0, { dur: 0.9 });
+  focus($("#c2"), B, 40.9, 46.0, { dur: 0.9 });
+  focus($("#c3"), B, 46.9, 52.0, { dur: 0.9 });
+  const pop = (el, t, dy = 26) => { const k = E.outQuint(P(B, t, t + 0.7)); st(el, { opacity: k.toFixed(3), transform: `translateY(${((1 - k) * dy).toFixed(2)}px)`, filter: k < 1 ? `blur(${((1 - k) * 8).toFixed(2)}px)` : "none" }); };
+  if (B > 33 && B < 42) {
+    $$("#p1t .tag").forEach((e, i) => pop(e, 35.6 + i * 0.3));
+    pop($("#p1l2"), 37.2, 14); $$("#p1h .tag").forEach((e, i) => pop(e, 37.5 + i * 0.2));
+  }
+  if (B > 39 && B < 48) {
+    pop($("#p2k"), 41.4, 14);
+    const pk = P((B - 41.4) % 3, 0, 1.6); st($("#p2ping"), { transform: `scale(${1 + 2.4 * pk})`, opacity: B > 41.4 ? 0.7 * (1 - pk) : 0 });
+    $$("#p2h .w").forEach((e, i) => { const k = E.outQuint(P(B, 41.6 + i * 0.3, 42.6 + i * 0.3)); st(e, { opacity: k.toFixed(3), filter: k < 1 ? `blur(${((1 - k) * 10).toFixed(2)}px)` : "none" }); });
+    pop($("#p2s"), 42.7, 14); pop($("#p2r1"), 43.4, 40); pop($("#p2r2"), 44.4, 40);
+  }
+  if (B > 45 && B < 54) {
+    const n = count(scQ, B);
+    $("#p3q").textContent = QUERY.slice(0, n);
+    $("#p3ph").style.opacity = B < 47.3 ? 1 : 0;
+    $("#p3c").style.opacity = B < 47.0 ? 0 : B < 48.2 || (B * BEAT) % 0.9 < 0.45 ? 1 : 0;
+    const u = E.inOutQuint(P(B, 48.2, 48.7)), [l0, w0] = M.ul[0], [l1, w1] = M.ul[2];
+    st($("#p3ul"), { left: lerp(l0, l1, u) + "px", width: lerp(w0, w1, u) + "px" });
+    $$("#p3f span").forEach((e, i) => e.classList.toggle("on", i === (u > 0.5 ? 2 : 0)));
+    ["#p3r0", "#p3r1", "#p3r2"].forEach((id, i) => pop($(id), 48.4 + i * 0.2, 34));
+    const sent = B >= 50.1, btn = $("#p3b");
+    st(btn, { transform: `scale(${B >= 50 && B < 50.2 ? 0.95 : 1})`, background: sent ? "rgba(147,168,255,.1)" : "transparent", borderColor: sent ? "rgba(147,168,255,.35)" : "rgba(190,205,255,.24)", color: sent ? "var(--peri)" : "var(--star)" });
+    $("#p3b1").style.opacity = sent ? 0 : 1; $("#p3b2").style.opacity = sent ? 1 : 0;
+    const tp = P(B, 50, 51.2), tr = lerp(30, 160, E.outCubic(tp));
+    st($("#p3tap"), { width: tr + "px", height: tr + "px", marginLeft: -tr / 2 + "px", marginTop: -tr / 2 + "px", opacity: tp > 0 && tp < 1 ? 1 - tp : 0 });
+    const ts = E.outExpo(P(B, 50.3, 51.0));
+    st($("#p3toast"), { opacity: ts, transform: `translateY(${(1 - ts) * 30}px)` });
+  }
+
+  /* ---- S6: only Ateneans, B52-60 ---- */
+  focus($("#why"), B, 52.6, 58.3, { stag: 0.09, dur: 1.1 });
+  fade($("#whys"), B, 53.5, 58.3);
+
+  /* ---- S7: price, B60-68 ---- */
+  const pout = E.inOutCubic(P(B, 67.3, 68.1));
+  const slam = (el, t) => { if (!vis(el, B >= t && B < 68.2)) return; const k = E.outExpo(P(B, t, t + 0.5)); st(el, { opacity: (k * (1 - pout)).toFixed(3), transform: `scale(${(1.14 - 0.14 * k).toFixed(4)}) translateY(${(-pout * 16).toFixed(2)}px)`, transformOrigin: "0 60%", filter: `blur(${((1 - k) * 20 + pout * 8).toFixed(2)}px)` }); };
+  slam($("#pr1"), 60); slam($("#pr2"), 62);
+  ["#pr1", "#pr2"].forEach((id, i) => { const el = $(id + " .per"); const k = E.outQuint(P(B, 60.4 + i * 2, 61.3 + i * 2)); st(el, { opacity: k, filter: k < 1 ? `blur(${(1 - k) * 10}px)` : "none" }); });
+  [["#pru1", 60.5], ["#pru2", 62.5]].forEach(([id, t]) => { const el = $(id); if (vis(el, B >= t && B < 68.2)) st(el, { transform: `scaleX(${E.inOutCubic(P(B, t, t + 0.8))})`, opacity: 1 - pout }); });
+  fade($("#pl3"), B, 64, 67.3);
+
+  /* ---- S8: the horizon, B68-78 ---- */
+  const el = $("#elogo");
+  if (vis(el, B >= 68.3, "flex")) {
+    linkMark(B, 68.3, 69, ["#ekA", "#ekB", "#ekBg", "#ekC"]);
+    st(el, { transform: `translate(${540 - M.eW / 2}px,${560 - M.eH / 2}px)` });
+    const wp = E.outQuint(P(B, 69.1, 70.2));
+    st($("#ew"), { clipPath: `inset(-20% ${(100 - wp * 100).toFixed(2)}% -20% 0)`, filter: wp < 1 ? `blur(${((1 - wp) * 14).toFixed(2)}px)` : "none", opacity: Math.min(1, wp * 1.4) });
+  }
+  focus($("#ef"), B, 70.0, null, { stag: 0.1 });
+  fade($("#elink"), B, 71.4, null);
+  fade($("#eg1"), B, 72.2, null); fade($("#eg2"), B, 72.4, null);
+}
+
+window.seek = (t) => frame(t / BEAT);
+window.cueList = cueList;
+window.ready = (async () => {
+  await document.fonts.ready;
+  await Promise.all([document.fonts.load('700 100px "Inter BL"'), document.fonts.load('500 30px "Inter BL"'), document.fonts.load('500 30px "JBM"')]);
+  measure();
+  const q = new URLSearchParams(location.search);
+  if (location.hash === "#play") {
+    const t0 = performance.now();
+    const loop = () => { window.seek(((performance.now() - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+    loop();
+  } else window.seek(q.has("b") ? +q.get("b") * BEAT : +(q.get("t") || 0));
+  return true;
+})();
+</script>
+</body>
+</html>

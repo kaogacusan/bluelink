@@ -10,6 +10,7 @@ import { chromium } from 'playwright-core';
 import { mkdir, writeFile, readFile, rm, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { BASE_CSS, fontLinks, LOOKS } from './kit.mjs';
+import { pageCss, pdfOptions, trimPdf } from './pdf.mjs';
 
 const PX_PER_MM = 96 / 25.4;
 const OUT = fileURLToPath(new URL('../../assets/print/', import.meta.url));
@@ -32,7 +33,7 @@ async function docFor(asset, version) {
   const pages = await Promise.all(asset.pages.map((_, i) => version.html(i)));
   const body = pages.map((p) => `<section class="pg" style="width:${w}mm;height:${h}mm">${p}</section>`).join('');
   return `<!doctype html><html><head><meta charset="utf-8">${fontLinks()}
-<style>@page{size:${w}mm ${h}mm;margin:0}${BASE_CSS}${asset.css || ''}</style></head><body>${body}</body></html>`;
+<style>${pageCss(asset.mm)}${BASE_CSS}${asset.css || ''}</style></head><body>${body}</body></html>`;
 }
 
 async function buildVersion(browser, pageId, asset, version) {
@@ -44,7 +45,9 @@ async function buildVersion(browser, pageId, asset, version) {
   await tab.evaluate(() => document.fonts.ready);
 
   const [w, h] = asset.mm;
-  await tab.pdf({ path: `${dir}${version.id}.pdf`, width: `${w}mm`, height: `${h}mm`, printBackground: true, preferCSSPageSize: true });
+  // exactly w × h mm: no white strip on the right or bottom edge (see pdf.mjs)
+  await tab.pdf(pdfOptions(`${dir}${version.id}.pdf`, asset.mm));
+  await trimPdf(`${dir}${version.id}.pdf`, asset.mm);
 
   const S = sizes(asset);
   const out = { jpg: [], m: [], t: [] };

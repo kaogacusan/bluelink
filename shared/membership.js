@@ -12,7 +12,7 @@ export const FREE_ROLES = ['alum', 'faculty']
 
 export const MEMBERSHIP = {
   plans: PLANS,
-  codeDays: 365, // voucher cards and founding member codes give one year
+  codeDays: 365, // 1-year voucher cards and founding member codes give one year. Lifetime voucher cards give lifetime.
 }
 
 export const planById = (id) => PLANS.find((p) => p.id === id) || PLANS[0]
