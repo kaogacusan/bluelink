@@ -51,9 +51,9 @@ function OrgCard({ org: start }: { org: Org }) {
 }
 
 const KINDS = [
-  { id: 'all', label: 'Orgs and businesses' },
-  { id: 'org', label: 'Orgs only' },
-  { id: 'business', label: 'Businesses only' },
+  { id: 'all', label: 'Any type' },
+  { id: 'org', label: 'Orgs' },
+  { id: 'business', label: 'Businesses' },
 ] as const
 
 type Kind = (typeof KINDS)[number]['id']
@@ -62,7 +62,6 @@ export function Orgs({ type = 'all' }: { type?: Kind }) {
   const [kind, setKind] = useState<Kind>(type)
   const [q, setQ] = useState('')
   const [query, setQuery] = useState('')
-  const [cat, setCat] = useState('')
   const create = kind === 'business' ? href.newBusiness : href.newOrg
 
   useEffect(() => setKind(type), [type])
@@ -72,7 +71,7 @@ export function Orgs({ type = 'all' }: { type?: Kind }) {
     return () => clearTimeout(t)
   }, [q])
 
-  const params = new URLSearchParams(Object.entries({ type: kind, q: query, cat }).filter(([, v]) => v))
+  const params = new URLSearchParams(Object.entries({ type: kind, q: query }).filter(([, v]) => v))
   const { data, error } = useFetch<{ orgs: Org[] }>(`/api/orgs?${params}`)
 
   return (
@@ -94,14 +93,6 @@ export function Orgs({ type = 'all' }: { type?: Kind }) {
           {KINDS.map((k) => (
             <option key={k.id} value={k.id}>
               {k.label}
-            </option>
-          ))}
-        </select>
-        <select className="input select chip-select" value={cat} onChange={(e) => setCat(e.target.value)} aria-label="Category">
-          <option value="">Any type</option>
-          {ORG_CATEGORIES.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.label}
             </option>
           ))}
         </select>
