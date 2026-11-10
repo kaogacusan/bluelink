@@ -571,7 +571,7 @@ export function createDemo({ db, save, newId, acceptLink, sendMessage, requestLi
   function onJoin(uid) {
     if (ownerUids.has(uid)) return setUpOwner(uid)
     setTimeout(() => {
-      if (!db.users[uid] || db.links[`${uid}:demo-migs`] || db.links[`demo-migs:${uid}`]) return
+      if (!db.users[uid] || !db.users['demo-migs'] || db.links[`${uid}:demo-migs`] || db.links[`demo-migs:${uid}`]) return
       requestLink('demo-migs', uid, 'Hi! I saw you just joined. I help run a tech org and we are looking for people for a campus app project. Want to meet up this week?')
     }, 2500)
   }
