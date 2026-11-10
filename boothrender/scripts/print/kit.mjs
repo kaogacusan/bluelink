@@ -119,9 +119,11 @@ export const EVENT = {
 // *word* = a key phrase set bright (in a statement) or the one blue word (in a heading).
 export const INFO = {
   cover: 'A private network for the Ateneo community.',
-  can: 'Find *internships*, connect with *mentors*, and offer your *skills* to fellow Ateneans.',
-  safe: ['Your profile and posts are visible to members only.', 'You can report, block, or delete your data at any time.'],
-  price: 'Both plans include the full app. Full refund within 7 days.',
+  can: 'Connect with *orgs*, *businesses*, and *mentors*, and share your *skills* with each other.',
+  safeHead: 'A safe space\nfor *networking.*',
+  safe: ['It’s exclusive to the Ateneo community.', 'Everyone here joined to network and find opportunities.'],
+  // True today: the app's Terms say how to ask for a refund. There is no refund button in the app yet.
+  price: 'Full refund within 7 days. The steps are in the app.',
   join: ['Sign in with your Ateneo Google account', 'Complete your profile', 'Choose a plan and start connecting'],
   booth: 'Sign up through the link in our bio, or visit us at the LAS Bazaar: Red Brick Road, Tent 34B.',
 };

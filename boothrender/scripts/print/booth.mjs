@@ -779,10 +779,21 @@ export const instaPost = (v, h) => {
     <div class="abs foot" style="left:${PM}px;right:${PM}px;bottom:${PM - 16}px">${logo}<span class="m" style="font-size:22px;color:${k.dark ? C.peri : C.ink3}">Link in bio</span></div></div>${FIT}`;
 };
 
+// Instagram captions: the words under each post. Kept here, in one place, so captions.txt (npm run posts) and the
+// Copy caption buttons on the booth page always say the same thing. The legal line goes in every caption, never on
+// the image. A blank line between paragraphs pastes cleanly into Instagram.
+export const IG_LEGAL = 'Made by Ateneans. Not an official Ateneo de Manila University service.';
+export const IG_CAPTIONS = {
+  teasers: HOOKS.map((h) => `${h.cap} Link in bio.\n\n${IG_LEGAL}`),
+  info: `BlueLink is a private network for the Ateneo community. Connect with orgs, businesses, and mentors, and share your skills with each other.\n\nIt’s exclusive to Ateneans, so it’s a safe space for people who want to network and find opportunities.\n\nMembership is ${F.price} a year or ${F.life} for lifetime access, with a full refund within 7 days. Sign up through the link in our bio, or visit us at the ${EVENT.name}, ${EVENT.road}, Tent ${EVENT.tent}.\n\n${IG_LEGAL}`,
+  booth: `We have a booth at the ${EVENT.name}! Find us at the very end of ${EVENT.road}, Tent ${EVENT.tent}, across from the Bazaar Committee booth. We're there Nov 9 to 13, 8 AM to 5 PM.\n\nDrop by to sign up or just to ask us about BlueLink.\n\n${IG_LEGAL}`,
+};
+
 const insta = {
   id: 'insta', piece: 'insta', section: 'social', name: 'Teaser posts', size: `1080 × 1350 px (4:5), ${HOOKS.length} posts`, mm: [IW, IH], px: PY, css: INSTA_CSS,
   pages: HOOKS.map(hookText),
-  print: 'Single posts, one question each, to build interest before and during the bazaar. Post the JPG. Captions: npm run posts makes captions.txt. Put the legal line in every caption.',
+  print: 'Single posts, one question each, to build interest before and during the bazaar. Post the JPG with its caption (Copy caption below; it changes with the post you pick).',
+  captions: IG_CAPTIONS.teasers,
   versions: [{ id: 'v1', note: 'The question top left, a constellation, the logo, and “Link in bio”.', html: (i) => instaPost('v1', HOOKS[i]) }],
 };
 
@@ -809,12 +820,11 @@ const igSky = (seed, w = PX, h = PY, shift = 0, opts = {}) => {
   // a sky wider than one post: show only this post's part of it
   return w === PX ? s : s.replace(/viewBox="0 0 [\d.]+ [\d.]+"/, `viewBox="${shift} 0 ${PX} ${h}"`);
 };
-const igNum = (i, n) => `${i + 1} / ${n}`;
 
 // ---------- INFO CAROUSEL, 5 slides ----------
 // One idea per slide, and a different layout on each, so every slide reads in a few seconds:
 // 1 the headline, 2 one big statement with its key phrases lit, 3 members only (a closed ring of stars),
-// 4 the price as big as it gets, 5 the steps as a constellation.
+// 4 both plans at the same size, 5 the steps as a constellation.
 const INFO_N = 5;
 const INFO_PAGES = ['Welcome', 'What you can do', 'Members only', 'Membership', 'How to join'];
 const kicker = (t) => `<div style="font-size:32px;font-weight:600;letter-spacing:-0.01em;color:${C.peri}">${esc(t)}</div>`;
@@ -862,14 +872,13 @@ export const infoSlide = (i) => {
     // 2. one statement, key phrases lit
     () => pxAt(PM, top, `${kicker('What you can do')}<div style="margin-top:44px">${statement(INFO.can, 96)}</div>`, `width:${IG_W}px`),
     // 3. members only: the claim big, two short lines, and a closed ring of stars
-    () => `${ringSvg(780, 790, 140)}${pxAt(PM, top, `${kicker('Members only')}<div style="margin-top:36px">${igHead('Only *Ateneans*\ncan join.', 112)}</div>
+    () => `${ringSvg(780, 790, 140)}${pxAt(PM, top, `${kicker('Members only')}<div style="margin-top:36px">${igHead(INFO.safeHead, 112)}</div>
         <div style="margin-top:56px;width:560px">${INFO.safe.map((t) => `<div style="font-size:38px;font-weight:600;letter-spacing:-0.015em;line-height:1.25;color:${K.sub};margin-bottom:28px">${esc(t)}</div>`).join('')}</div>`, `width:${IG_W}px`)}`,
     // 4. the price, as big as it gets
     () => pxAt(PM, top, `${kicker('Membership')}
-        <div style="margin-top:20px;display:flex;align-items:baseline;gap:28px">
-          <span class="d nw" style="font-size:330px;letter-spacing:-0.05em;line-height:1;color:${K.ink}">${F.price}</span>
-          <span style="font-size:60px;font-weight:700;letter-spacing:-0.03em;color:${K.sub}">a year</span></div>
-        <div style="margin-top:12px;font-size:56px;font-weight:700;letter-spacing:-0.03em;color:${K.muted}">or <span style="color:${K.ink}">${F.life}</span> for lifetime access</div>
+        ${[[F.price, 'a year'], [F.life, 'lifetime access']].map(([p, per], j) => `<div style="margin-top:${j ? 8 : 28}px;display:flex;align-items:baseline;gap:30px">
+          <span class="d nw" style="font-size:196px;letter-spacing:-0.05em;line-height:1;color:${K.ink}">${p}</span>
+          <span class="nw" style="font-size:58px;font-weight:700;letter-spacing:-0.03em;color:${K.sub}">${per}</span></div>`).join('')}
         <div style="margin-top:56px;padding-top:30px;border-top:2px solid ${K.rule};font-size:36px;font-weight:500;line-height:1.3;color:${K.sub}">${esc(INFO.price)}</div>`, `width:${IG_W}px`),
     // 5. how to join: three stars joined by one line
     () => {
@@ -884,15 +893,16 @@ export const infoSlide = (i) => {
     },
   ];
   return `<div class="post" style="background:${K.bg}">${igSky('info-sky', PX * INFO_N, PY, i * PX)}${infoChain(i)}
-    ${bodies[i]()}${igFoot(igNum(i, INFO_N))}</div>`;
+    ${bodies[i]()}${igFoot()}</div>`;
 };
 
 const one = (note, html) => [{ id: 'v1', note, html }];
 const infoCarousel = {
   id: 'insta-info', piece: 'insta', section: 'social', name: 'Info carousel', size: `1080 × 1350 px (4:5), ${INFO_N} slides`, mm: [IW, IH], px: PY, css: INSTA_CSS,
   pages: INFO_PAGES,
-  print: 'One carousel post, 5 slides in this order. The main explainer: pin it to the top of the profile. npm run posts makes the caption.',
-  versions: one('One idea per slide, each with its own layout: the headline, one statement with its key phrases lit, members only with a closed ring of stars, the price as big as it gets, and the steps as a constellation. One line of stars runs along the bottom of all 5.', (i) => infoSlide(i)),
+  print: 'One carousel post, 5 slides in this order. The main explainer: pin it to the top of the profile. Copy the caption below.',
+  caption: IG_CAPTIONS.info,
+  versions: one('One idea per slide, each with its own layout: the headline, one statement with its key phrases lit, members only with a closed ring of stars, both plans at the same size (a year and lifetime access), and the steps as a constellation. One line of stars runs along the bottom of all 5.', (i) => infoSlide(i)),
 };
 
 // ---------- THE MAP ----------
@@ -945,7 +955,7 @@ const factRows = (list, size = 46, lw = 170) => `<div style="border-bottom:2px s
 
 export const boothSlide = (i) => {
   const top = PM + 24;
-  const foot = igFoot(igNum(i, BOOTH_PAGES.length));
+  const foot = igFoot();
   if (i === 0) {
     // the planet's edge low on the post, the sun about to come up
     return `<div class="post" style="background:${K.bg}">${igSky('booth-sky')}
@@ -969,7 +979,8 @@ export const boothSlide = (i) => {
 const boothPost = {
   id: 'insta-booth', piece: 'insta', section: 'social', name: 'Booth carousel', size: `1080 × 1350 px (4:5), ${BOOTH_PAGES.length} slides`, mm: [IW, IH], px: PY, css: INSTA_CSS,
   pages: BOOTH_PAGES,
-  print: `One carousel post for the bazaar week (${EVENT.short}). Check the hours with the organizers before posting.`,
+  print: `One carousel post for the bazaar week (${EVENT.short}). Check the hours with the organizers before posting. Copy the caption below.`,
+  caption: IG_CAPTIONS.booth,
   versions: one('1: where, when, and the time, over a sunrise. 2: a simple map of the bazaar from above, with a path from JSEC to our glowing tent. 3: how signing up at the booth works.', (i) => boothSlide(i)),
 };
 

@@ -138,6 +138,9 @@ export function mountAssets(art, { pieces = [], stage = null } = {}) {
         </div>` : ''}
         <p class="asset__note"></p>
         <p class="asset__print">${esc(a.print)}</p>
+        ${a.caption || a.captions ? `<div class="asset__cap">
+          <div class="asset__cap-top"><span>Caption</span><button type="button" class="btn btn--ghost asset__copy" data-copy>Copy caption</button></div>
+          <p class="asset__cap-text"></p></div>` : ''}
         <div class="asset__dl">
           <a class="btn btn--pri" data-dl="pdf">PDF<small></small></a>
           <a class="btn" data-dl="jpg">JPG<small></small></a>
@@ -152,6 +155,17 @@ export function mountAssets(art, { pieces = [], stage = null } = {}) {
       if (!b) return;
       shown[a.id] = +b.dataset.pg;
       draw(a.id);
+    });
+    // Copy caption: the clipboard API, or a hidden textarea where the API is not allowed
+    el.querySelector('[data-copy]')?.addEventListener('click', async (e) => {
+      const b = e.currentTarget;
+      const t = el.querySelector('.asset__cap-text').textContent;
+      try { await navigator.clipboard.writeText(t); } catch {
+        const ta = document.createElement('textarea');
+        ta.value = t; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      }
+      b.textContent = 'Copied'; clearTimeout(b._t); b._t = setTimeout(() => { b.textContent = 'Copy caption'; }, 1600);
     });
     el.querySelector('[data-show]')?.addEventListener('click', () => {
       document.querySelectorAll('#viewTabs button').forEach((b) => b.setAttribute('aria-selected', 'false'));
@@ -175,6 +189,9 @@ export function mountAssets(art, { pieces = [], stage = null } = {}) {
     el.querySelectorAll('.vchip').forEach((b) => b.setAttribute('aria-checked', String(b.dataset.v === v.id)));
     el.querySelectorAll('[data-pg]').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.pg === i)));
     el.querySelector('.asset__note').textContent = v.note;
+    // the caption for this post (teasers have one per post, carousels one for the whole post)
+    const cap = el.querySelector('.asset__cap-text');
+    if (cap) cap.textContent = a.captions ? a.captions[i] ?? '' : a.caption;
     const pdf = el.querySelector('[data-dl="pdf"]');
     pdf.href = v.pdf; pdf.download = `${name}.pdf`;
     pdf.querySelector('small').textContent = `${a.pages.length > 1 ? `${a.pages.length} pages · ` : ''}${v.pdfKb} KB`;

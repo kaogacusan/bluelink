@@ -13,10 +13,9 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { join } from 'node:path';
 import { BASE_CSS, fontLinks, HOOKS, EVENT, F, hookText, peso } from '../print/kit.mjs';
-import { instaPost, infoSlide, boothSlide, boothStory, INSTA_CSS, INSTA_PX, STORY_PX } from '../print/booth.mjs';
+import { instaPost, infoSlide, boothSlide, boothStory, INSTA_CSS, INSTA_PX, STORY_PX, IG_CAPTIONS } from '../print/booth.mjs';
 
 const OUT = process.argv[2] || join(homedir(), 'Downloads/ADVO/BLUELINK/Instagram');
-const LEGAL = 'Made by Ateneans. Not an official Ateneo de Manila University service.';
 const [W, H] = INSTA_PX;
 const num = (i) => String(i + 1).padStart(2, '0');
 const INFO_FILES = ['welcome', 'what-you-can-do', 'members-only', 'membership', 'how-to-join'];
@@ -42,13 +41,11 @@ try {
   await browser.close();
 }
 
-const teasers = HOOKS.map((h, i) => `${num(i)}  ${hookText(h)}${h.sub ? ` / ${h.sub}` : ''}\n    ${h.cap} Link in bio.\n    ${LEGAL}`).join('\n\n');
-const info = `INFO CAROUSEL (info-carousel/, 5 slides in order). Pin it to the top of the profile.
-    BlueLink is a private network for the Ateneo community. Students, alumni, and faculty can find internships, connect with mentors, and offer their skills. Membership is ${F.price} a year or ${F.life} for lifetime access, with a full refund within 7 days. Sign up through the link in our bio, or visit us at the ${EVENT.name}, ${EVENT.road}, Tent ${EVENT.tent}.
-    ${LEGAL}`;
-const booth = `BOOTH CAROUSEL (booth-carousel/, 3 slides in order). Post during the bazaar week.
-    We have a booth at the ${EVENT.name}! Find us at the very end of ${EVENT.road}, Tent ${EVENT.tent}, across from the Bazaar Committee booth. We're there Nov 9 to 13, 8 AM to 5 PM. Drop by to sign up or just to ask us about BlueLink.
-    ${LEGAL}
+// The captions come from IG_CAPTIONS in booth.mjs, the same words as the Copy caption buttons on the booth page.
+const indent = (t) => t.split('\n').map((l) => (l ? `    ${l}` : '')).join('\n');
+const teasers = HOOKS.map((h, i) => `${num(i)}  ${hookText(h)}\n${indent(IG_CAPTIONS.teasers[i])}`).join('\n\n');
+const info = `INFO CAROUSEL (info-carousel/, 5 slides in order). Pin it to the top of the profile.\n${indent(IG_CAPTIONS.info)}`;
+const booth = `BOOTH CAROUSEL (booth-carousel/, 3 slides in order). Post during the bazaar week.\n${indent(IG_CAPTIONS.booth)}
 
 BOOTH STORY (booth-story.png). Post each day of the bazaar. Add a link sticker in the empty space right of the road. Stories have no caption.`;
 await writeFile(join(OUT, 'captions.txt'), `BlueLink Instagram posts. Caption under each.\n\nTEASERS (teasers/)\n\n${teasers}\n\n${info}\n\n${booth}\n`);

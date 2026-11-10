@@ -679,7 +679,21 @@
     "Building a startup?",
     "Find your people."
    ],
-   "print": "Single posts, one question each, to build interest before and during the bazaar. Post the JPG. Captions: npm run posts makes captions.txt. Put the legal line in every caption.",
+   "print": "Single posts, one question each, to build interest before and during the bazaar. Post the JPG with its caption (Copy caption below; it changes with the post you pick).",
+   "captions": [
+    "BlueLink is a networking app just for Ateneans, whether you’re a student, an alum, or faculty. Sign up through the link in our bio. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "Thinking about your next sem, or your first job? Find someone from your course who’s been through it and ask them. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "Everyone on BlueLink signed up because they want to meet people, so saying hi is a lot less awkward. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "Want to meet someone you don’t know yet? Ask a friend on BlueLink who does. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "Looking for an internship? Add it to what you’re open to on your profile, so other Ateneans know. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "If you edit, code, design, or tutor, put it on your profile. Someone in your batch might be looking for exactly that. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "See upcoming talks, workshops, and org events posted on BlueLink, and tap Going on the ones you plan to attend. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "The person you need for your startup might be in the next block. Look for them on BlueLink. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "You can only sign up with an Ateneo email, and only members can see what you post. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "Need groupmates or respondents for your thesis? Post what you need and see who’s interested. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "Looking for a co-founder, a designer, or your first users? Start with other Ateneans. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
+    "BlueLink is a networking app for Ateneans. Sign up through the link in our bio. Link in bio.\n\nMade by Ateneans. Not an official Ateneo de Manila University service."
+   ],
    "versions": [
     {
      "id": "v1",
@@ -750,14 +764,15 @@
     "Membership",
     "How to join"
    ],
-   "print": "One carousel post, 5 slides in this order. The main explainer: pin it to the top of the profile. npm run posts makes the caption.",
+   "print": "One carousel post, 5 slides in this order. The main explainer: pin it to the top of the profile. Copy the caption below.",
+   "caption": "BlueLink is a private network for the Ateneo community. Connect with orgs, businesses, and mentors, and share your skills with each other.\n\nIt’s exclusive to Ateneans, so it’s a safe space for people who want to network and find opportunities.\n\nMembership is ₱99 a year or ₱250 for lifetime access, with a full refund within 7 days. Sign up through the link in our bio, or visit us at the LAS Bazaar, Red Brick Road, Tent 34B.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
    "versions": [
     {
      "id": "v1",
      "look": "v1",
-     "note": "One idea per slide, each with its own layout: the headline, one statement with its key phrases lit, members only with a closed ring of stars, the price as big as it gets, and the steps as a constellation. One line of stars runs along the bottom of all 5.",
+     "note": "One idea per slide, each with its own layout: the headline, one statement with its key phrases lit, members only with a closed ring of stars, both plans at the same size (a year and lifetime access), and the steps as a constellation. One line of stars runs along the bottom of all 5.",
      "pdf": "/assets/print/booth/insta-info/v1.pdf",
-     "pdfKb": 624,
+     "pdfKb": 616,
      "jpg": [
       "/assets/print/booth/insta-info/v1-1.jpg",
       "/assets/print/booth/insta-info/v1-2.jpg",
@@ -798,14 +813,15 @@
     "Where we are",
     "Signing up"
    ],
-   "print": "One carousel post for the bazaar week (Nov 9–13). Check the hours with the organizers before posting.",
+   "print": "One carousel post for the bazaar week (Nov 9–13). Check the hours with the organizers before posting. Copy the caption below.",
+   "caption": "We have a booth at the LAS Bazaar! Find us at the very end of Red Brick Road, Tent 34B, across from the Bazaar Committee booth. We're there Nov 9 to 13, 8 AM to 5 PM.\n\nDrop by to sign up or just to ask us about BlueLink.\n\nMade by Ateneans. Not an official Ateneo de Manila University service.",
    "versions": [
     {
      "id": "v1",
      "look": "v1",
      "note": "1: where, when, and the time, over a sunrise. 2: a simple map of the bazaar from above, with a path from JSEC to our glowing tent. 3: how signing up at the booth works.",
      "pdf": "/assets/print/booth/insta-booth/v1.pdf",
-     "pdfKb": 603,
+     "pdfKb": 600,
      "jpg": [
       "/assets/print/booth/insta-booth/v1-1.jpg",
       "/assets/print/booth/insta-booth/v1-2.jpg",
