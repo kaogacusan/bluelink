@@ -812,7 +812,7 @@ export const instaPost = (v, h) => {
 export const IG_LEGAL = 'Made by Ateneans. Not an official Ateneo de Manila University service.';
 export const IG_CAPTIONS = {
   teasers: HOOKS.map((h) => `${h.cap} Link in bio.\n\n${IG_LEGAL}`),
-  info: `BlueLink is a private network for the Ateneo community. Connect with orgs, businesses, and mentors, and share your skills with each other.\n\nIt’s exclusive to Ateneans, so it’s a safe space for people who want to network and find opportunities.\n\nMembership is ${F.price} a year or ${F.life} for lifetime access, with a full refund within 7 days. Sign up through the link in our bio, or visit us at the ${EVENT.name}, ${EVENT.road}, Tent ${EVENT.tent}.\n\n${IG_LEGAL}`,
+  info: `BlueLink is a private network for the Ateneo community. Find internships, and connect with orgs, businesses, alumni, and mentors.\n\nIt’s exclusive to Ateneans, so it’s a safe space for people who want to network and find opportunities.\n\nMembership is ${F.price} a year or ${F.life} for lifetime access, with a full refund within 7 days. Sign up through the link in our bio, or visit us at the ${EVENT.name}, ${EVENT.road}, Tent ${EVENT.tent}.\n\n${IG_LEGAL}`,
   booth: `We have a booth at the ${EVENT.name}! Find us at the very end of ${EVENT.road}, Tent ${EVENT.tent}, across from the Bazaar Committee booth. We're there Nov 9 to 13, 8 AM to 5 PM.\n\nDrop by to sign up or just to ask us about BlueLink.\n\n${IG_LEGAL}`,
 };
 
@@ -856,7 +856,7 @@ const INFO_N = 5;
 const INFO_PAGES = ['Welcome', 'What you can do', 'Members only', 'Membership', 'How to join'];
 const kicker = (t) => `<div style="font-size:32px;font-weight:600;letter-spacing:-0.01em;color:${C.peri}">${esc(t)}</div>`;
 // a statement in muted type, with its *key phrases* set bright: the eye reads the bright words first
-const statement = (t, size) => `<div style="font-size:${size}px;font-weight:700;letter-spacing:-0.035em;line-height:1.1;color:${K.muted}">${esc(t).replace(/\*(.+?)\*/g, (_, w) => `<span style="color:${K.ink}">${w}</span>`)}</div>`;
+const statement = (t, size) => `<div style="font-size:${size}px;font-weight:700;letter-spacing:-0.035em;line-height:1.1;color:${K.muted}">${esc(t).replace(/\*(.+?)\*/g, (_, w) => `<span style="color:${K.ink}">${w}</span>`).replace(/\n/g, '<br>')}</div>`;
 // One constellation runs along the bottom of every slide, so a swipe follows the line from one slide to the next.
 // It ends on the last slide in a warm star.
 const infoChain = (() => {

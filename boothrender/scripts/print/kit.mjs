@@ -231,7 +231,7 @@ export const EVENT = {
 // *word* = a key phrase set bright (in a statement) or the one blue word (in a heading).
 export const INFO = {
   cover: 'A private network for the Ateneo community.',
-  can: 'Connect with *orgs*, *businesses*, and *mentors*, and share your *skills* with each other.',
+  can: 'Find *internships.*\nConnect with *orgs*, *businesses*, *alumni*, and *mentors*.',
   safeHead: 'A safe space\nfor *networking.*',
   safe: ['It’s exclusive to the Ateneo community.', 'Everyone here joined to network and find opportunities.'],
   // True today: the app's Terms say how to ask for a refund. There is no refund button in the app yet.
