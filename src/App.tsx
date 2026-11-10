@@ -197,7 +197,7 @@ function Page({ route }: { route: Route }) {
     case 'edit':
       return <EditProfile />
     case 'admin':
-      return <Admin />
+      return <Admin tab={route.tab} />
     case 'legal':
       return <Legal doc={route.doc} />
     default:

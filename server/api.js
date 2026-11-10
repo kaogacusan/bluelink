@@ -7,6 +7,7 @@ import { FREE_ROLES, MEMBERSHIP, LIFETIME_UNTIL, PLANS, planById, isLifetime } f
 import { LEGAL } from '../shared/legal.js'
 import { openStore } from './store.js'
 import { createDemo } from './seed.js'
+import { CLUSTERS, STATUSES, TEAM, TEMPLATE, byPriority, followUpOn, pickOwner, slug, syncOutreach } from './outreach.js'
 
 const CODE_TTL = 10 * 60_000
 const HOUR = 60 * 60_000
@@ -611,6 +612,83 @@ export function createApi({ dataDir, dev = false }) {
     db.settings.gcashName = line(body.gcashName, 60)
     db.settings.gcashNumber = line(body.gcashNumber, 20)
     save()
+    return { ok: true }
+  })
+
+  // ---- org outreach: the team splits the emailing; everyone sees everyone's progress
+  if (syncOutreach(db, new URL('./outreach-orgs.json', import.meta.url))) save()
+  const outreachTemplate = () => ({ subject: db.settings.outreachSubject || TEMPLATE.subject, body: db.settings.outreachBody || TEMPLATE.body })
+  const tellAdmins = () => {
+    for (const uid of streams.keys()) if (isSiteAdmin(uid)) notify(uid, 'admin')
+  }
+  const touched = (o, uid) => {
+    o.at = Date.now()
+    o.by = db.users[uid]?.name || ''
+    save()
+    tellAdmins()
+    return { ok: true }
+  }
+  const readOutreach = (o, body) => {
+    if (body.name !== undefined && line(body.name, 120)) o.name = line(body.name, 120)
+    if (body.short !== undefined) o.short = line(body.short, 30)
+    if (body.cluster !== undefined) o.cluster = line(body.cluster, 40) || 'Other'
+    if (body.email !== undefined) o.email = line(body.email, 120).toLowerCase()
+    if (body.page !== undefined) o.page = line(body.page, 300)
+    if (body.note !== undefined) o.note = block(body.note, 1000)
+    if (body.owner !== undefined && TEAM.includes(body.owner)) o.owner = body.owner
+    if (body.tier !== undefined) o.tier = body.tier === 1 ? 1 : 2
+  }
+
+  route('GET', '/api/admin/outreach', 'admin', () => ({
+    team: TEAM,
+    statuses: STATUSES,
+    clusters: CLUSTERS,
+    template: outreachTemplate(),
+    orgs: Object.values(db.outreach)
+      .sort(byPriority)
+      .map((o) => ({ ...o, followUp: o.status === 'Sent' ? followUpOn(o.sentOn) : '' })),
+  }))
+
+  route('POST', '/api/admin/outreach', 'admin', ({ uid, body }) => {
+    const name = line(body.name, 120)
+    if (name.length < 2) throw new Fail(400, 'Type the org name.')
+    const id = slug(name)
+    if (db.outreach[id]) throw new Fail(400, 'That org is already on the list.')
+    const o = { id, name, short: '', cluster: 'Other', email: '', page: '', tier: 2, why: '', owner: '', status: 'Not sent', sentOn: '', note: '', at: 0, by: '' }
+    readOutreach(o, body)
+    if (!o.owner) o.owner = pickOwner(Object.values(db.outreach), o.tier)
+    db.outreach[id] = o
+    return touched(o, uid)
+  })
+
+  route('POST', '/api/admin/outreach/template', 'admin', ({ uid, body }) => {
+    const subject = line(body.subject, 160)
+    const text = block(body.body, 4000)
+    if (!subject || !text) throw new Fail(400, 'The email needs a subject and a message.')
+    db.settings.outreachSubject = subject
+    db.settings.outreachBody = text
+    save()
+    tellAdmins()
+    return { ok: true, by: db.users[uid]?.name || '' }
+  })
+
+  route('POST', '/api/admin/outreach/:id', 'admin', ({ uid, params, body }) => {
+    const o = db.outreach[params.id]
+    if (!o) throw new Fail(404, 'Org not found.')
+    if (body.status !== undefined) {
+      if (!STATUSES.includes(body.status)) throw new Fail(400, 'Pick a status.')
+      o.status = body.status
+      if (body.status === 'Not sent') o.sentOn = ''
+      else if (!o.sentOn) o.sentOn = new Date(Date.now() + 8 * HOUR).toISOString().slice(0, 10) // Manila date
+    }
+    readOutreach(o, body)
+    return touched(o, uid)
+  })
+
+  route('POST', '/api/admin/outreach/:id/delete', 'admin', ({ params }) => {
+    delete db.outreach[params.id]
+    save()
+    tellAdmins()
     return { ok: true }
   })
 

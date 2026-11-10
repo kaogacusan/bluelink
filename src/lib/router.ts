@@ -16,14 +16,14 @@ export type Route =
   | { page: 'inbox'; id?: string }
   | { page: 'me' }
   | { page: 'edit' }
-  | { page: 'admin' }
+  | { page: 'admin'; tab?: 'outreach' }
   | { page: 'legal'; doc: 'privacy' | 'terms' }
 
 export function parse(hash: string): Route {
   const [a, b] = hash.replace(/^#\/?/, '').split('/')
   if (Object.hasOwn(FEED_PATHS, a)) return { page: 'feed', kind: FEED_PATHS[a] }
   if (a === 'people') return { page: 'people' }
-  if (a === 'admin') return { page: 'admin' }
+  if (a === 'admin') return b === 'outreach' ? { page: 'admin', tab: 'outreach' } : { page: 'admin' }
   if (a === 'privacy' || a === 'terms') return { page: 'legal', doc: a }
   if (a === 'orgs') return b === 'new' ? { page: 'newOrg' } : { page: 'orgs' }
   if (a === 'businesses' && !b) return { page: 'businesses' }
@@ -45,6 +45,7 @@ export const href = {
   feedKind: (kind?: FeedKind) => (kind ? `#/${Object.keys(FEED_PATHS).find((k) => FEED_PATHS[k] === kind)}` : '#/'),
   people: '#/people',
   admin: '#/admin',
+  outreach: '#/admin/outreach',
   orgs: '#/orgs',
   businesses: '#/businesses',
   newOrg: '#/orgs/new',

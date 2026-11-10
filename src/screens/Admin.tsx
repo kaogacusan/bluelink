@@ -6,6 +6,7 @@ import { useLive } from '../lib/live'
 import { href } from '../lib/router'
 import { ago } from '../lib/format'
 import { REPORT_REASONS } from '../../shared/options.js'
+import { Outreach } from './Outreach'
 import type { Person } from '../types'
 
 type AdminData = {
@@ -41,9 +42,33 @@ function GcashForm({ start, onSaved }: { start: AdminData['gcash']; onSaved: () 
   )
 }
 
-export function Admin() {
-  const { isAdmin, toast } = useApp()
-  const { data, reload } = useFetch<AdminData>(isAdmin ? '/api/admin' : null)
+function AdminTabs({ tab }: { tab?: 'outreach' }) {
+  return (
+    <nav className="admin-tabs" aria-label="Admin">
+      <a href={href.admin} className={!tab ? 'is-on' : ''} aria-current={!tab ? 'page' : undefined}>
+        Overview
+      </a>
+      <a href={href.outreach} className={tab === 'outreach' ? 'is-on' : ''} aria-current={tab === 'outreach' ? 'page' : undefined}>
+        Org outreach
+      </a>
+    </nav>
+  )
+}
+
+export function Admin({ tab }: { tab?: 'outreach' }) {
+  const { isAdmin } = useApp()
+  if (!isAdmin) return <p className="empty">Admins only.</p>
+  return (
+    <>
+      <AdminTabs tab={tab} />
+      {tab === 'outreach' ? <Outreach /> : <Overview />}
+    </>
+  )
+}
+
+function Overview() {
+  const { toast } = useApp()
+  const { data, reload } = useFetch<AdminData>('/api/admin')
   const [code, setCode] = useState('')
   const [max, setMax] = useState('50')
   const [count, setCount] = useState('50')
@@ -51,7 +76,6 @@ export function Admin() {
   const [cards, setCards] = useState<{ codes: string[]; plan: 'life' | 'year' }>({ codes: [], plan: 'life' })
   useLive((e) => e.type === 'admin' && reload())
 
-  if (!isAdmin) return <p className="empty">Admins only.</p>
   if (!data) return <div className="card skeleton" />
 
   async function act(path: string, done: string) {

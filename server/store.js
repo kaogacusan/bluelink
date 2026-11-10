@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 
-const empty = () => ({ users: {}, orgs: {}, posts: [], payments: [], codes: {}, settings: {}, links: {}, messages: {}, reads: {}, blocks: {}, reports: [] })
+const empty = () => ({ users: {}, orgs: {}, posts: [], payments: [], codes: {}, settings: {}, links: {}, messages: {}, reads: {}, blocks: {}, reports: [], outreach: {} })
 
 // A small JSON file database. Good for the first few thousand users; swap for Postgres later.
 export function openStore(file) {

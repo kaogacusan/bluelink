@@ -1,0 +1,1122 @@
+[
+ {
+  "name": "The Ateneo Assembly",
+  "short": "Assembly",
+  "cluster": "Analysis & Discourse Cluster",
+  "email": "assembly.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/theateneoassembly",
+  "tier": 2,
+  "why": "Policy and discourse org; members network through forums."
+ },
+ {
+  "name": "Ateneo Association of European Studies Students",
+  "short": "AEuSS",
+  "cluster": "Analysis & Discourse Cluster",
+  "email": "aeuss.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoAEuSS",
+  "tier": 2,
+  "why": "European Studies majors; links students to embassies and programs."
+ },
+ {
+  "name": "Ateneo Debate Society",
+  "short": "ADS",
+  "cluster": "Analysis & Discourse Cluster",
+  "email": "ads.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoDebateSociety",
+  "tier": 2,
+  "why": "Debaters often head to law, policy, and consulting."
+ },
+ {
+  "name": "Ateneo Economics Association",
+  "short": "AEA",
+  "cluster": "Analysis & Discourse Cluster",
+  "email": "aea.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/aea.admu",
+  "tier": 1,
+  "why": "Economics majors looking at finance and policy careers."
+ },
+ {
+  "name": "Ateneo Project for Asian and International Relations",
+  "short": "APAIR",
+  "cluster": "Analysis & Discourse Cluster",
+  "email": "apair.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoPAIR",
+  "tier": 2,
+  "why": "International relations students; diplomacy and policy contacts."
+ },
+ {
+  "name": "Development Society of the Ateneo",
+  "short": "DevSoc",
+  "cluster": "Analysis & Discourse Cluster",
+  "email": "devsoc.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/DevSocAteneo",
+  "tier": 2,
+  "why": "Development Studies majors; NGO and policy career paths."
+ },
+ {
+  "name": "Ateneo ENterteynment para sa TAo, Bayan, LAnsangan, at DiyOs",
+  "short": "Ateneo ENTABLADO",
+  "cluster": "Analysis & Discourse Cluster",
+  "email": "entablado.college.org@student.ateneo.edu",
+  "page": "https://www.instagram.com/ateneoentablado",
+  "tier": 2,
+  "why": "Socio-political theater group with alumni ties."
+ },
+ {
+  "name": "AIESEC in Ateneo de Manila University",
+  "short": "AIESEC in AdMU",
+  "cluster": "Business Cluster",
+  "email": "aiesec.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/aiesecphl",
+  "tier": 1,
+  "why": "Leadership and internship exchange org; career-focused members."
+ },
+ {
+  "name": "Ateneo Association for Communication Technology Management",
+  "short": "ACTM",
+  "cluster": "Business Cluster",
+  "email": "actm.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoACTM",
+  "tier": 1,
+  "why": "CTM majors heading into tech and telecom careers."
+ },
+ {
+  "name": "Ateneo Blue Consulting Group",
+  "short": "BCG",
+  "cluster": "Business Cluster",
+  "email": "ateneobcg.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/Ateneo.BCG",
+  "tier": 1,
+  "why": "Student consulting group; members chase consulting careers."
+ },
+ {
+  "name": "Ateneo Lex",
+  "short": "A-Lex",
+  "cluster": "Business Cluster",
+  "email": "alex.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneolex",
+  "tier": 1,
+  "why": "Legal Management majors; pre-law and corporate paths."
+ },
+ {
+  "name": "Ateneo Management Association",
+  "short": "AMA",
+  "cluster": "Business Cluster",
+  "email": "ama.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/OfficialAMAPage",
+  "tier": 1,
+  "why": "Large management org with strong industry and alumni links."
+ },
+ {
+  "name": "Ateneo Management Economics Organization",
+  "short": "MEcO",
+  "cluster": "Business Cluster",
+  "email": "meco.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/OfficialAteneoMEcO",
+  "tier": 1,
+  "why": "Management Economics majors; finance and consulting careers."
+ },
+ {
+  "name": "Ateneo Management Engineering Association",
+  "short": "MEA",
+  "cluster": "Business Cluster",
+  "email": "mea.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/mea.ateneo",
+  "tier": 1,
+  "why": "ME majors; consulting, analytics, and corporate recruiting."
+ },
+ {
+  "name": "Ateneo Management of Applied Chemistry Association",
+  "short": "MACA",
+  "cluster": "Business Cluster",
+  "email": "maca.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ADMUMACA",
+  "tier": 1,
+  "why": "Applied chemistry and management majors; industry careers."
+ },
+ {
+  "name": "Ateneo Aspiring Restaurant Entrepreneurs Association",
+  "short": "AREA",
+  "cluster": "Newly Accredited Organizations",
+  "email": "officialareaorg@gmail.com",
+  "page": "https://www.facebook.com/OfficialAREAOrg",
+  "tier": 1,
+  "why": "Restaurant Entrepreneurship majors; F&B industry contacts."
+ },
+ {
+  "name": "Ateneo Christian Life Community",
+  "short": "ACLC",
+  "cluster": "Faith Formation Cluster",
+  "email": "aclc.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoCLC1",
+  "tier": 2,
+  "why": "Ignatian faith community; tight member and alumni ties."
+ },
+ {
+  "name": "Ateneo College Ministry Group",
+  "short": "ACMG",
+  "cluster": "Faith Formation Cluster",
+  "email": "acmg.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ACMGintheMass",
+  "tier": 2,
+  "why": "Liturgy ministry; active cross-batch community."
+ },
+ {
+  "name": "Ateneo Student Catholic Action",
+  "short": "AtSCA",
+  "cluster": "Faith Formation Cluster",
+  "email": "atsca.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoSCA",
+  "tier": 2,
+  "why": "Faith and service org with community outreach."
+ },
+ {
+  "name": "Youth for Christ - Ateneo",
+  "short": "YFC-A",
+  "cluster": "Faith Formation Cluster",
+  "email": "yfca.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/yfcateneo",
+  "tier": 2,
+  "why": "Faith community; peer networking among members."
+ },
+ {
+  "name": "Ateneo Environmental Science Society",
+  "short": "AESS",
+  "cluster": "Health & Environment Cluster",
+  "email": "aess.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoESS",
+  "tier": 2,
+  "why": "Environmental Science majors; sustainability career paths."
+ },
+ {
+  "name": "Ateneo Peers",
+  "short": "PEERS",
+  "cluster": "Health & Environment Cluster",
+  "email": "peers.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoPeers",
+  "tier": 2,
+  "why": "Peer support org; mentoring culture fits BlueLink."
+ },
+ {
+  "name": "Health Sciences Society of the Ateneo",
+  "short": "HSS",
+  "cluster": "Health & Environment Cluster",
+  "email": "hss.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/healthsciencessociety",
+  "tier": 2,
+  "why": "Health Sciences majors; medicine and health careers."
+ },
+ {
+  "name": "Loyola Mountaineers",
+  "short": "LM",
+  "cluster": "Health & Environment Cluster",
+  "email": "lm.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/loyolamountaineers",
+  "tier": 2,
+  "why": "Outdoor org with long alumni history."
+ },
+ {
+  "name": "The Pre-Medical Society of the Ateneo",
+  "short": "PMSA",
+  "cluster": "Health & Environment Cluster",
+  "email": "pmsa.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/the.pmsa",
+  "tier": 2,
+  "why": "Pre-med students seeking mentors in medicine."
+ },
+ {
+  "name": "Ateneo Celadon",
+  "short": "CLDN",
+  "cluster": "Intercultural Relations Cluster",
+  "email": "celadon.college.org@student.ateneo.edu",
+  "page": "https://ateneoceladon.com",
+  "tier": 2,
+  "why": "Chinese-Filipino cultural org with strong alumni network."
+ },
+ {
+  "name": "Ateneo Hinomoto",
+  "short": "HINO",
+  "cluster": "Intercultural Relations Cluster",
+  "email": "hinomoto.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneo.hino",
+  "tier": 2,
+  "why": "Japanese Studies student arm; exchange and culture."
+ },
+ {
+  "name": "Ateneo Lingua Ars Cultura",
+  "short": "ALAC",
+  "cluster": "Intercultural Relations Cluster",
+  "email": "alac.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneolac",
+  "tier": 2,
+  "why": "Language and culture org."
+ },
+ {
+  "name": "Ateneo Student Exchange Council",
+  "short": "ASEC",
+  "cluster": "Intercultural Relations Cluster",
+  "email": "asec.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/OfficialASEC",
+  "tier": 2,
+  "why": "Exchange students and returnees; cross-border contacts."
+ },
+ {
+  "name": "Baybayin Ateneo",
+  "short": "Baybayin",
+  "cluster": "Intercultural Relations Cluster",
+  "email": "baybayin.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/BaybayinAteneo",
+  "tier": 2,
+  "why": "Filipino culture and heritage org."
+ },
+ {
+  "name": "Ateneo Musicians' Pool",
+  "short": "AMP",
+  "cluster": "Media & Creative Arts Cluster",
+  "email": "amp.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneomusicianspool",
+  "tier": 2,
+  "why": "Musicians' org; events and creative collaborations."
+ },
+ {
+  "name": "Ateneo Collegiate Society of Advertising",
+  "short": "CoSA",
+  "cluster": "Media & Creative Arts Cluster",
+  "email": "cosa.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/cosaateneo",
+  "tier": 1,
+  "why": "Advertising students headed to agencies and marketing."
+ },
+ {
+  "name": "Loyola Film Circle",
+  "short": "LFC",
+  "cluster": "Media & Creative Arts Cluster",
+  "email": "lfc.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/LoyolaFilmCircle",
+  "tier": 2,
+  "why": "Film org; production and media contacts."
+ },
+ {
+  "name": "Ateneo Blue Repertory",
+  "short": "blueREP",
+  "cluster": "Performing Arts Cluster",
+  "email": "bluerep.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneobluerepertory",
+  "tier": 2,
+  "why": "Musical theater company with active alumni."
+ },
+ {
+  "name": "Ateneo de Manila College Glee Club",
+  "short": "ACGC",
+  "cluster": "Performing Arts Cluster",
+  "email": "acgc.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneocollegegleeclub",
+  "tier": 2,
+  "why": "Choir with a large alumni base."
+ },
+ {
+  "name": "Company of Ateneo Dancers",
+  "short": "CADs",
+  "cluster": "Performing Arts Cluster",
+  "email": "cads.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/CompanyofAteneoDancers",
+  "tier": 2,
+  "why": "Dance company with active alumni."
+ },
+ {
+  "name": "Tanghalang Ateneo",
+  "short": "TA",
+  "cluster": "Performing Arts Cluster",
+  "email": "ta.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/tanghalangateneo",
+  "tier": 2,
+  "why": "Theater company with long alumni history."
+ },
+ {
+  "name": "Ateneo Consultants for Organization Development and Empowerment",
+  "short": "Ateneo CODE",
+  "cluster": "Sector Based Cluster",
+  "email": "code.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneocode",
+  "tier": 1,
+  "why": "Student consultants for NGOs; consulting skills focus."
+ },
+ {
+  "name": "Ateneo Education Geared Towards Empowerment",
+  "short": "Ateneo EDGE",
+  "cluster": "Sector Based Cluster",
+  "email": "edge.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoEDGE",
+  "tier": 2,
+  "why": "Education outreach org."
+ },
+ {
+  "name": "Ateneo Gabay",
+  "short": "Gabay",
+  "cluster": "Sector Based Cluster",
+  "email": "gabay.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/GabayAteneo",
+  "tier": 2,
+  "why": "Supports scholars; mentoring fits BlueLink."
+ },
+ {
+  "name": "Ateneo Special Education Society",
+  "short": "SPEED",
+  "cluster": "Sector Based Cluster",
+  "email": "speed.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoSPEED",
+  "tier": 2,
+  "why": "Special education advocacy org."
+ },
+ {
+  "name": "Barefoot Philippines Ateneo",
+  "short": "Barefoot",
+  "cluster": "Sector Based Cluster",
+  "email": "barefoot.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/BarefootPhilippines",
+  "tier": 2,
+  "why": "Social involvement org."
+ },
+ {
+  "name": "Kythe-Ateneo",
+  "short": "Kythe-Ateneo",
+  "cluster": "Sector Based Cluster",
+  "email": "kythe.college.org@student.ateneo.edu",
+  "page": "https://www.instagram.com/kytheateneo",
+  "tier": 2,
+  "why": "Volunteers for children with chronic illness."
+ },
+ {
+  "name": "Musmos Ateneo",
+  "short": "Musmos",
+  "cluster": "Sector Based Cluster",
+  "email": "musmos.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/musmosateneo",
+  "tier": 2,
+  "why": "Child welfare volunteer org."
+ },
+ {
+  "name": "TUGON Ateneo",
+  "short": "TUGON",
+  "cluster": "Sector Based Cluster",
+  "email": "tugon.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/TugonAteneo",
+  "tier": 2,
+  "why": "Social involvement org."
+ },
+ {
+  "name": "Habitat for Humanity Blue Chapter",
+  "short": "HFH BC",
+  "cluster": "Newly Accredited Organizations",
+  "email": "hfhateneo@gmail.com",
+  "page": "https://www.facebook.com/people/HFH-Blue-Chapter/61590817539940",
+  "tier": 2,
+  "why": "Housing advocacy volunteers."
+ },
+ {
+  "name": "Laan Ateneo",
+  "short": "Laan",
+  "cluster": "Newly Accredited Organizations",
+  "email": "projectlaanforhealth@gmail.com",
+  "page": "https://www.facebook.com/laanateneo",
+  "tier": 2,
+  "why": "Public health advocacy org."
+ },
+ {
+  "name": "Ateneo Biological Organization - eXplore. eXperience. eXcel.",
+  "short": "Ateneo BOx",
+  "cluster": "Science & Technology Cluster",
+  "email": "box.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoBOx",
+  "tier": 2,
+  "why": "Biology majors; research and health career paths."
+ },
+ {
+  "name": "Ateneo Chemistry Society",
+  "short": "ACheS",
+  "cluster": "Science & Technology Cluster",
+  "email": "aches.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneochemsoc",
+  "tier": 2,
+  "why": "Chemistry majors; research and industry paths."
+ },
+ {
+  "name": "Ateneo Electronics and Computer Engineering Society",
+  "short": "AECES",
+  "cluster": "Science & Technology Cluster",
+  "email": "aeces.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneoaeces",
+  "tier": 1,
+  "why": "ECE and CompE majors; tech and engineering careers."
+ },
+ {
+  "name": "Ateneo League of Physicists",
+  "short": "LeaPs",
+  "cluster": "Science & Technology Cluster",
+  "email": "leaps.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoLeaPs",
+  "tier": 2,
+  "why": "Physics majors; research and tech paths."
+ },
+ {
+  "name": "Ateneo Management Information Systems Association",
+  "short": "MISA",
+  "cluster": "Science & Technology Cluster",
+  "email": "misa.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/Ateneo.MISA",
+  "tier": 1,
+  "why": "MIS majors; tech consulting and IT careers."
+ },
+ {
+  "name": "Ateneo Mathematics Society",
+  "short": "AMS",
+  "cluster": "Science & Technology Cluster",
+  "email": "ams.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoMathematicsSociety",
+  "tier": 2,
+  "why": "Math majors; data and analytics paths."
+ },
+ {
+  "name": "Ateneo Psyche",
+  "short": "PSYCHE",
+  "cluster": "Science & Technology Cluster",
+  "email": "psyche.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoPsyche",
+  "tier": 2,
+  "why": "Psychology majors; HR, clinical, and research paths."
+ },
+ {
+  "name": "Computer Society of the Ateneo",
+  "short": "CompSAt",
+  "cluster": "Science & Technology Cluster",
+  "email": "compsat.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/CompSAteneo",
+  "tier": 1,
+  "why": "CS students; software and tech careers."
+ },
+ {
+  "name": "The GUIDON",
+  "short": "TGDN",
+  "cluster": "Publication",
+  "email": "desk@theguidon.com",
+  "page": "https://www.facebook.com/TheGUIDON",
+  "tier": 1,
+  "why": "Official student newspaper; wide campus reach."
+ },
+ {
+  "name": "HEIGHTS Ateneo",
+  "short": "HEIGHTS",
+  "cluster": "Publication",
+  "email": "heights.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/heightsateneo",
+  "tier": 1,
+  "why": "Official literary and art publication."
+ },
+ {
+  "name": "Matanglawin Ateneo",
+  "short": "Matanglawin",
+  "cluster": "Publication",
+  "email": "matanglawin.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/MatanglawinAteneo",
+  "tier": 1,
+  "why": "Official Filipino magazine of the Loyola Schools."
+ },
+ {
+  "name": "Ateneo AEGIS",
+  "short": "AEGIS",
+  "cluster": "Publication",
+  "email": "aegis.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ADMUAEGIS",
+  "tier": 1,
+  "why": "Official yearbook; reaches every graduating batch."
+ },
+ {
+  "name": "Sanggunian ng mga Mag-Aaral ng Pamantasang Ateneo de Manila",
+  "short": "Sanggu",
+  "cluster": "Student government",
+  "email": "sanggunian.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/admusanggu",
+  "tier": 1,
+  "why": "Undergraduate student government; reaches all students."
+ },
+ {
+  "name": "Council of Organizations of the Ateneo - Manila",
+  "short": "COA-M",
+  "cluster": "Student government",
+  "email": "coa.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/coamanila",
+  "tier": 1,
+  "why": "Umbrella body of all accredited orgs; one channel to many."
+ },
+ {
+  "name": "Ateneo Commission on Elections",
+  "short": "COMELEC",
+  "cluster": "Student government",
+  "email": "comelec.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneocomelec",
+  "tier": 2,
+  "why": "Runs student elections."
+ },
+ {
+  "name": "Ateneo Commission on Audit",
+  "short": "ACoA",
+  "cluster": "Student government",
+  "email": "commission.on.audit.ls@gmail.com",
+  "page": "https://www.facebook.com/ateneo.coa",
+  "tier": 2,
+  "why": "Student government audit body."
+ },
+ {
+  "name": "Ateneo Office of the Ombudsman",
+  "short": "OMB",
+  "cluster": "Student government",
+  "email": "ombudsman.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoOmbudsman",
+  "tier": 2,
+  "why": "Student government accountability office."
+ },
+ {
+  "name": "Ateneo Student Judicial Court",
+  "short": "ASJC",
+  "cluster": "Student government",
+  "email": "sjc.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ateneo.sjc",
+  "tier": 2,
+  "why": "Student judiciary."
+ },
+ {
+  "name": "Department of Student Welfare and Services",
+  "short": "DSWS",
+  "cluster": "Student government",
+  "email": "dsws.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoDSWS",
+  "tier": 2,
+  "why": "Student welfare services arm."
+ },
+ {
+  "name": "Scholars' Sectoral Board",
+  "short": "SSB",
+  "cluster": "Student government",
+  "email": "ssb.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/ADMUScholarsSectoralBoard",
+  "tier": 2,
+  "why": "Represents scholars; mentoring access matters to them."
+ },
+ {
+  "name": "Office of Placement and Career Services Student Arm",
+  "short": "OPCS",
+  "cluster": "Alumni & career",
+  "email": "execom.opcs.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/AteneoOPCS",
+  "tier": 1,
+  "why": "Student arm of career services; runs career events."
+ },
+ {
+  "name": "Alay ni Ignacio",
+  "short": "ANI",
+  "cluster": "Student Arms and Groups",
+  "email": "alayniignacio.pathwaysateneo@gmail.com",
+  "page": "https://www.facebook.com/ani.pathways",
+  "tier": 2,
+  "why": "Pathways student arm; mentors students toward college."
+ },
+ {
+  "name": "Ateneo Martial Law Museum - Junior Fellows",
+  "short": "AMLM-JF",
+  "cluster": "Student Arms and Groups",
+  "email": "amlmjf.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/MartialLawMuseum",
+  "tier": 2,
+  "why": "Student arm of the Martial Law Museum."
+ },
+ {
+  "name": "Lights for Hope",
+  "short": "LFH",
+  "cluster": "Student Arms and Groups",
+  "email": "lightsforhope@ateneo.edu",
+  "page": "https://www.facebook.com/LightsForHope",
+  "tier": 2,
+  "why": "Student volunteer group."
+ },
+ {
+  "name": "Rizal Library Ambassadors",
+  "short": "RLA",
+  "cluster": "Student Arms and Groups",
+  "email": "rlambassadors.rl.ls@ateneo.edu",
+  "page": "https://www.facebook.com/RLAmbassadors",
+  "tier": 2,
+  "why": "Student arm of the Rizal Library."
+ },
+ {
+  "name": "League of Independent Organizations",
+  "short": "LIONS",
+  "cluster": "Independent (LIONS)",
+  "email": "admu.lions@gmail.com",
+  "page": "https://www.facebook.com/admu.lions",
+  "tier": 1,
+  "why": "Umbrella body of independent orgs; one channel to many."
+ },
+ {
+  "name": "Google Developer Groups on Campus - Loyola",
+  "short": "GDGoC-L",
+  "cluster": "Independent (LIONS)",
+  "email": "dsc.ateneo@gmail.com",
+  "page": "https://www.facebook.com/gdgloyola",
+  "tier": 1,
+  "why": "Student developer community; tech careers and projects.",
+  "note": "Email came from a search result, not their page. Check it first."
+ },
+ {
+  "name": "Junior Fellowship for Financial Literacy",
+  "short": "JFeL",
+  "cluster": "Independent (LIONS)",
+  "email": "jfelonline@outlook.com",
+  "page": "https://www.facebook.com/jfelonline",
+  "tier": 1,
+  "why": "Finance and investing org; finance career interest.",
+  "note": "Email came from a search result, not their page. Check it first."
+ },
+ {
+  "name": "Effective Altruism Blue",
+  "short": "EA Blue",
+  "cluster": "Independent (LIONS)",
+  "email": "eablue.ph@gmail.com",
+  "page": "https://www.facebook.com/eablue.ph",
+  "tier": 2,
+  "why": "Impact-focused community; career planning talks."
+ },
+ {
+  "name": "Atenean Car Enthusiasts",
+  "short": "ACE",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.instagram.com/ateneancarenthusiasts",
+  "tier": 2,
+  "why": "Hobby community."
+ },
+ {
+  "name": "Ateneans Guided and Inspired by Love for Animals",
+  "short": "AGILA",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.instagram.com/atenean_agila",
+  "tier": 2,
+  "why": "Animal welfare community."
+ },
+ {
+  "name": "Blue Bird Improv",
+  "short": "BBI",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/bluebirdimprov",
+  "tier": 2,
+  "why": "Improv comedy group."
+ },
+ {
+  "name": "Blue Hanguk Society",
+  "short": "BlueHan",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/BlueHangukSociety",
+  "tier": 2,
+  "why": "Korean culture community."
+ },
+ {
+  "name": "Blue Independent Komiks",
+  "short": "BLINK",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/blueindiekomiks",
+  "tier": 2,
+  "why": "Comics creators community."
+ },
+ {
+  "name": "Blue Symphony Orchestra",
+  "short": "BSO",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/thebluesymphony",
+  "tier": 2,
+  "why": "Student orchestra."
+ },
+ {
+  "name": "Christ's Youth in Action - Blue",
+  "short": "CYA",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/cya.admu",
+  "tier": 2,
+  "why": "Faith community."
+ },
+ {
+  "name": "Contemporary A Cappella Singers Association",
+  "short": "CASA",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/musikaCASA",
+  "tier": 2,
+  "why": "A cappella group."
+ },
+ {
+  "name": "FASH",
+  "short": "FASH",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/ateneofash",
+  "tier": 2,
+  "why": "Fashion community; creative industry interest."
+ },
+ {
+  "name": "Fitness Improvement Team",
+  "short": "FIT",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/FITteamCommunity",
+  "tier": 2,
+  "why": "Fitness community."
+ },
+ {
+  "name": "Kalipunang Sosyolohiya at Antropolohiya",
+  "short": "KSA",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/KalipunangSA",
+  "tier": 2,
+  "why": "Sociology and Anthropology majors' org."
+ },
+ {
+  "name": "Laro Loyola",
+  "short": "LaLo",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/laroloyola",
+  "tier": 2,
+  "why": "Games and play community."
+ },
+ {
+  "name": "League of Atenean Historians",
+  "short": "LAHi",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/lahionline",
+  "tier": 2,
+  "why": "History majors' org."
+ },
+ {
+  "name": "Loyola Gaming",
+  "short": "LG",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/loyolagaming",
+  "tier": 2,
+  "why": "Gaming and esports community."
+ },
+ {
+  "name": "Mokoa Animation",
+  "short": "Mokoa",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/mokoa.animation",
+  "tier": 2,
+  "why": "Animation creators; creative industry interest."
+ },
+ {
+  "name": "PLUME",
+  "short": "PLUME",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/PLUMEBookClub",
+  "tier": 2,
+  "why": "Book club."
+ },
+ {
+  "name": "Spaces for Women's Arts and Narratives",
+  "short": "SWAN",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/swanatenista",
+  "tier": 2,
+  "why": "Women's arts community."
+ },
+ {
+  "name": "Tabletop Hobbies & Interests Collaborative",
+  "short": "THINC",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/ThincHobbiesThincInterests",
+  "tier": 2,
+  "why": "Tabletop games community."
+ },
+ {
+  "name": "Touyou No Shinju",
+  "short": "TOUSHIN",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/toushin.org",
+  "tier": 2,
+  "why": "Anime and Japanese pop culture community."
+ },
+ {
+  "name": "WriterSkill",
+  "short": "WS",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/writerskill",
+  "tier": 2,
+  "why": "Writing community."
+ },
+ {
+  "name": "ZOOM Photography - Loyola Chapter",
+  "short": "ZOOM",
+  "cluster": "Independent (LIONS)",
+  "email": "",
+  "page": "https://www.facebook.com/ZOOMLoyola",
+  "tier": 2,
+  "why": "Photography community."
+ },
+ {
+  "name": "Association of Communication Majors",
+  "short": "ACOMM",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "https://www.facebook.com/ACOMMofficial",
+  "tier": 1,
+  "why": "Communication majors heading into media, PR, and ads."
+ },
+ {
+  "name": "Science and Technology Organization of Ateneo",
+  "short": "STOA",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "",
+  "tier": 2,
+  "why": "Science and technology interest org."
+ },
+ {
+  "name": "Association of Lifters and Bodybuilders - Blue Chapter",
+  "short": "ALAB",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "https://www.facebook.com/alab.bluechapt",
+  "tier": 2,
+  "why": "Lifting and fitness community."
+ },
+ {
+  "name": "Atenean Catechetical Instruction League",
+  "short": "ACIL",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "",
+  "tier": 2,
+  "why": "Catechism and faith service org."
+ },
+ {
+  "name": "Atenean Futsal Club",
+  "short": "AFC",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "https://www.facebook.com/ateneanfutsalclub.ls",
+  "tier": 2,
+  "why": "Futsal club open to all students."
+ },
+ {
+  "name": "Atenean Table Tennis Enthusiasts",
+  "short": "ATTE",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "https://www.facebook.com/ADMUTableTennis",
+  "tier": 2,
+  "why": "Table tennis club."
+ },
+ {
+  "name": "Atenean Ultimate",
+  "short": "AU",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "https://www.facebook.com/AteneoUltimate",
+  "tier": 2,
+  "why": "Ultimate frisbee club."
+ },
+ {
+  "name": "Blue Badminton League",
+  "short": "BBL",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "",
+  "tier": 2,
+  "why": "Badminton club."
+ },
+ {
+  "name": "Blue Card Collectibles Society",
+  "short": "BCCS",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "",
+  "tier": 2,
+  "why": "Trading card hobby club."
+ },
+ {
+  "name": "Bluepoint",
+  "short": "BP",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "",
+  "tier": 2,
+  "why": "Bouldering club."
+ },
+ {
+  "name": "Institute of Skin Divers of Ateneo",
+  "short": "ISDA",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "https://www.facebook.com/ISDAteneans",
+  "tier": 2,
+  "why": "Skin diving and marine conservation org."
+ },
+ {
+  "name": "Silid",
+  "short": "Silid",
+  "cluster": "Independent (OSA-registered)",
+  "email": "",
+  "page": "",
+  "tier": 2,
+  "why": "Registered student org."
+ },
+ {
+  "name": "JGSOM Sanggunian",
+  "short": "",
+  "cluster": "School council",
+  "email": "jgsom.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/JGSOMSanggunian",
+  "tier": 1,
+  "why": "Student government of the School of Management.",
+  "note": "Email came from a search result, not their page. Check it first."
+ },
+ {
+  "name": "SOH Sanggunian",
+  "short": "",
+  "cluster": "School council",
+  "email": "soh.college.org@student.ateneo.edu",
+  "page": "https://www.facebook.com/sohsanggu",
+  "tier": 1,
+  "why": "Student government of the School of Humanities.",
+  "note": "Email came from a search result, not their page. Check it first."
+ },
+ {
+  "name": "SOSE Sanggunian",
+  "short": "",
+  "cluster": "School council",
+  "email": "",
+  "page": "https://www.facebook.com/SOSESanggu",
+  "tier": 1,
+  "why": "Student government of the School of Science and Engineering."
+ },
+ {
+  "name": "RGLSOSS Sanggunian",
+  "short": "SOSS Sanggu",
+  "cluster": "School council",
+  "email": "",
+  "page": "https://www.facebook.com/SOSS.Sanggunian",
+  "tier": 1,
+  "why": "Student government of the School of Social Sciences."
+ },
+ {
+  "name": "Ateneo Alumni Association, Inc.",
+  "short": "AAA",
+  "cluster": "Alumni & career",
+  "email": "info@ateneoalumniassociation.org",
+  "page": "https://www.facebook.com/ateneoalumni",
+  "tier": 1,
+  "why": "Main alumni body; direct line to alumni."
+ },
+ {
+  "name": "Office of University Development and Alumni Affairs",
+  "short": "OUDAA",
+  "cluster": "Alumni & career",
+  "email": "alumnirelations@ateneo.edu",
+  "page": "https://www.ateneo.edu/directory/office/oudaa",
+  "tier": 1,
+  "why": "University alumni relations office."
+ },
+ {
+  "name": "Office of Placement and Career Services, Higher Education",
+  "short": "OPCS",
+  "cluster": "Alumni & career",
+  "email": "placement.ls@ateneo.edu",
+  "page": "https://www.facebook.com/AteneoOPCS",
+  "tier": 1,
+  "why": "Career services office; runs the LS Career Fair."
+ },
+ {
+  "name": "Loyola Schools Office of Guidance and Counseling",
+  "short": "OGC",
+  "cluster": "Alumni & career",
+  "email": "guidance.ls@ateneo.edu",
+  "page": "https://www.facebook.com/OGC.HEd",
+  "tier": 1,
+  "why": "Guidance office that also advises on career planning."
+ },
+ {
+  "name": "Ateneo Intellectual Property Office / Ateneo Blue Nest",
+  "short": "AIPO",
+  "cluster": "Alumni & career",
+  "email": "aipo@ateneo.edu",
+  "page": "https://www.facebook.com/AteneoIPO",
+  "tier": 1,
+  "why": "Runs the Blue Nest startup incubator for students and alumni."
+ },
+ {
+  "name": "Ateneo Business Insights Laboratory for Development",
+  "short": "BUILD",
+  "cluster": "Alumni & career",
+  "email": "build.jgsom@ateneo.edu",
+  "page": "https://www.facebook.com/ateneo.build",
+  "tier": 1,
+  "why": "JGSOM lab that incubates student-founded ventures."
+ },
+ {
+  "name": "Ateneo Center for Social Entrepreneurship",
+  "short": "ACSEnt",
+  "cluster": "Alumni & career",
+  "email": "",
+  "page": "https://www.facebook.com/acsentsom",
+  "tier": 1,
+  "why": "JGSOM center for social entrepreneurship."
+ },
+ {
+  "name": "Ateneo Business Resource Center",
+  "short": "BRC",
+  "cluster": "Alumni & career",
+  "email": "",
+  "page": "https://www.facebook.com/AteneoBRC",
+  "tier": 1,
+  "why": "JGSOM center supporting entrepreneurs."
+ },
+ {
+  "name": "Office of College Athletics (Blue Eagles varsity)",
+  "short": "OCA",
+  "cluster": "Varsity & performing",
+  "email": "athletics.ls@ateneo.edu",
+  "page": "https://www.facebook.com/goATENEO",
+  "tier": 2,
+  "why": "Runs varsity teams; reach to student-athletes."
+ },
+ {
+  "name": "Ateneo Blue Babble Battalion",
+  "short": "BBB",
+  "cluster": "Varsity & performing",
+  "email": "",
+  "page": "https://www.facebook.com/BabbleAteneo",
+  "tier": 2,
+  "why": "Official cheer and pep squad."
+ },
+ {
+  "name": "Office of Student Activities, Loyola Schools",
+  "short": "OSA",
+  "cluster": "Other",
+  "email": "osa.ls@ateneo.edu",
+  "page": "https://www.facebook.com/ateneo.osa",
+  "tier": 2,
+  "why": "Registers all student orgs; can relay to every group."
+ }
+]
