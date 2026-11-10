@@ -737,7 +737,8 @@ export function createApi({ dataDir, dev = false }) {
   route(
     'POST',
     '/api/me/photo',
-    'member',
+    // Not 'member': new people add a photo during setup, before they join.
+    'profile',
     ({ uid, body }) => {
       const u = db.users[uid]
       const file = path.join(photoDir, `${uid}.jpg`)

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Shell } from './components/Shell'
 import { Composer } from './components/Composer'
 import { Landing } from './screens/Landing'
-import { Onboarding } from './screens/Onboarding'
+import { Onboarding, needsSetup } from './screens/Onboarding'
 import { Feed } from './screens/Feed'
 import { People } from './screens/People'
 import { Profile } from './screens/Profile'
@@ -88,7 +88,8 @@ function SignedIn({ token, theme, setTheme }: { token: string; theme: Theme; set
         )}
       </div>
     )
-  if (me === null) return <Onboarding onDone={(u) => (setMe(u), loadMe())} onSignOut={signOut} />
+  // New people, and anyone with an unfinished profile, set it up before they see the app.
+  if (me === null || needsSetup(me)) return <Onboarding me={me} onSaved={(u) => (setMe(u), loadMe())} onSignOut={signOut} />
   if (!membership.active) return <Join firstName={me.name.split(' ')[0]} onJoined={loadMe} onSignOut={signOut} />
   return <Main token={token} me={me} setMe={setMe} connections={connections} orgs={orgs} membership={membership} isAdmin={isAdmin} reloadMe={loadMe} theme={theme} setTheme={setTheme} signOut={signOut} />
 }

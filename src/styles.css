@@ -2249,6 +2249,27 @@ textarea.input {
 .onboard-body .btn-block {
   margin-top: 6px;
 }
+.onboard-steps {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.onboard-steps span {
+  flex: 1;
+  height: 4px;
+  background: var(--line);
+}
+.onboard-steps span.is-on {
+  background: var(--blue);
+}
+.onboard-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.onboard-actions .btn-primary {
+  flex: 1;
+}
 
 .boot {
   min-height: 100vh;
