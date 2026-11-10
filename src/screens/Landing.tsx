@@ -11,7 +11,7 @@ import { GoogleButton } from '../components/GoogleButton'
 import { api, session, useFetch } from '../lib/api'
 import { save } from '../lib/storage'
 import { OPEN_TO } from '../../shared/options.js'
-import { SCHOOL, SIGNUP_ROLES, canSignUp, type SignupRole } from '../../shared/school.js'
+import { SCHOOL, SIGNUP_ROLES, type SignupRole as Role } from '../../shared/school.js'
 import { PLANS, earlyAccessOpen } from '../../shared/membership.js'
 import { LEGAL, RULES } from '../../shared/legal.js'
 
@@ -60,10 +60,13 @@ function finish(r: SignedIn, role: string) {
   session.set(r.token)
 }
 
-function SignInForm() {
+// People who already have an account skip the student or alumni step.
+type SignupRole = Omit<Role, 'id'> & { id: Role['id'] | 'signin' }
+const SIGN_IN: SignupRole = { id: 'signin', label: 'Sign in', title: 'Sign in', domains: [], hint: 'Type your full email.' }
+
+function SignInForm({ role, setRole }: { role: SignupRole | null; setRole: (r: SignupRole | null) => void }) {
   const config = useFetch<{ googleClientId: string }>('/api/config')
   const google = config.data?.googleClientId
-  const [role, setRole] = useState<SignupRole | null>(null)
   const [typed, setTyped] = useState('')
   const [sent, setSent] = useState(false)
   const [code, setCode] = useState('')
@@ -75,18 +78,18 @@ function SignInForm() {
   const local = !!domain && !typed.includes('@')
   const email = (local ? `${typed.trim()}@${domain}` : typed.trim()).toLowerCase()
 
-  function pick(r: SignupRole | null) {
-    setRole(r)
+  // Start clean when the role changes, from the buttons here or from Sign in at the top.
+  useEffect(() => {
     setTyped('')
     setSent(false)
     setError('')
-  }
+  }, [role])
 
-  async function withGoogle(credential: string) {
+  async function withGoogle(accessToken: string) {
     if (!role) return
     setError('')
     try {
-      finish(await api<SignedIn>('/api/auth/google', { credential, role: role.id }), role.id)
+      finish(await api<SignedIn>('/api/auth/google', { accessToken, role: role.id }), role.id)
     } catch (err) {
       setError((err as Error).message)
     }
@@ -96,7 +99,8 @@ function SignInForm() {
     e?.preventDefault()
     if (!role) return
     setError('')
-    if (!typed.trim() || !canSignUp(email, role.id)) return setError(role.hint)
+    // The server checks the school email, so people who already have an account can still sign in.
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return setError(role.hint)
     setBusy(true)
     try {
       const r = await api<{ devCode?: string }>('/api/auth/start', { email, role: role.id })
@@ -135,7 +139,7 @@ function SignInForm() {
         <p className="l-roles-label">Sign up as</p>
         <div className="l-roles">
           {SIGNUP_ROLES.map((r) => (
-            <button key={r.id} className="btn btn-primary btn-lg" onClick={() => pick(r)}>
+            <button key={r.id} className="btn btn-primary btn-lg" onClick={() => setRole(r)}>
               {r.label}
             </button>
           ))}
@@ -178,7 +182,7 @@ function SignInForm() {
   return (
     <form className="l-form" id="signin" onSubmit={start} noValidate>
       <div className="l-form-head">
-        <button type="button" className="l-back" onClick={() => pick(null)} aria-label="Back">
+        <button type="button" className="l-back" onClick={() => setRole(null)} aria-label="Back">
           <ArrowLeft weight="bold" />
         </button>
         <p className="l-form-title">{role.title}</p>
@@ -199,7 +203,7 @@ function SignInForm() {
           autoCorrect="off"
           spellCheck={false}
           autoFocus
-          placeholder={domain ? 'juan.delacruz' : 'you@gmail.com'}
+          placeholder={domain ? 'juan.delacruz' : role === SIGN_IN ? 'Your email' : 'you@gmail.com'}
           value={typed}
           style={local ? { paddingRight: `calc(${domain.length + 1}ch + 24px)` } : undefined}
           onChange={(e) => {
@@ -271,15 +275,16 @@ function Preview() {
 
 export function Landing() {
   const early = earlyAccessOpen()
+  const [role, setRole] = useState<SignupRole | null>(null)
   return (
     <div className="landing">
       <div className="l-dark">
         <HeroGraph />
         <header className="l-top">
           <Logo size={30} />
-          <a className="btn btn-ghost" href="#signin">
+          <button className="btn btn-ghost" onClick={() => setRole(SIGN_IN)}>
             Sign in
-          </a>
+          </button>
         </header>
 
         <section className="l-hero">
@@ -288,7 +293,7 @@ export function Landing() {
               Welcome to <em>Atenean Networking</em>
             </h1>
             <p className="l-sub">Find opportunities, network with each other. Exclusive for the {SCHOOL.short} Community.</p>
-            <SignInForm />
+            <SignInForm role={role} setRole={setRole} />
           </div>
           <Preview />
         </section>

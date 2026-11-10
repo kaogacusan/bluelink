@@ -147,6 +147,22 @@ export function createApi({ dataDir, dev = false }) {
     return payload
   }
 
+  // The Google button gives an access token. Ask Google whose it is, and check it was made for BlueLink, not another app.
+  async function verifyGoogleAccess(accessToken) {
+    const bad = new Fail(400, 'Google sign-in did not work. Try again.')
+    if (!googleClientId) throw new Fail(400, 'Google sign-in is not set up yet.')
+    const token = String(accessToken || '')
+    if (!token || token.length > 4096) throw bad
+    const get = (url, opts) => fetch(url, { ...opts, signal: AbortSignal.timeout(5000) }).then((r) => (r.ok ? r.json() : null))
+    const [info, user] = await Promise.all([
+      get('https://oauth2.googleapis.com/tokeninfo?access_token=' + encodeURIComponent(token)),
+      get('https://openidconnect.googleapis.com/v1/userinfo', { headers: { authorization: 'Bearer ' + token } }),
+    ]).catch(() => [null, null])
+    if (!info || info.aud !== googleClientId || !(Number(info.expires_in) > 0)) throw bad
+    if (!user || !user.sub || user.sub !== info.sub || !user.email_verified) throw bad
+    return user
+  }
+
   // A new person's Google photo becomes their first profile photo.
   const googlePictures = new Map()
   async function savePicture(uid, url) {
@@ -439,7 +455,8 @@ export function createApi({ dataDir, dev = false }) {
 
   route('POST', '/api/auth/start', 'open', ({ body }) => {
     const email = String(body.email || '').trim().toLowerCase()
-    if (!canSignUp(email, body.role)) throw new Fail(400, signupRole(body.role)?.hint || 'Use your Ateneo email.')
+    // People who already have an account just sign in, whichever button they picked.
+    if (!db.users[uidFor(email)]?.name && !canSignUp(email, body.role)) throw new Fail(400, signupRole(body.role)?.hint || 'No account with this email yet. Go back and sign up.')
     const prev = codes.get(email)
     if (prev && Date.now() - prev.sent < 20_000) throw new Fail(429, 'Wait a few seconds, then ask for a new code.')
     const code = String(crypto.randomInt(0, 1_000_000)).padStart(6, '0')
@@ -467,11 +484,11 @@ export function createApi({ dataDir, dev = false }) {
 
   // Sign in with Google. Ateneo email runs on Google, so this is one tap and gives us a name and photo.
   route('POST', '/api/auth/google', 'open', async ({ body }) => {
-    const g = await verifyGoogle(body.credential)
+    const g = body.accessToken ? await verifyGoogleAccess(body.accessToken) : await verifyGoogle(body.credential)
     const email = String(g.email || '').toLowerCase()
-    if (!canSignUp(email, body.role)) throw new Fail(400, signupRole(body.role)?.hint || 'Use your Ateneo Google account.')
     const uid = uidFor(email)
     const isNew = !db.users[uid]?.name
+    if (isNew && !canSignUp(email, body.role)) throw new Fail(400, signupRole(body.role)?.hint || 'No account with this Google account yet. Go back and sign up.')
     if (isNew && g.picture) googlePictures.set(uid, g.picture)
     return { token: tokenFor(uid), isNew, prefill: { name: line(g.name, 60) || nameFromEmail(email) } }
   })

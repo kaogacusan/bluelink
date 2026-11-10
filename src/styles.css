@@ -3347,28 +3347,12 @@ textarea.input {
   font-weight: 600;
 }
 .google-btn {
-  position: relative;
-  overflow: hidden;
-}
-.google-face {
   border: 1px solid var(--line-strong);
   color: var(--text);
   gap: 12px;
 }
-.google-btn:hover .google-face {
+.google-btn:hover:not(:disabled) {
   background: var(--hover);
-}
-.google-btn:focus-within .google-face {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-/* Google's real button, stretched over ours and nearly see-through. */
-.google-hit {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform-origin: 0 0;
-  opacity: 0.01;
 }
 .l-replies {
   display: flex;

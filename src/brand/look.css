@@ -674,9 +674,6 @@ body:has(.landing) {
 .landing .code-box {
   background: rgba(255, 255, 255, 0.03);
 }
-.landing .google-btn iframe {
-  color-scheme: light;
-}
 
 /* Said under the headline. Bright enough to read over the stars. */
 .l-dark .l-sub {
