@@ -6,6 +6,7 @@ import { BANNERS, KINDS, LEVELS, OPEN_TO, ORG_CATEGORIES, REPORT_REASONS, ROLES,
 import { FREE_ROLES, MEMBERSHIP, LIFETIME_UNTIL, PLANS, planById, isLifetime, earlyAccessOpen } from '../shared/membership.js'
 import { LEGAL } from '../shared/legal.js'
 import { openStore } from './store.js'
+import { canMail, codeMail, sendMail } from './mail.js'
 import { createDemo } from './seed.js'
 import { CLUSTERS, STATUSES, TEAM, TEMPLATE, byPriority, followUpOn, pickOwner, slug, syncOutreach } from './outreach.js'
 
@@ -453,17 +454,27 @@ export function createApi({ dataDir, dev = false }) {
   // Sign in with a code sent to your email. Students and faculty use their school email; alumni use any.
   const codes = new Map()
 
-  route('POST', '/api/auth/start', 'open', ({ body }) => {
+  route('POST', '/api/auth/start', 'open', async ({ body }) => {
     const email = String(body.email || '').trim().toLowerCase()
     // People who already have an account just sign in, whichever button they picked.
     if (!db.users[uidFor(email)]?.name && !canSignUp(email, body.role)) throw new Fail(400, signupRole(body.role)?.hint || 'No account with this email yet. Go back and sign up.')
     const prev = codes.get(email)
     if (prev && Date.now() - prev.sent < 20_000) throw new Fail(429, 'Wait a few seconds, then ask for a new code.')
+    if (!dev && !canMail) throw new Fail(503, 'Email codes are down right now. Use Google to sign in.')
+    limit('code:' + email, 6, HOUR)
     const code = String(crypto.randomInt(0, 1_000_000)).padStart(6, '0')
     codes.set(email, { code, exp: Date.now() + CODE_TTL, tries: 0, sent: Date.now() })
-    // TODO: send the code by email (needs an email provider). Until then it shows in dev.
-    // Never log it outside dev: the log would hold an email and a working sign-in code.
+    // Never log the code outside dev: the log would hold an email and a working sign-in code.
     if (dev) console.log(`[bluelink] sign-in code for ${email}: ${code}`)
+    if (canMail) {
+      try {
+        await sendMail({ to: email, ...codeMail(code) })
+      } catch (err) {
+        codes.delete(email)
+        console.error('[bluelink] code email failed:', err.message)
+        throw new Fail(502, 'We could not send the code. Try again, or use Google.')
+      }
+    }
     return { ok: true, ...(dev ? { devCode: code } : {}) }
   })
 
