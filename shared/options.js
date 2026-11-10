@@ -102,7 +102,8 @@ export const LEVELS = [
 export const ROLES = [
   { id: 'student', label: 'Student' },
   { id: 'alum', label: 'Alumni' },
-  { id: 'faculty', label: 'Faculty or staff' },
+  // Faculty is off for now. Remove the // to turn it back on.
+  // { id: 'faculty', label: 'Faculty or staff' },
 ]
 
 export const KINDS = [

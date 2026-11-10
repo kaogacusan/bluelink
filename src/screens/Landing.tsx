@@ -22,8 +22,8 @@ const WHY = [
 ]
 
 const STEPS = [
-  { title: 'Pick student, alumni, or professor', text: 'Sign in with a code sent to your email. We never show or keep your email.' },
-  { title: 'Students pay the membership fee', text: `You get in right away. Full refund within ${LEGAL.refundDays} days. Alumni and professors join free for now.` },
+  { title: 'Pick student or alumni', text: 'Sign in with a code sent to your email. We never show or keep your email.' },
+  { title: 'Students pay the membership fee', text: `You get in right away. Full refund within ${LEGAL.refundDays} days. Alumni join free for now.` },
   { title: 'Post and connect', text: 'Find people by course, skill, or what they are open to, and say hi.' },
 ]
 
@@ -68,7 +68,7 @@ function SignInForm() {
   const [devCode, setDevCode] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
-  // Students and professors type only the part before the @. A full email still works.
+  // Students type only the part before the @. A full email still works.
   const domain = role?.domains[0]
   const local = !!domain && !typed.includes('@')
   const email = (local ? `${typed.trim()}@${domain}` : typed.trim()).toLowerCase()
@@ -138,7 +138,7 @@ function SignInForm() {
             </button>
           ))}
         </div>
-        <p className="l-free">Free for alumni and professors for now.</p>
+        <p className="l-free">Free for alumni for now.</p>
         {fine}
       </div>
     )
@@ -309,7 +309,7 @@ export function Landing() {
       <section className="l-band">
         <div className="l-band-inner">
           <h2>Both plans get everything.</h2>
-          <p className="l-band-note">For students. Alumni and professors join free for now.</p>
+          <p className="l-band-note">For students. Alumni join free for now.</p>
           <div className="l-plan-table">
             <div className="l-plans">
               {PLANS.map((p) => (

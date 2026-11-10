@@ -11,7 +11,8 @@ export const SCHOOL = {
 export const SIGNUP_ROLES = [
   { id: 'student', label: 'Student', title: 'Sign up as a student', domains: ['student.ateneo.edu'], hint: 'Use your Ateneo student email. It ends in @student.ateneo.edu.' },
   { id: 'alum', label: 'Alumni', title: 'Sign up as alumni', domains: [], hint: 'Type your full email, like juan@gmail.com.' },
-  { id: 'faculty', label: 'Professor', title: 'Sign up as a professor', domains: ['ateneo.edu'], hint: 'Use your Ateneo email. It ends in @ateneo.edu.' },
+  // Professor sign up is off for now. Remove the // to turn it back on.
+  // { id: 'faculty', label: 'Professor', title: 'Sign up as a professor', domains: ['ateneo.edu'], hint: 'Use your Ateneo email. It ends in @ateneo.edu.' },
 ]
 
 export const signupRole = (id) => SIGNUP_ROLES.find((r) => r.id === id) || null
