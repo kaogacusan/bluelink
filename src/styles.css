@@ -2669,7 +2669,8 @@ textarea.input {
 }
 .l-roles {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 8px;
 }
 .l-roles .btn {
@@ -2703,9 +2704,19 @@ textarea.input {
   background: var(--hover);
 }
 .l-or {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin: 14px 0;
   font-size: 14px;
   color: var(--muted);
+}
+.l-or::before,
+.l-or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
 }
 /* The school part of the email is already typed, so people only type their name. */
 .l-email-field {
@@ -3336,12 +3347,28 @@ textarea.input {
   font-weight: 600;
 }
 .google-btn {
-  min-height: 44px;
-  max-width: 400px;
+  position: relative;
+  overflow: hidden;
 }
-.google-btn.is-loading {
-  border-radius: var(--r-control);
-  background: var(--surface);
+.google-face {
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  gap: 12px;
+}
+.google-btn:hover .google-face {
+  background: var(--hover);
+}
+.google-btn:focus-within .google-face {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+/* Google's real button, stretched over ours and nearly see-through. */
+.google-hit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  opacity: 0.01;
 }
 .l-replies {
   display: flex;

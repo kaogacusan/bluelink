@@ -186,7 +186,7 @@ function SignInForm() {
       {google && (
         <>
           <GoogleButton clientId={google} onToken={withGoogle} />
-          <p className="l-or">or use a code</p>
+          <p className="l-or">or</p>
         </>
       )}
       <label className={`l-email-field ${local ? 'has-domain' : ''}`}>
@@ -212,7 +212,7 @@ function SignInForm() {
         {local && <span>@{domain}</span>}
       </label>
       <button className="btn btn-primary btn-lg btn-block" disabled={busy}>
-        Send me a code <ArrowRight weight="bold" />
+        Continue with email <ArrowRight weight="bold" />
       </button>
       {error && <p className="form-error">{error}</p>}
       {fine}
