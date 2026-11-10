@@ -27,7 +27,7 @@ npm run dev                     # then open http://localhost:5191/
 | `kit/` | The brand kit page. It reads `assets/kit/index.json`. |
 | `render/` | The 3D engine and page wiring. Colors are the Deep Field tokens (top of `render/render.css`, `COL` in `render/stage.js`). |
 | `scripts/print/kit.mjs` | The facts on every print (`F`), the bazaar and the road for the booth posts (`EVENT`, `ROUTE`), the Instagram words (`INFO`, `BOOTH`), the passes (`PASSES`), the links behind the QR (`URLS`), the three looks (`LOOKS`, `LOOK`), the legal lines, and the logo, sky, horizon, constellation, plate-mark, and QR helpers. |
-| `scripts/print/booth.mjs` | One entry per printed piece (three looks each) and Instagram post (one design). Each flyer front's composition is in `HOOK_FRONT`. The staff FAQ words are here too (`FAQ`, `NEVER`, `CONCERN`, `SALE`). |
+| `scripts/print/booth.mjs` | One entry per printed piece (three looks each) and Instagram post (one design). Each flyer front's composition is in `HOOK_FRONT`. The staff FAQ and sales script layouts are here too; their words are in `kit.mjs` (`FAQ`, `SALE_STEPS`, `CONCERN`, `SCRIPT`, `OBJECTIONS`). |
 | `scripts/social/posts.mjs` | Saves every Instagram post as a PNG, with captions.txt. |
 | `scripts/kit/` | `wordmark.py` outlines "BlueLink" from the app's Inter. `build.mjs` makes every brand file, the zip, and the laptop screen in the 3D model. |
 
@@ -41,7 +41,8 @@ npm run dev                     # then open http://localhost:5191/
 | Flyer | A6, two sides, 4 per A4 sheet. One design: the headline over the planet’s edge, dark back |
 | Hook flyers | A6, two sides. One short question on the front (HOOKS with `flyer: true` in `kit.mjs`), the flyer back. One design each, no looks. Each front has its own composition (`HOOK_FRONT` in `booth.mjs`): a constellation, two stars, plain big type, the app’s profile card, a star-chart week, a sunrise. Backs alternate white and dark through the set |
 | Voucher card | Business card size (90 × 54 mm), two sides, 10 per A4 sheet (2 × 5). Fronts: Lifetime (“Lifetime access to BlueLink”) and Founding member (“1 year of BlueLink”). No badges or tags on the front: it only says what the card is worth (the founding card has one warm star); the back names the pass |
-| Staff FAQ | A4, two pages, for the team only |
+| Staff FAQ | A4, three pages, for the team only |
+| Sales script | A4, one page, for the team only |
 
 The standee, header, QR sign, and voucher cards have three looks (flyers and Instagram posts have one design each):
 

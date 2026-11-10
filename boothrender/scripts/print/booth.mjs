@@ -2,7 +2,7 @@
 // Sizes in mm. `piece` is the id the 3D model uses. A version's html(i) returns page i.
 // Words come from F in kit.mjs only. One QR on every print: URLS.home (https://bluelinkph.com).
 // Every ₱ goes through peso() at the end, so it is set in Inter on purpose.
-import { C, F, PASSES, URLS, LOOK, LABELS, CONNECT, HOOKS, EVENT, INFO, BOOTH, hookText, margin, esc, hiText, lockupFor, mark, markSvg, skySvg, horizonSvg, constellationSvg, plateSvg, qrTile, peso, seeded } from './kit.mjs';
+import { C, F, PASSES, URLS, LOOK, LABELS, CONNECT, HOOKS, EVENT, INFO, BOOTH, FAQ, SALE_STEPS, CONCERN, SCRIPT, OBJECTIONS, hookText, margin, esc, hiText, lockupFor, mark, markSvg, skySvg, horizonSvg, constellationSvg, plateSvg, qrTile, peso, seeded } from './kit.mjs';
 
 // ---------- small helpers ----------
 const at = (x, y, inner, style = '', cls = '') => `<div class="abs ${cls}" style="left:${x}mm;top:${y}mm;${style}">${inner}</div>`;
@@ -652,83 +652,110 @@ const cardBackPrint = {
   ],
 };
 
+const PW = 210, PH = 297;
 // ======================================================================
-// STAFF FAQ, A4, two pages, for the team only (not for visitors). What people ask, and short, honest answers.
-// Page 2: when someone has a concern (privacy, safety, the school), the sale in 4 steps, and what never to say.
+// STAFF FAQ, A4, three pages, for the team only (not for visitors). Same format as the profstopick booth.
+// Page 1: the prices, about BlueLink, why pay, privacy. Page 2: safety, hard questions, paying and the code,
+// and how to make a sale. Page 3: when someone has a concern. Words: FAQ, SALE_STEPS, CONCERN in kit.mjs.
 // ======================================================================
-const FAQ = [
-  ['About BlueLink', [
-    ['Is this an official Ateneo thing?', 'No. Ateneans made it. It is not an official Ateneo de Manila University service, and the school does not run it.'],
-    ['Who can join?', 'Anyone 18 or older with an Ateneo email: college students, alumni, and faculty.'],
-    ['Why pay?', '₱99 a year or ₱250 for lifetime keeps out spam and fake accounts, and keeps the room small and serious. Both plans get the same app. No premium tier.'],
-    ['Where is my money going?', 'It runs BlueLink: hosting, email, and upkeep.'],
-    ['Refunds?', `Yes. Ask within 7 days for a full refund: ${F.refundContact}.`],
-  ]],
-  ['Privacy', [
-    ['Who sees my data? Do you sell it?', `Only members see your profile and posts. We never sell your data. The privacy notice says what we keep and why: ${F.privacy}.`],
-    ['Can the team read my messages?', 'No. Messages are private. Admins only see a message if someone reports it.'],
-    ['Can I delete my account and data?', 'Yes. In Settings. It is deleted right away.'],
-  ]],
-  ['Safety and rules', [
-    ['Is it safe for students if alumni and faculty are on it?', 'Everyone on it is 18 or older. Every profile has report and block. The rules ban harassment, and we remove people who break them.'],
-    ['Can people use it to cheat?', 'No. The rules ban selling or asking for answers, homework, or papers. Report it and we remove it.'],
-  ]],
-];
-const NEVER = [
-  'You will get a job, an internship, or a mentor.',
-  'Everyone replies, or people reply fast.',
-  'Ateneo supports, approves, or runs this.',
-  'It is free, or there is a raffle or a prize.',
-  'Any number of members, or anything about a member, unless it is true and public.',
-];
-const CONCERN = [
-  ['Listen.', 'Let them finish. Do not argue.'],
-  ['Say it is fair.', '“That’s a fair question.”'],
-  ['Answer from this sheet only.', 'If it is not here, say you will ask the team.'],
-  ['Write it down.', 'Who asked, what they asked, and how to reach them. Tell the team the same day.'],
-];
-const SALE = [
-  ['Check first.', 'They are 18+ and have an Ateneo email. If not, do not sell.'],
-  ['Take the payment.', '₱99 for 1 year or ₱250 for lifetime, cash or GCash. Check the GCash payment came in.'],
-  ['Give the card.', 'Write the code on the back. Log the time, the code, and how they paid.'],
-  ['Help them redeem.', 'Sign in, tap “Have a code?”, type the code. Right there at the table.'],
-];
+const SM = 15, SCW = PW - 2 * SM;
+const kick = (t) => `<div class="m" style="font-size:2.9mm;font-weight:600;color:${C.signal};margin-bottom:2.2mm">${t}</div>`;
+// The dark band on top of every staff sheet: the logo, and who it is for.
+const staffHead = (seed, note) => `
+  <div class="abs" style="left:0;top:0;width:${PW}mm;height:24mm;overflow:hidden">${ground('v1')}${skySvg({ w: PW, h: 24, seed, density: 0.05, band: 0.3 })}
+    <div class="abs" style="left:${SM}mm;top:7mm">${lockupFor('v1', 5.4)}</div>
+    <div class="abs" style="right:${SM}mm;top:8mm">${mono(note, 2.6, C.sub)}</div></div>`;
+const staffTitle = (title, sub) => `
+  <div class="d" style="font-size:9mm;color:${C.ink}">${title}</div>
+  <div class="t" style="font-size:3.5mm;margin-top:1.8mm;color:${C.ink2}">${sub}</div>`;
+
+// the four sale steps (SALE_STEPS), two by two, numbered
+const saleSteps = () => `<div style="display:grid;grid-template-columns:1fr 1fr;gap:3mm 8mm">${SALE_STEPS.map(([t, d], j) => `
+  <div style="display:flex;gap:2.8mm;line-height:1.35;color:${C.ink}">${mono(`0${j + 1}`, 3.2, C.signal, 'font-weight:600;line-height:1.3')}
+    <div><div style="font-size:3.5mm;font-weight:700">${esc(t)}</div><div class="t" style="font-size:3.3mm;margin-top:0.6mm;color:${C.ink2}">${esc(d)}</div></div></div>`).join('')}</div>`;
 
 const faqPage = (i) => {
-  const M = 15, CW = PW - 2 * M;
-  const kick = (t) => `<div class="m" style="font-size:2.9mm;font-weight:600;color:${C.signal};margin-bottom:2.4mm">${t}</div>`;
-  const head = (title, sub) => `
-    <div class="abs" style="left:0;top:0;width:${PW}mm;height:30mm;overflow:hidden">${ground('v1')}${skySvg({ w: PW, h: 30, seed: `faq-${i}`, density: 0.05, band: 0.3 })}
-      <div class="abs" style="left:${M}mm;top:8mm">${lockupFor('v1', 6)}</div>
-      <div class="abs" style="right:${M}mm;top:9mm">${mono(`For the team · Not for visitors · ${i + 1} / 2`, 2.6, C.sub)}</div></div>
-    <div class="abs" style="left:${M}mm;top:38mm;width:${CW}mm">
-      <div class="d" style="font-size:9.5mm;color:${C.ink}">${title}</div>
-      <div class="t" style="font-size:3.6mm;margin-top:2mm;color:${C.ink2}">${sub}</div></div>`;
-  const qa = ([q, a]) => `<div style="display:grid;grid-template-columns:62mm 1fr;gap:6mm;padding:2.8mm 0 3mm;border-top:0.25mm solid ${C.line}">
-      <div style="font-size:4mm;font-weight:700;line-height:1.3;color:${C.ink}">${esc(q)}</div>
-      <div class="t" style="font-size:3.9mm;line-height:1.4;color:${C.ink}">${esc(a)}</div></div>`;
-  const row = ([t, d], j) => `<div style="display:grid;grid-template-columns:8mm 52mm 1fr;gap:4mm;align-items:baseline;padding:2.8mm 0 3mm;border-top:0.25mm solid ${C.line}">
-      ${mono(`0${j + 1}`, 3.2, C.signal, 'font-weight:600')}
-      <div style="font-size:4mm;font-weight:700;line-height:1.3;color:${C.ink}">${esc(t)}</div>
-      <div class="t" style="font-size:3.9mm;line-height:1.4;color:${C.ink}">${esc(d)}</div></div>`;
-  const foot = `<div class="abs" style="left:${M}mm;bottom:${M}mm;width:${CW}mm;border-top:0.4mm solid ${C.ink};padding-top:3mm;display:flex;justify-content:space-between">
-      ${legal(F.unofficial, 3, C.ink2)}${mono(F.site, 2.8, C.ink3)}</div>`;
-  if (i === 0) return `
-    <div class="fill" style="background:#fff"></div>
-    ${head('Booth FAQ', 'What people ask, and what to say. Short and honest. If it is not on this sheet, say you will ask the team.')}
-    <div class="abs" style="left:${M}mm;top:62mm;width:${CW}mm">
-      ${FAQ.map(([t, list]) => `<div style="margin-bottom:7mm">${kick(t)}${list.map(qa).join('')}</div>`).join('')}
-    </div>${foot}`;
+  if (i === 2) return concernPage();
+  const qa = ([q, a]) => `<div style="display:grid;grid-template-columns:50mm 1fr;gap:6mm;padding:1.7mm 0 1.9mm;border-top:0.25mm solid ${C.line}">
+      <div style="font-size:3.5mm;font-weight:700;line-height:1.3;color:${C.ink}">${esc(q)}</div>
+      <div class="t" style="font-size:3.4mm;line-height:1.4;color:${C.ink}">${esc(a)}</div></div>`;
+  const section = ([t, list]) => `<div style="margin-top:4.6mm">${kick(t)}${list.map(qa).join('')}</div>`;
+  const price = ([who, plan, p]) => `<div style="flex:1;border:0.25mm solid ${C.line};padding:2.4mm 3.2mm">
+      ${mono(`${who} · ${plan}`, 2.6, C.ink2)}
+      <div class="d nw" style="font-size:6.4mm;margin-top:1.2mm;color:${C.ink}">${p}</div></div>`;
+  const top = i === 0
+    ? `${staffTitle('Booth FAQ', 'What visitors ask, and what to say. Short and honest. If it is not here, say you will ask the team.')}
+      <div style="display:flex;gap:2.6mm;margin-top:5mm">${[['Students', '1 year', F.price], ['Students', 'Lifetime', F.life], ['Alumni', 'For now', 'Free']].map(price).join('')}</div>`
+    : `<div class="d" style="font-size:9mm;color:${C.ink}">Booth FAQ, continued</div>`;
+  const foot = i === 0
+    ? `<div class="abs" style="left:${SM}mm;bottom:${SM}mm;width:${SCW}mm;border-top:0.4mm solid ${C.ink};padding-top:3mm;display:flex;justify-content:space-between">
+        ${legal(F.unofficial, 3, C.ink2)}${mono('More on the back · 1 / 3', 2.8, C.ink3)}</div>`
+    : `<div class="abs" style="left:${SM}mm;bottom:${SM}mm;width:${SCW}mm;border-top:0.4mm solid ${C.ink};padding-top:3.2mm">
+        ${kick('How to make a sale')}${saleSteps()}
+        <div style="margin-top:3.4mm;padding:2.2mm 3.2mm;background:${C.paper};border-left:1mm solid ${C.signal};font-size:3.5mm;font-weight:700;color:${C.ink}">After every sale, log the time, the code, and how they paid.</div>
+        <div style="display:flex;justify-content:space-between;margin-top:3.4mm">${mono(F.site, 2.8, C.ink3)}${mono('2 / 3', 2.8, C.ink3)}</div></div>`;
   return `
     <div class="fill" style="background:#fff"></div>
-    ${head('Concerns, the sale, and what not to say', 'Stay calm and polite. Never promise more than BlueLink does.')}
-    <div class="abs" style="left:${M}mm;top:62mm;width:${CW}mm">
-      <div style="margin-bottom:8mm">${kick('If someone has a concern')}${CONCERN.map(row).join('')}</div>
-      <div style="margin-bottom:8mm">${kick('The sale, in 4 steps')}${SALE.map(row).join('')}</div>
-      <div style="padding:3.6mm 4.4mm 4mm;background:#fff6ee;border-left:1mm solid ${C.flare}">
-        ${kick('Never say')}
-        ${NEVER.map((t) => `<div style="font-size:4mm;font-weight:600;line-height:1.4;margin-top:1.2mm;color:${C.ink}">✕&nbsp; “${esc(t)}”</div>`).join('')}</div>
+    ${staffHead(`faq-${i}`, 'For the team · Not for visitors')}
+    <div class="abs" style="left:${SM}mm;top:31mm;width:${SCW}mm">
+      ${top}
+      ${FAQ.filter((x) => x[2] === i).map(section).join('')}
     </div>${foot}`;
+};
+
+// Page 3: someone has a concern (privacy, safety, the price, the Ateneo name). Calm steps, what to say back, what not to do.
+const concernPage = () => {
+  const step = ([t, d], j) => `<div style="display:grid;grid-template-columns:8mm 54mm 1fr;gap:4mm;align-items:baseline;padding:1.7mm 0 1.9mm;border-top:0.25mm solid ${C.line}">
+      ${mono(`0${j + 1}`, 3.2, C.signal, 'font-weight:600')}
+      <div style="font-size:3.6mm;font-weight:700;line-height:1.3;color:${C.ink}">${esc(t)}</div>
+      <div class="t" style="font-size:3.5mm;line-height:1.4;color:${C.ink}">${esc(d)}</div></div>`;
+  const said = ([q, a]) => `<div style="display:grid;grid-template-columns:58mm 1fr;gap:6mm;padding:1.7mm 0 1.9mm;border-top:0.25mm solid ${C.line}">
+      <div style="font-size:3.6mm;font-weight:700;line-height:1.3;color:${C.ink}">“${esc(q)}”</div>
+      <div class="t" style="font-size:3.5mm;line-height:1.4;color:${C.ink}">“${esc(a)}”</div></div>`;
+  return `
+    <div class="fill" style="background:#fff"></div>
+    ${staffHead('faq-2', 'For the team · Not for visitors')}
+    <div class="abs" style="left:${SM}mm;top:31mm;width:${SCW}mm">
+      ${staffTitle('If someone has concerns', 'About privacy, safety, the price, or the school. Stay calm and polite. Never promise more than BlueLink does.')}
+      <div style="margin-top:4.8mm">${kick('What to do')}${CONCERN.steps.map(step).join('')}</div>
+      <div style="margin-top:4.8mm">${kick('If they say')}${CONCERN.says.map(said).join('')}</div>
+      <div style="margin-top:4.8mm;padding:3mm 4.4mm 3.4mm;background:#fff6ee;border-left:1mm solid ${C.flare}">
+        ${kick('Never')}
+        ${CONCERN.never.map((t) => `<div style="font-size:3.6mm;font-weight:600;line-height:1.4;margin-top:1mm;color:${C.ink}">✕&nbsp; ${esc(t)}</div>`).join('')}</div>
+    </div>
+    <div class="abs" style="left:${SM}mm;bottom:${SM}mm;width:${SCW}mm;border-top:0.4mm solid ${C.ink};padding-top:3mm">
+      <div style="font-size:3.5mm;font-weight:700;color:${C.ink}">Privacy notice: ${F.privacy} · Terms: ${F.terms}</div>
+      <div style="display:flex;justify-content:space-between;margin-top:2.6mm">${mono('Upset, or wants someone in charge? Call Prince.', 2.8, C.ink2)}${mono('3 / 3', 2.8, C.ink3)}</div></div>`;
+};
+
+// ======================================================================
+// SALES SCRIPT, A4, one page. Onboarding for the booth team: ask 1 or 2 questions, bring them to the booth,
+// sell at the laptop. Short lines only. Words: SCRIPT and OBJECTIONS in kit.mjs.
+// ======================================================================
+const scriptPage = () => {
+  const line = ([who, t]) => `<div style="display:grid;grid-template-columns:17mm 1fr;gap:3mm;align-items:baseline;margin-top:1.7mm">
+      ${mono(who === 'you' ? 'You say' : 'Do', 2.9, who === 'you' ? C.signal : C.ink2, 'font-weight:600')}
+      ${who === 'you' ? `<span style="font-size:4mm;font-weight:600;line-height:1.34;color:${C.ink}">“${esc(t)}”</span>`
+        : `<span class="t" style="font-size:3.8mm;line-height:1.38;color:${C.ink2}">${esc(t)}</span>`}</div>`;
+  const step = ([title, why, list, tip], n) => `<div style="display:grid;grid-template-columns:11mm 1fr;gap:4mm;padding:3mm 0 3.2mm;border-top:0.3mm solid ${C.line}">
+      <span class="d" style="font-size:9mm;line-height:1;color:${C.signal}">${n + 1}</span>
+      <div><div class="d nw" style="font-size:5.6mm;color:${C.ink}">${esc(title)}</div>
+        <div class="t" style="font-size:3.5mm;margin-top:1mm;color:${C.ink2}">${esc(why)}</div>
+        ${list.map(line).join('')}
+        <div style="margin-top:2.4mm;padding:1.8mm 3.2mm;background:${C.paper};border-left:1mm solid ${C.signal};font-size:3.4mm;font-weight:600;line-height:1.35;color:${C.ink}">${mono('Tip', 2.9, C.signal, 'font-weight:600;margin-right:2mm')}${esc(tip)}</div></div></div>`;
+  const said = ([q, a]) => `<div style="display:grid;grid-template-columns:48mm 1fr;gap:6mm;padding:1.7mm 0 1.9mm;border-top:0.3mm solid ${C.line}">
+      <div style="font-size:3.7mm;font-weight:700;line-height:1.3;color:${C.ink}">“${esc(q)}”</div>
+      <div class="t" style="font-size:3.7mm;line-height:1.38;color:${C.ink}">“${esc(a)}”</div></div>`;
+  return `
+    <div class="fill" style="background:#fff"></div>
+    ${staffHead('script', 'For the team · Read it before your shift')}
+    <div class="abs" style="left:${SM}mm;top:31mm;width:${SCW}mm">
+      ${staffTitle('Sales script', 'Keep it short. Ask 1 or 2 questions, then bring them to the booth.')}
+      <div style="margin-top:4.6mm">${SCRIPT.map(step).join('')}</div>
+      <div style="margin-top:4mm">${kick('If they say')}${OBJECTIONS.map(said).join('')}</div>
+    </div>
+    <div class="abs" style="left:${SM}mm;bottom:${SM}mm;width:${SCW}mm;border-top:0.3mm solid ${C.line};padding-top:2.8mm;display:flex;justify-content:space-between">
+      ${mono('Anything else: check the Booth FAQ, or ask Prince.', 2.8, C.ink2)}${mono(F.site, 2.8, C.ink3)}</div>`;
 };
 
 // ======================================================================
@@ -1000,11 +1027,16 @@ const boothStoryAsset = {
   versions: one('The bazaar map from above with our glowing tent, and the dates and time.', () => boothStory()),
 };
 
-const PW = 210, PH = 297;
 const faq = {
-  id: 'faq', piece: 'faq', name: 'Staff FAQ', size: 'A4, 210 × 297 mm, two pages', mm: [PW, PH], pages: ['FAQ', 'Concerns and the sale'],
-  print: 'Plain paper, A4, both sides of one sheet. For the team: keep one behind the table. Not for visitors.',
-  versions: [{ id: 'v1', look: 'staff', note: 'White, two pages. Page 1: is it official, who can join, why pay, refunds, privacy, messages, deleting an account, safety, cheating. Page 2: what to do when someone has a concern, the sale in 4 steps, and what never to say.', html: faqPage }],
+  id: 'faq', piece: 'faq', name: 'Staff FAQ', size: 'A4, 210 × 297 mm, three pages', mm: [PW, PH], pages: ['FAQ, page 1', 'FAQ, page 2', 'If someone has concerns'],
+  print: 'Plain paper, A4. Pages 1 and 2 on both sides of one sheet, page 3 on its own sheet. For the team: keep one behind the table. Not for visitors.',
+  versions: [{ id: 'v1', look: 'staff', note: 'White, three pages: the prices, about BlueLink, why pay, and privacy; then safety, the hard questions, the code, and how to make a sale; then what to say when someone has a concern.', html: faqPage }],
+};
+
+const script = {
+  id: 'script', piece: 'faq', name: 'Sales script', size: 'A4, 210 × 297 mm', mm: [PW, PH], pages: ['Script'],
+  print: 'Plain paper, A4. For the team: read it before your shift. Not for visitors.',
+  versions: [{ id: 'v1', look: 'staff', note: 'White, one page: ask 1 or 2 questions, bring them to the booth, sell at the laptop, and short answers.', html: scriptPage }],
 };
 
 // every ₱ in Inter (see peso() in kit.mjs)
@@ -1012,5 +1044,5 @@ const withPeso = (asset) => ({ ...asset, versions: asset.versions.map((v) => ({ 
 
 export default {
   page: 'booth',
-  assets: [standee, header, qrSign, flyer, ...hookFlyers, card, cardFounding, cardBackPrint, insta, infoCarousel, boothPost, boothStoryAsset, faq].map(withPeso),
+  assets: [standee, header, qrSign, flyer, ...hookFlyers, card, cardFounding, cardBackPrint, insta, infoCarousel, boothPost, boothStoryAsset, faq, script].map(withPeso),
 };

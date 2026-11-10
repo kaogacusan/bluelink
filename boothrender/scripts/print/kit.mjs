@@ -93,6 +93,118 @@ export const PASSES = [
   { id: 'founding', tag: 'Founding member', lead: '*1 year* of', what: '1 year of BlueLink membership (365 days)', price: '₱99', flare: true },
 ];
 
+// Staff FAQ (A4, three pages, for the team, not for visitors): what people ask at the booth, and what to say.
+// Same format as the profstopick booth. Facts from the app: shared/membership.js (prices, alumni free),
+// shared/school.js (who can sign up), shared/legal.js (18+, 7-day refund, the rules).
+// [section, [[question, answer], ...], page]  page 0 = front, 1 = back.
+export const FAQ = [
+  ['About BlueLink', [
+    ['What is BlueLink?', 'A private network for the Ateneo community. Students and alumni post, message, and find internships, jobs, mentors, and orgs.'],
+    ['Who made it?', 'A group of Ateneo students.'],
+    ['Is it from Ateneo?', 'No. Ateneans made it. It is not an official Ateneo de Manila University service, and the school does not run it.'],
+    ['Who can join?', 'Ateneo students with a @student.ateneo.edu email, and Ateneo alumni. Everyone must be 18 or older. Faculty sign up is off for now.'],
+    ['How is it different from LinkedIn?', 'Only the Ateneo community is on it, and everyone joined to network with each other. Find people by course, skill, and what they are open to, like hiring interns or giving advice.'],
+  ], 0],
+  ['Why pay', [
+    ['Why pay?', 'It gives you exclusive access to opportunities in the Ateneo community. Alumni and people who can give internships, jobs, and advice are on it. The fee also keeps out spam and fake accounts.'],
+    ['Why are alumni free?', 'Alumni are the ones with jobs, internships, and advice to give. Free means more of them join, so students get more opportunities.'],
+    ['What is the difference between the plans?', 'Only how long it lasts. ₱99 is 1 year. ₱250 is lifetime. Both get the same app. No premium tier.'],
+    ['Where does the money go?', 'It runs BlueLink: hosting, email, and upkeep.'],
+    ['Can I get my money back?', `Yes. Full refund within 7 days: ${F.refundContact}.`],
+  ], 0],
+  ['Privacy', [
+    ['Who sees my data? Do you sell it?', `Only members see your profile and posts. We never sell your data. The privacy notice: ${F.privacy}.`],
+    ['Can the team read my messages?', 'No. Messages are private. Admins only see a message if someone reports it.'],
+    ['Can I delete my account?', 'Yes. In Settings. Your account and data are deleted right away.'],
+  ], 0],
+  ['Safety and rules', [
+    ['Is it safe for students, with alumni on it?', 'Everyone is 18 or older. Every profile has report and block. The rules ban harassment, and we remove people who break them.'],
+    ['How do you know someone is really alumni?', 'Alumni give the year they finished. Faking it breaks the rules, and we remove them. If someone seems off, report them.'],
+    ['Can people use it to cheat?', 'No. The rules ban selling or asking for answers, homework, or papers. Report it and we remove it.'],
+  ], 1],
+  // The criticisms. Honest answers only: never promise a job, a mentor, or a reply (see CONCERN.never).
+  ['Hard questions', [
+    ['Will I get a job or an internship?', 'We cannot promise that. You get access to people who can help: alumni, orgs, and businesses. What you get depends on you reaching out.'],
+    ['Will alumni reply to me?', 'They joined to network with Ateneans. Not everyone replies. A full profile and a short, clear message help.'],
+    ['It is new. Why pay now?', 'You get in early. We are inviting alumni and Ateneo orgs now. If it is not for you, the refund is there.'],
+    ['Is this legit?', 'The terms and the privacy notice are on the site. We never sell your data. You can delete your account any time, and get a full refund within 7 days.'],
+  ], 1],
+  ['Paying and the code', [
+    ['How do I pay?', 'Cash or GCash, here at the booth. For GCash, check that the payment came in before you give the card.'],
+    ['I am alumni. Do I pay?', 'No. Alumni join free for now. Help them sign up at the table.'],
+    ['How do I use my code?', 'Go to bluelinkph.com and sign in with your Ateneo email. Set up your profile. On the join screen, tap “Have a code?” and type the code.'],
+    ['The code does not work.', 'Check it is typed right. Still no? Write down their email and the code, and tell Prince. Do not take a second payment.'],
+    ['Can I buy one for a friend?', 'Yes. Each code works once, on any account.'],
+  ], 1],
+];
+
+// How to make a sale, in four steps. On the staff FAQ and the sales script.
+export const SALE_STEPS = [
+  ['Talk to them.', 'Ask 1 or 2 questions.'],
+  ['Bring them to the booth.', 'If you let them go, they will not come back.'],
+  ['Check, then take the payment.', '18+, a student email. Cash or GCash.'],
+  ['Give the card.', 'Write the code on the back. Help them redeem.'],
+];
+
+// Page 3 of the staff FAQ: when someone has a concern (privacy, safety, the price, the Ateneo name).
+export const CONCERN = {
+  // [what to do, how]
+  steps: [
+    ['Listen.', 'Let them finish. Do not interrupt. Do not argue.'],
+    ['Say it is fair.', '“That’s a fair concern.”'],
+    ['Ask what bothers them.', 'Privacy? Safety? The price? The Ateneo name?'],
+    ['Answer from these sheets.', 'If it is not here, say you will ask the team.'],
+    ['Thank them. Tell Prince.', 'Who, what they asked, and how to reach them.'],
+  ],
+  // [what they say, what you say]
+  says: [
+    ['Is this approved by Ateneo?', 'No. Ateneo students made it. It is not an official Ateneo service, and we say so on every print.'],
+    ['So students pay to reach alumni?', 'Students pay for the network, not for any person. Alumni join free and choose who they talk to.'],
+    ['Why charge students at all?', 'The fee keeps out spam and fake accounts, and pays for the servers. Full refund within 7 days if it is not for them.'],
+    ['What do you do with my data?', 'We keep only what runs your account: your name, email, course, and year. We never sell it. You can delete it any time in Settings.'],
+    ['Is it safe, with older people?', 'Everyone is 18 or older. Every profile has report and block. We remove anyone who breaks the rules.'],
+    ['Someone on it bothered me.', 'I am sorry. Please report them in the app, from their profile. I will tell the team today.'],
+    ['Who runs this?', 'A group of Ateneo students. I can get Prince for you now.'],
+  ],
+  never: [
+    'Argue, or tell them they are wrong.',
+    'Promise a job, an internship, a mentor, or a reply.',
+    'Say Ateneo supports, approves, or runs BlueLink.',
+    'Say it is free for students, or that there is a raffle or a prize.',
+    'Give a number of members, unless it is true and public.',
+    'Talk badly about other apps, groups, or people.',
+  ],
+};
+
+// The sales script (onboarding for the team). Short on purpose: people walking by do not want a speech.
+// Ask 1 or 2 questions, then bring them to the booth. The laptop does the selling.
+// Each step: [title, what it is for, [lines], tip]. A line is [who, words]; who = 'you' or 'do'.
+export const SCRIPT = [
+  ['Ask 1 or 2 questions', 'Keep it short. They are walking by. Pick from these.', [
+    ['you', 'Are you looking for an internship or a job?'],
+    ['you', 'Want to meet Ateneo alumni in your field?'],
+    ['you', 'Have you heard of BlueLink?'],
+  ], 'Smile. If they stop and answer, go to step 2.'],
+  ['Bring them to the booth', 'That is the whole goal. Do not explain everything.', [
+    ['you', 'BlueLink is a network only for Ateneans. Alumni and people who can give internships and jobs are on it. Come see it at our booth!'],
+    ['do', 'Walk with them to the booth.'],
+  ], 'If you let them go, they will not come back.'],
+  ['At the booth', 'Let them see it on the laptop, then ask them to pay.', [
+    ['do', 'Show them the app: people, orgs, and what each person is open to.'],
+    ['you', '₱99 for 1 year, or ₱250 for lifetime. Cash or GCash?'],
+    ['do', 'Check they are 18 or older, with a student email. Write the code on the back of the card and give it.'],
+  ], 'Help them redeem the code right there. Alumni join free: help them sign up.'],
+];
+
+// What to say back, short. [what they say, what you say]. Anything else: the Booth FAQ.
+export const OBJECTIONS = [
+  ['Why pay?', 'It gives you exclusive access to opportunities in the Ateneo community. Alumni and people who can give internships, jobs, and advice are on it.'],
+  ['I’ll come back later.', 'It takes 2 minutes, and we’ll set it up with you right now.'],
+  ['Isn’t this just LinkedIn?', 'Only Ateneans are on it, and everyone joined to network with each other.'],
+  ['Is my data safe?', 'Yes. Only members see your profile. We never sell your data, and you can delete it any time.'],
+  ['What if I don’t like it?', 'Full refund within 7 days.'],
+];
+
 // Real links. Every QR goes to `home`. Make sure the site is live, and test the QR on 2 phones before printing.
 export const URLS = {
   home: 'https://bluelinkph.com',

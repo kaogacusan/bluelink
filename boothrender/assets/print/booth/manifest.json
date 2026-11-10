@@ -878,34 +878,70 @@
    "id": "faq",
    "piece": "faq",
    "name": "Staff FAQ",
-   "size": "A4, 210 × 297 mm, two pages",
+   "size": "A4, 210 × 297 mm, three pages",
    "mm": [
     210,
     297
    ],
    "pages": [
-    "FAQ",
-    "Concerns and the sale"
+    "FAQ, page 1",
+    "FAQ, page 2",
+    "If someone has concerns"
    ],
-   "print": "Plain paper, A4, both sides of one sheet. For the team: keep one behind the table. Not for visitors.",
+   "print": "Plain paper, A4. Pages 1 and 2 on both sides of one sheet, page 3 on its own sheet. For the team: keep one behind the table. Not for visitors.",
    "versions": [
     {
      "id": "v1",
      "look": "staff",
-     "note": "White, two pages. Page 1: is it official, who can join, why pay, refunds, privacy, messages, deleting an account, safety, cheating. Page 2: what to do when someone has a concern, the sale in 4 steps, and what never to say.",
+     "note": "White, three pages: the prices, about BlueLink, why pay, and privacy; then safety, the hard questions, the code, and how to make a sale; then what to say when someone has a concern.",
      "pdf": "/assets/print/booth/faq/v1.pdf",
-     "pdfKb": 763,
+     "pdfKb": 1450,
      "jpg": [
       "/assets/print/booth/faq/v1-1.jpg",
-      "/assets/print/booth/faq/v1-2.jpg"
+      "/assets/print/booth/faq/v1-2.jpg",
+      "/assets/print/booth/faq/v1-3.jpg"
      ],
      "m": [
       "/assets/print/booth/faq/v1-1.m.jpg",
-      "/assets/print/booth/faq/v1-2.m.jpg"
+      "/assets/print/booth/faq/v1-2.m.jpg",
+      "/assets/print/booth/faq/v1-3.m.jpg"
      ],
      "t": [
       "/assets/print/booth/faq/v1-1.t.jpg",
-      "/assets/print/booth/faq/v1-2.t.jpg"
+      "/assets/print/booth/faq/v1-2.t.jpg",
+      "/assets/print/booth/faq/v1-3.t.jpg"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "script",
+   "piece": "faq",
+   "name": "Sales script",
+   "size": "A4, 210 × 297 mm",
+   "mm": [
+    210,
+    297
+   ],
+   "pages": [
+    "Script"
+   ],
+   "print": "Plain paper, A4. For the team: read it before your shift. Not for visitors.",
+   "versions": [
+    {
+     "id": "v1",
+     "look": "staff",
+     "note": "White, one page: ask 1 or 2 questions, bring them to the booth, sell at the laptop, and short answers.",
+     "pdf": "/assets/print/booth/script/v1.pdf",
+     "pdfKb": 572,
+     "jpg": [
+      "/assets/print/booth/script/v1-1.jpg"
+     ],
+     "m": [
+      "/assets/print/booth/script/v1-1.m.jpg"
+     ],
+     "t": [
+      "/assets/print/booth/script/v1-1.t.jpg"
      ]
     }
    ]
