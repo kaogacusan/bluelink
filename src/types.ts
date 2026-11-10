@@ -118,7 +118,7 @@ export interface Post {
 export interface Membership {
   active: boolean
   until: number
-  via: 'gcash' | 'code' | 'admin' | 'free' | null
+  via: 'gcash' | 'code' | 'admin' | 'free' | 'early' | null
   status: 'pending' | 'approved' | 'rejected' | null
   ref: string
   lifetime: boolean

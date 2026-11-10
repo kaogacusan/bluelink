@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { canSignUp, signupRole } from '../shared/school.js'
 import { BANNERS, KINDS, LEVELS, OPEN_TO, ORG_CATEGORIES, REPORT_REASONS, ROLES, schoolOf } from '../shared/options.js'
-import { FREE_ROLES, MEMBERSHIP, LIFETIME_UNTIL, PLANS, planById, isLifetime } from '../shared/membership.js'
+import { FREE_ROLES, MEMBERSHIP, LIFETIME_UNTIL, PLANS, planById, isLifetime, earlyAccessOpen } from '../shared/membership.js'
 import { LEGAL } from '../shared/legal.js'
 import { openStore } from './store.js'
 import { createDemo } from './seed.js'
@@ -707,6 +707,12 @@ export function createApi({ dataDir, dev = false }) {
   // ---- me
   route('GET', '/api/me', 'auth', ({ uid }) => {
     const u = db.users[uid]
+    // Early access: anyone with a profile who is not a member yet gets a free year. No payment, no code.
+    if (u?.name && earlyAccessOpen() && !membershipOf(uid).active) {
+      u.until = Date.now() + MEMBERSHIP.codeDays * DAY
+      u.via = 'early'
+      save()
+    }
     return {
       user: u?.name ? full(u) : null,
       connections: u?.name ? connectionsOf(uid).length : 0,

@@ -2,6 +2,8 @@ export type Plan = { id: 'year' | 'life'; price: number; name: string; days: num
 export const LIFETIME_UNTIL: number
 export const PLANS: Plan[]
 export const FREE_ROLES: string[]
+export const EARLY_ACCESS_UNTIL: number
+export function earlyAccessOpen(now?: number): boolean
 export const MEMBERSHIP: { plans: Plan[]; codeDays: number }
 export function planById(id: string): Plan
 export function isLifetime(until: number): boolean

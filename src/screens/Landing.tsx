@@ -12,7 +12,7 @@ import { api, session, useFetch } from '../lib/api'
 import { save } from '../lib/storage'
 import { OPEN_TO } from '../../shared/options.js'
 import { SCHOOL, SIGNUP_ROLES, canSignUp, type SignupRole } from '../../shared/school.js'
-import { PLANS } from '../../shared/membership.js'
+import { PLANS, earlyAccessOpen } from '../../shared/membership.js'
 import { LEGAL, RULES } from '../../shared/legal.js'
 
 const WHY = [
@@ -23,7 +23,9 @@ const WHY = [
 
 const STEPS = [
   { title: 'Pick student or alumni', text: 'Sign in with a code sent to your email. We never show or keep your email.' },
-  { title: 'Students pay the membership fee', text: `You get in right away. Full refund within ${LEGAL.refundDays} days. Alumni join free for now.` },
+  earlyAccessOpen()
+    ? { title: 'Join free today', text: 'Early access is free on November 10 only. No payment, no code.' }
+    : { title: 'Students pay the membership fee', text: `You get in right away. Full refund within ${LEGAL.refundDays} days. Alumni join free for now.` },
   { title: 'Post and connect', text: 'Find people by course, skill, or what they are open to, and say hi.' },
 ]
 
@@ -138,7 +140,7 @@ function SignInForm() {
             </button>
           ))}
         </div>
-        <p className="l-free">Free for alumni for now.</p>
+        <p className="l-free">{earlyAccessOpen() ? 'Free for everyone who signs up today, November 10.' : 'Free for alumni for now.'}</p>
         {fine}
       </div>
     )
@@ -268,6 +270,7 @@ function Preview() {
 }
 
 export function Landing() {
+  const early = earlyAccessOpen()
   return (
     <div className="landing">
       <div className="l-dark">
@@ -308,17 +311,35 @@ export function Landing() {
 
       <section className="l-band">
         <div className="l-band-inner">
-          <h2>Both plans get everything.</h2>
-          <p className="l-band-note">For students. Alumni join free for now.</p>
+          {early ? (
+            <>
+              <h2>Early access is free today.</h2>
+              <p className="l-band-note">Sign up today and you get in. No payment, no code.</p>
+            </>
+          ) : (
+            <>
+              <h2>Both plans get everything.</h2>
+              <p className="l-band-note">For students. Alumni join free for now.</p>
+            </>
+          )}
           <div className="l-plan-table">
-            <div className="l-plans">
-              {PLANS.map((p) => (
-                <p key={p.id} className="l-price">
-                  <span>{p.name}</span>
-                  <b>₱{p.price}</b>
+            {early ? (
+              <div className="l-plans l-plans-one">
+                <p className="l-price">
+                  <span>Early access, November 10 only</span>
+                  <b>Free</b>
                 </p>
-              ))}
-            </div>
+              </div>
+            ) : (
+              <div className="l-plans">
+                {PLANS.map((p) => (
+                  <p key={p.id} className="l-price">
+                    <span>{p.name}</span>
+                    <b>₱{p.price}</b>
+                  </p>
+                ))}
+              </div>
+            )}
             <ul className="l-perks">
               {OPEN_TO.map((o) => (
                 <li key={o.id}>

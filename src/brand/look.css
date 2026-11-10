@@ -902,6 +902,9 @@ body:has(.landing) {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
+.l-plans-one {
+  grid-template-columns: minmax(0, 1fr);
+}
 .l-band .l-price {
   display: flex;
   flex-direction: column;
