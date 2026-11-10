@@ -60,6 +60,8 @@ function Settings() {
           Membership
           {membership.via === 'admin'
             ? ': admin'
+            : membership.via === 'free'
+            ? ': free for alumni and faculty'
             : membership.lifetime
               ? ': lifetime'
               : membership.until

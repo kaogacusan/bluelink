@@ -13,8 +13,10 @@ const YEARS = Array.from({ length: 70 }, (_, i) => THIS_YEAR + 5 - i)
 
 // One short screen. The name comes from Google or the email, so most people only pick a course and a year.
 export function Onboarding({ onDone, onSignOut }: { onDone: (me: FullPerson) => void; onSignOut: () => void }) {
-  const [name, setName] = useState(() => load<{ name: string } | null>('prefill', null)?.name ?? '')
-  const [role, setRole] = useState('student')
+  const [prefill] = useState(() => load<{ name?: string; role?: string } | null>('prefill', null))
+  const [name, setName] = useState(prefill?.name ?? '')
+  // The role picked on the landing page, so people do not pick it twice.
+  const [role, setRole] = useState(prefill?.role ?? 'student')
   const [course, setCourse] = useState('')
   const [level, setLevel] = useState('')
   const [year, setYear] = useState('')

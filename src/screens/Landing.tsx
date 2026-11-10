@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { ArrowRight } from '@phosphor-icons/react/dist/csr/ArrowRight'
+import { ArrowLeft } from '@phosphor-icons/react/dist/csr/ArrowLeft'
 import { ThumbsUp } from '@phosphor-icons/react/dist/csr/ThumbsUp'
 import { ChatCircle } from '@phosphor-icons/react/dist/csr/ChatCircle'
 import { Check } from '@phosphor-icons/react/dist/csr/Check'
@@ -10,7 +11,7 @@ import { GoogleButton } from '../components/GoogleButton'
 import { api, session, useFetch } from '../lib/api'
 import { save } from '../lib/storage'
 import { OPEN_TO } from '../../shared/options.js'
-import { SCHOOL, isSchoolEmail } from '../../shared/school.js'
+import { SCHOOL, SIGNUP_ROLES, canSignUp, type SignupRole } from '../../shared/school.js'
 import { PLANS } from '../../shared/membership.js'
 import { LEGAL, RULES } from '../../shared/legal.js'
 
@@ -21,8 +22,8 @@ const WHY = [
 ]
 
 const STEPS = [
-  { title: 'Sign in with your Ateneo account', text: 'One tap with Google. We never show or keep your email.' },
-  { title: 'Pay the membership fee', text: `You get in right away. Full refund within ${LEGAL.refundDays} days.` },
+  { title: 'Pick student, alumni, or professor', text: 'Sign in with a code sent to your email. We never show or keep your email.' },
+  { title: 'Students pay the membership fee', text: `You get in right away. Full refund within ${LEGAL.refundDays} days. Alumni and professors join free for now.` },
   { title: 'Post and connect', text: 'Find people by course, skill, or what they are open to, and say hi.' },
 ]
 
@@ -52,26 +53,38 @@ function CodeInput({ value, onChange, disabled }: { value: string; onChange: (v:
 
 type SignedIn = { token: string; prefill?: { name: string } }
 
-function finish(r: SignedIn) {
-  save('prefill', r.prefill ?? null)
+function finish(r: SignedIn, role: string) {
+  save('prefill', { ...r.prefill, role })
   session.set(r.token)
 }
 
 function SignInForm() {
   const config = useFetch<{ googleClientId: string }>('/api/config')
   const google = config.data?.googleClientId
-  const [step, setStep] = useState<'start' | 'email' | 'code'>('start')
-  const [email, setEmail] = useState('')
+  const [role, setRole] = useState<SignupRole | null>(null)
+  const [typed, setTyped] = useState('')
+  const [sent, setSent] = useState(false)
   const [code, setCode] = useState('')
   const [devCode, setDevCode] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
-  const showEmail = step === 'email' || (step === 'start' && config.data && !google)
+  // Students and professors type only the part before the @. A full email still works.
+  const domain = role?.domains[0]
+  const local = !!domain && !typed.includes('@')
+  const email = (local ? `${typed.trim()}@${domain}` : typed.trim()).toLowerCase()
+
+  function pick(r: SignupRole | null) {
+    setRole(r)
+    setTyped('')
+    setSent(false)
+    setError('')
+  }
 
   async function withGoogle(credential: string) {
+    if (!role) return
     setError('')
     try {
-      finish(await api<SignedIn>('/api/auth/google', { credential }))
+      finish(await api<SignedIn>('/api/auth/google', { credential, role: role.id }), role.id)
     } catch (err) {
       setError((err as Error).message)
     }
@@ -79,14 +92,15 @@ function SignInForm() {
 
   async function start(e?: FormEvent) {
     e?.preventDefault()
+    if (!role) return
     setError('')
-    if (!isSchoolEmail(email)) return setError(`Use your ${SCHOOL.short} email. It ends in @${SCHOOL.domains[0]}.`)
+    if (!typed.trim() || !canSignUp(email, role.id)) return setError(role.hint)
     setBusy(true)
     try {
-      const r = await api<{ devCode?: string }>('/api/auth/start', { email })
+      const r = await api<{ devCode?: string }>('/api/auth/start', { email, role: role.id })
       setDevCode(r.devCode ?? null)
       setCode('')
-      setStep('code')
+      setSent(true)
     } catch (err) {
       setError((err as Error).message)
     } finally {
@@ -95,10 +109,11 @@ function SignInForm() {
   }
 
   async function verify(value: string) {
+    if (!role) return
     setError('')
     setBusy(true)
     try {
-      finish(await api<SignedIn>('/api/auth/verify', { email, code: value }))
+      finish(await api<SignedIn>('/api/auth/verify', { email, code: value }), role.id)
     } catch (err) {
       setError((err as Error).message)
       setCode('')
@@ -112,12 +127,28 @@ function SignInForm() {
     </p>
   )
 
-  if (step === 'code')
+  if (!role)
+    return (
+      <div className="l-form" id="signin">
+        <p className="l-roles-label">Sign up as</p>
+        <div className="l-roles">
+          {SIGNUP_ROLES.map((r) => (
+            <button key={r.id} className="btn btn-primary btn-lg" onClick={() => pick(r)}>
+              {r.label}
+            </button>
+          ))}
+        </div>
+        <p className="l-free">Free for alumni and professors for now.</p>
+        {fine}
+      </div>
+    )
+
+  if (sent)
     return (
       <div className="l-form" id="signin">
         <p className="l-form-title">Check your email</p>
         <p className="l-form-sub">
-          We sent a 6-digit code to <b>{email}</b>.
+          We sent a 6-digit code to <b>{email}</b>. Not there? Check your spam folder.
         </p>
         <CodeInput
           value={code}
@@ -134,7 +165,7 @@ function SignInForm() {
         )}
         {error && <p className="form-error">{error}</p>}
         <div className="l-form-links">
-          <button onClick={() => (setStep('email'), setError(''))}>Use another email</button>
+          <button onClick={() => (setSent(false), setError(''))}>Use another email</button>
           <button onClick={() => start()} disabled={busy}>
             Send a new code
           </button>
@@ -142,45 +173,48 @@ function SignInForm() {
       </div>
     )
 
-  if (showEmail)
-    return (
-      <form className="l-form" id="signin" onSubmit={start} noValidate>
-        <div className="l-email">
-          <input
-            className="input"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            placeholder={SCHOOL.example}
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            aria-label="Ateneo email"
-          />
-          <button className="btn btn-primary btn-lg" disabled={busy}>
-            Join BlueLink <ArrowRight weight="bold" />
-          </button>
-        </div>
-        {error && <p className="form-error">{error}</p>}
-        {fine}
-        {google && (
-          <div className="l-form-links">
-            <button type="button" onClick={() => (setStep('start'), setError(''))}>
-              Use Google instead
-            </button>
-          </div>
-        )}
-      </form>
-    )
-
   return (
-    <div className="l-form" id="signin">
-      {google ? <GoogleButton clientId={google} onToken={withGoogle} /> : <div className="google-btn is-loading" />}
+    <form className="l-form" id="signin" onSubmit={start} noValidate>
+      <div className="l-form-head">
+        <button type="button" className="l-back" onClick={() => pick(null)} aria-label="Back">
+          <ArrowLeft weight="bold" />
+        </button>
+        <p className="l-form-title">{role.title}</p>
+      </div>
+      {google && (
+        <>
+          <GoogleButton clientId={google} onToken={withGoogle} />
+          <p className="l-or">or use a code</p>
+        </>
+      )}
+      <label className={`l-email-field ${local ? 'has-domain' : ''}`}>
+        <input
+          className="input"
+          type={domain ? 'text' : 'email'}
+          inputMode="email"
+          autoComplete="email"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          autoFocus
+          placeholder={domain ? 'juan.delacruz' : 'you@gmail.com'}
+          value={typed}
+          style={local ? { paddingRight: `calc(${domain.length + 1}ch + 24px)` } : undefined}
+          onChange={(e) => {
+            const v = e.target.value
+            // A browser that fills in the full school email: keep only the part before the @.
+            setTyped(domain && v.toLowerCase().endsWith('@' + domain) ? v.slice(0, -(domain.length + 1)) : v)
+          }}
+          aria-label="Email"
+        />
+        {local && <span>@{domain}</span>}
+      </label>
+      <button className="btn btn-primary btn-lg btn-block" disabled={busy}>
+        Send me a code <ArrowRight weight="bold" />
+      </button>
       {error && <p className="form-error">{error}</p>}
       {fine}
-      <div className="l-form-links">
-        <button onClick={() => (setStep('email'), setError(''))}>Use a sign-in code instead</button>
-      </div>
-    </div>
+    </form>
   )
 }
 
@@ -203,7 +237,7 @@ function Preview() {
           </div>
         </div>
         <p className="post-kind kind-work">
-          <i className="l-live" /> Open for work
+          Open for work
         </p>
         <p className="l-card-headline">I edit videos for orgs and small brands. Reels, event recaps, and interviews. Looking for paid projects this break.</p>
         <p className="l-card-stats">
@@ -275,6 +309,7 @@ export function Landing() {
       <section className="l-band">
         <div className="l-band-inner">
           <h2>Both plans get everything.</h2>
+          <p className="l-band-note">For students. Alumni and professors join free for now.</p>
           <div className="l-plan-table">
             <div className="l-plans">
               {PLANS.map((p) => (

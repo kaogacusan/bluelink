@@ -1,9 +1,9 @@
 import crypto from 'node:crypto'
 import fs from 'node:fs'
 import path from 'node:path'
-import { isSchoolEmail } from '../shared/school.js'
+import { canSignUp, signupRole } from '../shared/school.js'
 import { BANNERS, KINDS, LEVELS, OPEN_TO, ORG_CATEGORIES, REPORT_REASONS, ROLES, schoolOf } from '../shared/options.js'
-import { MEMBERSHIP, LIFETIME_UNTIL, PLANS, planById, isLifetime } from '../shared/membership.js'
+import { FREE_ROLES, MEMBERSHIP, LIFETIME_UNTIL, PLANS, planById, isLifetime } from '../shared/membership.js'
 import { LEGAL } from '../shared/legal.js'
 import { openStore } from './store.js'
 import { createDemo } from './seed.js'
@@ -232,11 +232,12 @@ export function createApi({ dataDir, dev = false }) {
   function membershipOf(uid) {
     const u = db.users[uid]
     const last = u?.payment ? db.payments.find((p) => p.id === u.payment) : null
-    const free = adminUids.has(uid)
+    const admin = adminUids.has(uid)
+    const free = admin || FREE_ROLES.includes(u?.role)
     return {
       active: free || (u?.until || 0) > Date.now(),
       until: u?.until || 0,
-      via: free ? 'admin' : u?.via || null,
+      via: admin ? 'admin' : free ? 'free' : u?.via || null,
       status: last?.status || null,
       ref: last?.ref || '',
       lifetime: !free && isLifetime(u?.until),
@@ -432,12 +433,12 @@ export function createApi({ dataDir, dev = false }) {
   const route = (method, pattern, access, fn, maxBody = 16_000) =>
     routes.push({ method, re: new RegExp('^' + pattern.replace(/:(\w+)/g, '(?<$1>[^/]+)') + '$'), access, fn, maxBody })
 
-  // Sign in with a code sent to your school email.
+  // Sign in with a code sent to your email. Students and faculty use their school email; alumni use any.
   const codes = new Map()
 
   route('POST', '/api/auth/start', 'open', ({ body }) => {
     const email = String(body.email || '').trim().toLowerCase()
-    if (!isSchoolEmail(email)) throw new Fail(400, 'Use your Ateneo email.')
+    if (!canSignUp(email, body.role)) throw new Fail(400, signupRole(body.role)?.hint || 'Use your Ateneo email.')
     const prev = codes.get(email)
     if (prev && Date.now() - prev.sent < 20_000) throw new Fail(429, 'Wait a few seconds, then ask for a new code.')
     const code = String(crypto.randomInt(0, 1_000_000)).padStart(6, '0')
@@ -467,7 +468,7 @@ export function createApi({ dataDir, dev = false }) {
   route('POST', '/api/auth/google', 'open', async ({ body }) => {
     const g = await verifyGoogle(body.credential)
     const email = String(g.email || '').toLowerCase()
-    if (!isSchoolEmail(email)) throw new Fail(400, 'Use your Ateneo Google account.')
+    if (!canSignUp(email, body.role)) throw new Fail(400, signupRole(body.role)?.hint || 'Use your Ateneo Google account.')
     const uid = uidFor(email)
     const isNew = !db.users[uid]?.name
     if (isNew && g.picture) googlePictures.set(uid, g.picture)

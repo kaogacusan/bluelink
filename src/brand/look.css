@@ -581,6 +581,8 @@ body:has(.landing) {
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  /* How much of the planet shows above the bottom edge. */
+  --exposed: max(120px, 10vw);
   /* Space gets a little hazy and blue just above the planet's air. */
   background: linear-gradient(180deg, #02030a 0%, #03050d 55%, #061033 100%);
 }
@@ -594,7 +596,6 @@ body:has(.landing) {
 
 /* The planet. A huge dark circle; only its top edge shows. Its color is the page color below. */
 .l-planet {
-  --exposed: max(120px, 10vw);
   position: absolute;
   z-index: -1;
   left: 50%;
@@ -617,7 +618,7 @@ body:has(.landing) {
   position: absolute;
   z-index: -1;
   left: 50%;
-  bottom: calc(max(120px, 10vw) - 150px);
+  bottom: calc(var(--exposed) - 150px);
   width: 2200px;
   height: 300px;
   transform: translateX(-50%);
@@ -637,7 +638,7 @@ body:has(.landing) {
 .l-dark .l-hero {
   min-height: min(800px, calc(100svh - 80px));
   padding-top: 32px;
-  padding-bottom: calc(max(120px, 10vw) + 56px);
+  padding-bottom: calc(var(--exposed) + 56px);
 }
 .l-dark .l-copy h1 {
   font-size: clamp(44px, 5.4vw, 76px);
@@ -666,9 +667,6 @@ body:has(.landing) {
 }
 .landing .btn-primary:hover:not(:disabled) {
   background: #2a52f0;
-}
-.l-email .input {
-  border-radius: var(--r-control);
 }
 .landing .input::placeholder {
   color: rgba(238, 241, 250, 0.38);
@@ -733,36 +731,8 @@ body:has(.landing) {
   box-shadow: 0 0 12px 1px rgba(90, 125, 255, 0.55);
   pointer-events: none;
 }
-/* A warm star on the tag: this person is open right now. */
-.l-live {
-  position: relative;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--flare);
-  box-shadow: 0 0 8px 1px rgba(255, 196, 138, 0.7);
-}
-.l-live::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--flare);
-  animation: lPing 2.4s var(--ease) infinite;
-}
-@keyframes lPing {
-  from {
-    opacity: 0.7;
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: scale(3.2);
-  }
-}
 @media (prefers-reduced-motion: reduce) {
-  .l-dark .l-visual,
-  .l-live::after {
+  .l-dark .l-visual {
     animation: none;
   }
 }
@@ -1000,10 +970,69 @@ body:has(.landing) {
   border-top-color: var(--line);
 }
 
+/* Phones and tablets: the copy and the post fit on one screen, with the planet's edge at the bottom. */
 @media (max-width: 900px) {
+  .l-dark {
+    --exposed: max(76px, 10vw);
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+  }
+  .l-dark .l-top,
   .l-dark .l-hero {
+    width: 100%;
+  }
+  .l-dark .l-hero {
+    flex: 1;
+    align-content: center;
+    gap: 24px;
     min-height: 0;
-    padding-bottom: 168px;
+    padding-top: 4px;
+    padding-bottom: calc(var(--exposed) + 16px);
+  }
+  .l-dark .l-copy h1 {
+    font-size: clamp(34px, 9.6vw, 56px);
+  }
+  .l-dark .l-sub {
+    margin-top: 14px;
+    font-size: 16px;
+  }
+  .l-dark .l-form {
+    margin-top: 22px;
+  }
+  .l-dark .l-free {
+    margin-top: 12px;
+  }
+  .l-dark .l-fine {
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  /* A smaller planet, so its edge curves on a phone like it does on a big screen. */
+  .l-planet {
+    width: 260vw;
+  }
+  .l-dark::before {
+    width: 1100px;
+    height: 220px;
+    bottom: calc(var(--exposed) - 110px);
+    background:
+      radial-gradient(220px 22px at 50% 50%, rgba(255, 236, 216, 0.5), rgba(255, 196, 138, 0.16) 45%, rgba(255, 196, 138, 0) 100%),
+      radial-gradient(closest-side, rgba(70, 110, 255, 0.24), rgba(70, 110, 255, 0) 100%);
+  }
+  /* The post gets smaller so it does not push the planet off the screen. */
+  .l-dark .l-card {
+    padding: 18px 18px 16px;
+  }
+  .l-dark .l-card .post-kind {
+    margin-top: 12px;
+  }
+  .l-card .l-card-headline {
+    margin-top: 10px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .l-card-stats {
+    margin-top: 12px;
   }
   .l-steps ol li,
   .l-steps ol li + li {
@@ -1206,4 +1235,11 @@ body:has(.landing) {
 }
 .l-legal a:hover {
   color: var(--text);
+}
+
+@media (max-width: 640px) {
+  .l-dark .l-replies,
+  .l-dark .l-card-stats {
+    display: none;
+  }
 }

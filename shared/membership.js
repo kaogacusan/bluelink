@@ -7,6 +7,9 @@ export const PLANS = [
   { id: 'life', price: 250, name: 'Lifetime', days: null },
 ]
 
+// Alumni and faculty join free for now, so the network grows faster.
+export const FREE_ROLES = ['alum', 'faculty']
+
 export const MEMBERSHIP = {
   plans: PLANS,
   codeDays: 365, // voucher cards and founding member codes give one year

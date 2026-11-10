@@ -2640,14 +2640,70 @@ textarea.input {
   max-width: 520px;
   margin-top: 34px;
 }
-.l-email {
-  display: flex;
+.l-roles-label {
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.l-roles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
-.l-email .input {
-  height: 52px;
+.l-roles .btn {
+  padding: 0 10px;
+}
+.l-free {
+  margin-top: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--accent-text);
+}
+.l-form-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.l-back {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line-strong);
   border-radius: var(--r-control);
-  padding: 0 22px;
+  font-size: 17px;
+  color: var(--text);
+  transition: background 0.15s var(--ease);
+}
+.l-back:hover {
+  background: var(--hover);
+}
+.l-or {
+  margin: 14px 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+/* The school part of the email is already typed, so people only type their name. */
+.l-email-field {
+  position: relative;
+  display: block;
+  margin-bottom: 8px;
+}
+.l-email-field .input {
+  height: 52px;
+  padding: 0 18px;
+}
+.l-email-field span {
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: var(--text-2);
+  pointer-events: none;
 }
 .l-form .form-error {
   margin-top: 10px;
@@ -2907,9 +2963,6 @@ textarea.input {
   }
 }
 @media (max-width: 520px) {
-  .l-email {
-    flex-direction: column;
-  }
   .l-top {
     padding: 16px 20px;
   }

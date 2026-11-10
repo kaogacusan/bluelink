@@ -32,7 +32,7 @@ const PRIVACY: Section[] = [
     body: (
       <ul>
         <li>
-          <b>When you sign in:</b> your school email, your name, and your Google photo if you use Google. We turn your email into a code and do not keep the email itself.
+          <b>When you sign in:</b> your email, your name, and your Google photo if you use Google. We turn your email into a code and do not keep the email itself.
         </li>
         <li>
           <b>What you add:</b> your role (student, alumni, faculty or staff), course or department, year, headline, about, skills, what you are open to, photo, posts, comments, messages, and org details.
@@ -149,7 +149,7 @@ const TERMS: Section[] = [
     body: (
       <ul>
         <li>You are {LEGAL.minAge} or older.</li>
-        <li>You are a current student, alumni, or faculty or staff, with an Ateneo email.</li>
+        <li>You are a current student, alumni, or faculty or staff of Ateneo.</li>
         <li>One account per person, under your real name.</li>
       </ul>
     ),
