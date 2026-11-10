@@ -1242,9 +1242,9 @@ export function createApi({ dataDir, dev = false }) {
     const q = line(query.get('q'), 60).toLowerCase()
     const cat = query.get('cat')
     const show = query.get('show')
-    const type = query.get('type') === 'business' ? 'business' : 'org'
+    const type = ['business', 'all'].includes(query.get('type')) ? query.get('type') : 'org'
     const orgs = Object.values(db.orgs)
-      .filter((o) => (o.type === 'business' ? 'business' : 'org') === type)
+      .filter((o) => type === 'all' || (o.type === 'business' ? 'business' : 'org') === type)
       .filter((o) => !q || [o.name, o.short, o.about].join(' ').toLowerCase().includes(q))
       .filter((o) => !cat || o.category === cat)
       .filter((o) => show !== 'recruiting' || o.recruiting)

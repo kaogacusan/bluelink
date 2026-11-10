@@ -3,7 +3,7 @@ import { MagnifyingGlass } from '@phosphor-icons/react/dist/csr/MagnifyingGlass'
 import { OrgLogo } from '../components/OrgLogo'
 import { api, useFetch } from '../lib/api'
 import { useApp } from '../lib/app'
-import { go, href } from '../lib/router'
+import { href } from '../lib/router'
 import { ORG_CATEGORIES } from '../../shared/options.js'
 import type { Org } from '../types'
 
@@ -51,66 +51,68 @@ function OrgCard({ org: start }: { org: Org }) {
 }
 
 const KINDS = [
-  { id: 'org', label: 'Orgs', to: href.orgs, create: href.newOrg, search: 'Search orgs', none: 'No orgs here yet.', add: 'Put your org on BlueLink' },
-  { id: 'business', label: 'Businesses', to: href.businesses, create: href.newBusiness, search: 'Search businesses', none: 'No businesses here yet.', add: 'Put your business on BlueLink' },
+  { id: 'all', label: 'Orgs and businesses' },
+  { id: 'org', label: 'Orgs only' },
+  { id: 'business', label: 'Businesses only' },
 ] as const
 
-export function Orgs({ type = 'org' }: { type?: 'org' | 'business' }) {
-  const t = KINDS.find((k) => k.id === type)!
-  const isOrg = type === 'org'
+type Kind = (typeof KINDS)[number]['id']
+
+export function Orgs({ type = 'all' }: { type?: Kind }) {
+  const [kind, setKind] = useState<Kind>(type)
   const [q, setQ] = useState('')
   const [query, setQuery] = useState('')
   const [cat, setCat] = useState('')
+  const create = kind === 'business' ? href.newBusiness : href.newOrg
+
+  useEffect(() => setKind(type), [type])
 
   useEffect(() => {
     const t = setTimeout(() => setQuery(q.trim()), 220)
     return () => clearTimeout(t)
   }, [q])
 
-  const params = new URLSearchParams(Object.entries({ type: isOrg ? '' : type, q: query, cat: isOrg ? cat : '' }).filter(([, v]) => v))
+  const params = new URLSearchParams(Object.entries({ type: kind, q: query, cat }).filter(([, v]) => v))
   const { data, error } = useFetch<{ orgs: Org[] }>(`/api/orgs?${params}`)
 
   return (
     <>
       <header className="page-head is-row">
         <h1>Orgs & businesses</h1>
-        <a className="btn btn-primary" href={t.create}>
+        <a className="btn btn-primary" href={create}>
           Create
         </a>
       </header>
 
-      <div className="seg page-tabs" role="tablist">
-        {KINDS.map((k) => (
-          <button key={k.id} role="tab" aria-selected={type === k.id} className={type === k.id ? 'is-on' : ''} onClick={() => go(k.to)}>
-            {k.label}
-          </button>
-        ))}
-      </div>
-
       <div className="search">
         <MagnifyingGlass weight="bold" />
-        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.search} aria-label={t.search} />
+        <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search orgs and businesses" aria-label="Search orgs and businesses" />
       </div>
 
-      {isOrg && (
-        <div className="filters">
-          <select className="input select chip-select" value={cat} onChange={(e) => setCat(e.target.value)} aria-label="Category">
-            <option value="">Any type</option>
-            {ORG_CATEGORIES.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      <div className="filters">
+        <select className="input select chip-select" value={kind} onChange={(e) => setKind(e.target.value as Kind)} aria-label="Show">
+          {KINDS.map((k) => (
+            <option key={k.id} value={k.id}>
+              {k.label}
+            </option>
+          ))}
+        </select>
+        <select className="input select chip-select" value={cat} onChange={(e) => setCat(e.target.value)} aria-label="Category">
+          <option value="">Any type</option>
+          {ORG_CATEGORIES.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {error && !data && <p className="empty">{error}</p>}
       {data && !data.orgs.length && (
         <div className="empty">
-          <p>{t.none}</p>
-          <a className="btn btn-outline" href={t.create}>
-            {t.add}
+          <p>Nothing here yet.</p>
+          <a className="btn btn-outline" href={create}>
+            {kind === 'business' ? 'Put your business on BlueLink' : 'Put your org on BlueLink'}
           </a>
         </div>
       )}
